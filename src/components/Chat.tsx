@@ -126,10 +126,10 @@ export default function Chat() {
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.4, ease: "easeOut" }}
-      className="flex flex-col h-[600px] md:h-[600px] h-[90vh] rounded-lg overflow-hidden bg-white shadow-md border border-gray-200"
+      className="flex flex-col h-[600px] md:h-[600px] h-[95vh] rounded-lg overflow-hidden bg-white shadow-md border border-gray-200"
     >
       <motion.div
-        className="bg-gradient-to-r from-blue-700 to-blue-800 px-3 sm:px-6 py-2 sm:py-3 text-white flex items-center justify-between"
+        className="bg-gradient-to-r from-blue-700 to-blue-800 px-2 sm:px-6 py-2 sm:py-3 text-white flex items-center justify-between"
         initial={{ backgroundColor: "#2563eb" }}
         animate={{ backgroundColor: "#1d4ed8" }}
         transition={{ duration: 0.5 }}
@@ -137,7 +137,7 @@ export default function Chat() {
         <h2 className="text-base font-medium tracking-wide">Tax Assistant</h2>
       </motion.div>
 
-      <div className="flex-1 overflow-y-auto px-2 sm:px-6 py-2 sm:py-4 bg-gray-50">
+      <div className="flex-1 overflow-y-auto px-1 sm:px-6 py-2 sm:py-4 bg-gray-50">
         <MessageList
           messages={messages}
           isLoading={isLoading}

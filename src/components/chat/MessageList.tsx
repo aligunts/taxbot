@@ -192,9 +192,9 @@ export default function MessageList({
           key={index}
           className={`flex ${message.role === "user" ? "justify-end" : "justify-start"}`}
         >
-          <div className="flex items-start max-w-[95%] sm:max-w-[85%]">
+          <div className="flex items-start max-w-[98%] sm:max-w-[85%]">
             {message.role === "assistant" && (
-              <div className="flex-shrink-0 w-6 h-6 sm:w-7 sm:h-7 rounded-full bg-blue-600 flex items-center justify-center text-white mr-1.5 sm:mr-2 shadow-sm">
+              <div className="flex-shrink-0 w-6 h-6 sm:w-7 sm:h-7 rounded-full bg-blue-600 flex items-center justify-center text-white mr-1 sm:mr-2 shadow-sm">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   className="h-3.5 w-3.5 sm:h-4 sm:w-4"
@@ -211,9 +211,9 @@ export default function MessageList({
                 </svg>
               </div>
             )}
-            <div className="relative group">
+            <div className="relative group w-full">
               <div
-                className={`py-2 px-3 rounded-lg ${
+                className={`py-2 px-3 rounded-lg w-full ${
                   message.role === "user"
                     ? "bg-blue-600 text-white rounded-br-none shadow-md"
                     : "bg-white border border-gray-200 text-gray-800 rounded-bl-none shadow-md"
@@ -240,7 +240,7 @@ export default function MessageList({
               </div>
             </div>
             {message.role === "user" && (
-              <div className="flex-shrink-0 w-6 h-6 sm:w-7 sm:h-7 rounded-full bg-gray-200 flex items-center justify-center text-gray-600 ml-1.5 sm:ml-2 shadow-sm">
+              <div className="flex-shrink-0 w-6 h-6 sm:w-7 sm:h-7 rounded-full bg-gray-200 flex items-center justify-center text-gray-600 ml-1 sm:ml-2 shadow-sm">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   className="h-3.5 w-3.5 sm:h-4 sm:w-4"
@@ -263,8 +263,8 @@ export default function MessageList({
 
       {isLoading && (
         <div className="flex justify-start">
-          <div className="flex items-start max-w-[95%] sm:max-w-[85%]">
-            <div className="flex-shrink-0 w-6 h-6 sm:w-7 sm:h-7 rounded-full bg-blue-600 flex items-center justify-center text-white mr-1.5 sm:mr-2 shadow-sm">
+          <div className="flex items-start max-w-[98%] sm:max-w-[85%]">
+            <div className="flex-shrink-0 w-6 h-6 sm:w-7 sm:h-7 rounded-full bg-blue-600 flex items-center justify-center text-white mr-1 sm:mr-2 shadow-sm">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 className="h-3.5 w-3.5 sm:h-4 sm:w-4"
@@ -280,7 +280,7 @@ export default function MessageList({
                 />
               </svg>
             </div>
-            <div className="py-2 px-3 rounded-lg bg-white border border-gray-200 text-gray-800 rounded-bl-none shadow-md">
+            <div className="py-2 px-3 rounded-lg bg-white border border-gray-200 text-gray-800 rounded-bl-none shadow-md w-full">
               <div className="flex space-x-1.5">
                 <div className="h-2 w-2 bg-blue-400 rounded-full animate-[bounce_1.4s_infinite_ease-in-out_both]" />
                 <div
