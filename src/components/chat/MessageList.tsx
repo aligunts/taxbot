@@ -192,7 +192,7 @@ export default function MessageList({
           key={index}
           className={`flex ${message.role === "user" ? "justify-end" : "justify-start"}`}
         >
-          <div className="flex items-start max-w-[90%] sm:max-w-[85%]">
+          <div className="flex items-start max-w-[95%] sm:max-w-[85%]">
             {message.role === "assistant" && (
               <div className="flex-shrink-0 w-6 h-6 sm:w-7 sm:h-7 rounded-full bg-blue-600 flex items-center justify-center text-white mr-1.5 sm:mr-2 shadow-sm">
                 <svg
@@ -263,11 +263,11 @@ export default function MessageList({
 
       {isLoading && (
         <div className="flex justify-start">
-          <div className="flex items-start max-w-[85%]">
-            <div className="flex-shrink-0 w-7 h-7 rounded-full bg-blue-600 flex items-center justify-center text-white mr-2 shadow-sm">
+          <div className="flex items-start max-w-[95%] sm:max-w-[85%]">
+            <div className="flex-shrink-0 w-6 h-6 sm:w-7 sm:h-7 rounded-full bg-blue-600 flex items-center justify-center text-white mr-1.5 sm:mr-2 shadow-sm">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
-                className="h-4 w-4"
+                className="h-3.5 w-3.5 sm:h-4 sm:w-4"
                 fill="none"
                 viewBox="0 0 24 24"
                 stroke="currentColor"
