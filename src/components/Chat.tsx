@@ -137,7 +137,7 @@ export default function Chat() {
         <h2 className="text-base font-medium tracking-wide">Tax Assistant</h2>
       </motion.div>
 
-      <div className="flex-1 overflow-y-auto px-1 sm:px-6 py-2 sm:py-4 bg-gray-50">
+      <div className="flex-1 overflow-y-auto px-0.5 sm:px-6 py-1.5 sm:py-4 bg-gray-50">
         <MessageList
           messages={messages}
           isLoading={isLoading}
@@ -149,7 +149,7 @@ export default function Chat() {
       </div>
 
       <motion.div
-        className="p-2 sm:p-4 border-t border-gray-200 bg-white"
+        className="p-1.5 sm:p-4 border-t border-gray-200 bg-white"
         initial={{ y: 10, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
         transition={{ delay: 0.2, duration: 0.3, ease: "easeOut" }}

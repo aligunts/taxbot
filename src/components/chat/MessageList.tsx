@@ -186,18 +186,18 @@ export default function MessageList({
   }
 
   return (
-    <div className="space-y-3 sm:space-y-4">
+    <div className="space-y-2.5 sm:space-y-4">
       {messages.map((message, index) => (
         <div
           key={index}
           className={`flex ${message.role === "user" ? "justify-end" : "justify-start"}`}
         >
-          <div className="flex items-start max-w-[98%] sm:max-w-[85%]">
+          <div className="flex items-start max-w-[99%] sm:max-w-[85%]">
             {message.role === "assistant" && (
-              <div className="flex-shrink-0 w-6 h-6 sm:w-7 sm:h-7 rounded-full bg-blue-600 flex items-center justify-center text-white mr-1 sm:mr-2 shadow-sm">
+              <div className="flex-shrink-0 w-5 h-5 sm:w-7 sm:h-7 rounded-full bg-blue-600 flex items-center justify-center text-white mr-1 sm:mr-2 shadow-sm">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
-                  className="h-3.5 w-3.5 sm:h-4 sm:w-4"
+                  className="h-3 w-3 sm:h-4 sm:w-4"
                   fill="none"
                   viewBox="0 0 24 24"
                   stroke="currentColor"
@@ -213,7 +213,7 @@ export default function MessageList({
             )}
             <div className="relative group w-full">
               <div
-                className={`py-2 px-3 rounded-lg w-full ${
+                className={`py-1.5 sm:py-2 px-2.5 sm:px-3 rounded-lg w-full ${
                   message.role === "user"
                     ? "bg-blue-600 text-white rounded-br-none shadow-md"
                     : "bg-white border border-gray-200 text-gray-800 rounded-bl-none shadow-md"
@@ -224,7 +224,7 @@ export default function MessageList({
                 </div>
                 <button
                   onClick={() => handleCopy(message.content, index)}
-                  className={`absolute top-1 sm:top-1.5 right-1 sm:right-1.5 p-1 rounded-full transition-colors ${
+                  className={`absolute top-0.5 sm:top-1.5 right-0.5 sm:right-1.5 p-0.5 sm:p-1 rounded-full transition-colors ${
                     message.role === "user"
                       ? "text-white/70 hover:text-white hover:bg-white/10"
                       : "text-gray-400 hover:text-gray-600 hover:bg-gray-100"
@@ -232,18 +232,18 @@ export default function MessageList({
                   aria-label="Copy message"
                 >
                   {copiedIndex === index ? (
-                    <Check className="h-3 w-3 sm:h-3.5 sm:w-3.5" />
+                    <Check className="h-2.5 w-2.5 sm:h-3.5 sm:w-3.5" />
                   ) : (
-                    <Copy className="h-3 w-3 sm:h-3.5 sm:w-3.5" />
+                    <Copy className="h-2.5 w-2.5 sm:h-3.5 sm:w-3.5" />
                   )}
                 </button>
               </div>
             </div>
             {message.role === "user" && (
-              <div className="flex-shrink-0 w-6 h-6 sm:w-7 sm:h-7 rounded-full bg-gray-200 flex items-center justify-center text-gray-600 ml-1 sm:ml-2 shadow-sm">
+              <div className="flex-shrink-0 w-5 h-5 sm:w-7 sm:h-7 rounded-full bg-gray-200 flex items-center justify-center text-gray-600 ml-1 sm:ml-2 shadow-sm">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
-                  className="h-3.5 w-3.5 sm:h-4 sm:w-4"
+                  className="h-3 w-3 sm:h-4 sm:w-4"
                   fill="none"
                   viewBox="0 0 24 24"
                   stroke="currentColor"

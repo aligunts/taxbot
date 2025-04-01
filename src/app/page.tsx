@@ -36,9 +36,9 @@ export default function Home() {
         </div>
       </header>
 
-      <main className="container mx-auto px-0 sm:px-4 py-2 sm:py-4">
+      <main className="container mx-auto px-0 sm:px-4 py-1 sm:py-4">
         <div className="max-w-5xl mx-auto">
-          <div className="bg-white rounded-lg shadow-md overflow-hidden mb-4 sm:mb-6">
+          <div className="bg-white rounded-lg shadow-md overflow-hidden mb-3 sm:mb-6">
             <div className="p-0 sm:p-3">
               <ErrorBoundary>
                 <Chat />
