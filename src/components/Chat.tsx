@@ -26,64 +26,67 @@ export default function Chat() {
   /**
    * Handle sending a message to the API
    */
-  const handleApiMessage = async (messageText: string, retryCount = 0) => {
-    setIsLoading(true);
+  const handleApiMessage = useCallback(
+    async (messageText: string, retryCount = 0) => {
+      setIsLoading(true);
 
-    try {
-      // Create a new messages array that includes the current conversation history
-      const currentMessages = [...messages, { role: "user", content: messageText }];
+      try {
+        // Create a new messages array that includes the current conversation history
+        const currentMessages = [...messages, { role: "user", content: messageText }];
 
-      const response = await fetch("/api/chat", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          messages: currentMessages,
-        }),
-      });
+        const response = await fetch("/api/chat", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            messages: currentMessages,
+          }),
+        });
 
-      const data = await response.json();
+        const data = await response.json();
 
-      if (!response.ok) {
-        throw new Error(data.error || "Failed to get response from API");
+        if (!response.ok) {
+          throw new Error(data.error || "Failed to get response from API");
+        }
+
+        // Add the user message and the response to the messages state
+        setMessages((prevMessages) => [
+          ...prevMessages,
+          { role: "user", content: messageText },
+          { role: "assistant", content: data.content },
+        ]);
+
+        // Reset error state on successful response
+        setHasError(false);
+      } catch (error) {
+        console.error("Error sending message:", error);
+
+        // Set error state
+        setHasError(true);
+
+        // Add the user message with an error response
+        setMessages((prevMessages) => [
+          ...prevMessages,
+          { role: "user", content: messageText },
+          {
+            role: "assistant",
+            content:
+              "I'm sorry, I'm having trouble connecting to my knowledge base right now. Please try a different question or try again later.",
+          },
+        ]);
+
+        // Show error toast
+        toast.error("Connection error. Please try again.", {
+          duration: 4000,
+        });
+      } finally {
+        setIsLoading(false);
+        setInput("");
       }
-
-      // Add the user message and the response to the messages state
-      setMessages((prevMessages) => [
-        ...prevMessages,
-        { role: "user", content: messageText },
-        { role: "assistant", content: data.content },
-      ]);
-
-      // Reset error state on successful response
-      setHasError(false);
-    } catch (error) {
-      console.error("Error sending message:", error);
-
-      // Set error state
-      setHasError(true);
-
-      // Add the user message with an error response
-      setMessages((prevMessages) => [
-        ...prevMessages,
-        { role: "user", content: messageText },
-        {
-          role: "assistant",
-          content:
-            "I'm sorry, I'm having trouble connecting to my knowledge base right now. Please try a different question or try again later.",
-        },
-      ]);
-
-      // Show error toast
-      toast.error("Connection error. Please try again.", {
-        duration: 4000,
-      });
-    } finally {
-      setIsLoading(false);
-      setInput("");
-    }
-  };
+    },
+    [messages]
+  );
 
   /**
    * Handle sending a message
@@ -93,7 +96,7 @@ export default function Chat() {
       if (!messageText.trim() || isLoading) return;
       handleApiMessage(messageText);
     },
-    [isLoading]
+    [isLoading, handleApiMessage]
   );
 
   /**
