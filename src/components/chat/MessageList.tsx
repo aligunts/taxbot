@@ -84,11 +84,11 @@ export default function MessageList({
   // Handle empty state with welcome message
   if (messages.length === 0) {
     return (
-      <div className="flex flex-col items-center justify-center min-h-[400px] py-8 text-center">
-        <div className="bg-blue-100 p-3 rounded-full mb-4 shadow-sm">
+      <div className="flex flex-col items-center justify-center min-h-[300px] sm:min-h-[400px] py-6 sm:py-8 text-center">
+        <div className="bg-blue-100 p-2.5 sm:p-3 rounded-full mb-3 sm:mb-4 shadow-sm">
           <svg
             xmlns="http://www.w3.org/2000/svg"
-            className="h-6 w-6 text-blue-600"
+            className="h-5 w-5 sm:h-6 sm:w-6 text-blue-600"
             fill="none"
             viewBox="0 0 24 24"
             stroke="currentColor"
@@ -102,11 +102,13 @@ export default function MessageList({
           </svg>
         </div>
         <h3 className="text-lg font-semibold text-gray-800 mb-2">Welcome to Taxbot</h3>
-        <p className="text-sm text-gray-600 max-w-sm leading-relaxed mb-6">
+        <p className="text-sm text-gray-600 max-w-xs sm:max-w-sm leading-relaxed mb-4 sm:mb-6 px-1">
           Ask me anything about taxes, VAT exemptions, or tax calculations — I&apos;m here to help
         </p>
-        <div className="w-full max-w-xs space-y-3">
-          <div className="text-xs font-medium text-gray-500 mb-2">Try these sample questions:</div>
+        <div className="w-full max-w-xs space-y-2 sm:space-y-3">
+          <div className="text-xs font-medium text-gray-500 mb-1 sm:mb-2">
+            Try these sample questions:
+          </div>
           <div className="grid grid-cols-1 gap-2">
             <button
               onClick={() =>
@@ -184,18 +186,18 @@ export default function MessageList({
   }
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-3 sm:space-y-4">
       {messages.map((message, index) => (
         <div
           key={index}
           className={`flex ${message.role === "user" ? "justify-end" : "justify-start"}`}
         >
-          <div className="flex items-start max-w-[85%]">
+          <div className="flex items-start max-w-[90%] sm:max-w-[85%]">
             {message.role === "assistant" && (
-              <div className="flex-shrink-0 w-7 h-7 rounded-full bg-blue-600 flex items-center justify-center text-white mr-2 shadow-sm">
+              <div className="flex-shrink-0 w-6 h-6 sm:w-7 sm:h-7 rounded-full bg-blue-600 flex items-center justify-center text-white mr-1.5 sm:mr-2 shadow-sm">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
-                  className="h-4 w-4"
+                  className="h-3.5 w-3.5 sm:h-4 sm:w-4"
                   fill="none"
                   viewBox="0 0 24 24"
                   stroke="currentColor"
@@ -217,12 +219,12 @@ export default function MessageList({
                     : "bg-white border border-gray-200 text-gray-800 rounded-bl-none shadow-md"
                 }`}
               >
-                <div className="whitespace-pre-wrap text-sm font-medium leading-relaxed">
+                <div className="whitespace-pre-wrap text-xs sm:text-sm font-medium leading-relaxed">
                   {message.content}
                 </div>
                 <button
                   onClick={() => handleCopy(message.content, index)}
-                  className={`absolute top-1.5 right-1.5 p-1 rounded-full transition-colors ${
+                  className={`absolute top-1 sm:top-1.5 right-1 sm:right-1.5 p-1 rounded-full transition-colors ${
                     message.role === "user"
                       ? "text-white/70 hover:text-white hover:bg-white/10"
                       : "text-gray-400 hover:text-gray-600 hover:bg-gray-100"
@@ -230,18 +232,18 @@ export default function MessageList({
                   aria-label="Copy message"
                 >
                   {copiedIndex === index ? (
-                    <Check className="h-3.5 w-3.5" />
+                    <Check className="h-3 w-3 sm:h-3.5 sm:w-3.5" />
                   ) : (
-                    <Copy className="h-3.5 w-3.5" />
+                    <Copy className="h-3 w-3 sm:h-3.5 sm:w-3.5" />
                   )}
                 </button>
               </div>
             </div>
             {message.role === "user" && (
-              <div className="flex-shrink-0 w-7 h-7 rounded-full bg-gray-200 flex items-center justify-center text-gray-600 ml-2 shadow-sm">
+              <div className="flex-shrink-0 w-6 h-6 sm:w-7 sm:h-7 rounded-full bg-gray-200 flex items-center justify-center text-gray-600 ml-1.5 sm:ml-2 shadow-sm">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
-                  className="h-4 w-4"
+                  className="h-3.5 w-3.5 sm:h-4 sm:w-4"
                   fill="none"
                   viewBox="0 0 24 24"
                   stroke="currentColor"
