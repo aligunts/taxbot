@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback } from "react";
 
 // Add declaration for Web Speech API
 interface WindowWithSpeechRecognition extends Window {
@@ -12,14 +12,15 @@ interface WindowWithSpeechRecognition extends Window {
  */
 export const useSpeechRecognition = () => {
   const [isListening, setIsListening] = useState(false);
-  const [transcript, setTranscript] = useState<string>('');
+  const [transcript, setTranscript] = useState<string>("");
   const [recognition, setRecognition] = useState<any>(null);
   const [error, setError] = useState<string | null>(null);
 
   // Initialize speech recognition
   useEffect(() => {
     const windowWithSpeech = window as unknown as WindowWithSpeechRecognition;
-    const SpeechRecognition = windowWithSpeech.SpeechRecognition || windowWithSpeech.webkitSpeechRecognition;
+    const SpeechRecognition =
+      windowWithSpeech.SpeechRecognition || windowWithSpeech.webkitSpeechRecognition;
 
     if (SpeechRecognition) {
       const recognitionInstance = new SpeechRecognition();
@@ -43,7 +44,7 @@ export const useSpeechRecognition = () => {
 
       setRecognition(recognitionInstance);
     } else {
-      setError('Speech recognition not supported in this browser');
+      setError("Speech recognition not supported in this browser");
     }
 
     return () => {
@@ -51,23 +52,23 @@ export const useSpeechRecognition = () => {
         recognition.abort();
       }
     };
-  }, []);
+  }, [recognition]);
 
   // Start listening
   const startListening = useCallback(() => {
     if (recognition) {
-      setTranscript('');
+      setTranscript("");
       setError(null);
       setIsListening(true);
-      
+
       try {
         recognition.start();
       } catch (error) {
-        setError('Error starting speech recognition');
+        setError("Error starting speech recognition");
         setIsListening(false);
       }
     } else {
-      setError('Speech recognition not available');
+      setError("Speech recognition not available");
     }
   }, [recognition]);
 
@@ -96,4 +97,4 @@ export const useSpeechRecognition = () => {
     stopListening,
     toggleListening,
   };
-}; 
+};

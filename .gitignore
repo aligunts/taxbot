@@ -52,3 +52,4 @@ jest.setup.js
 # Temporary files
 *.log
 temp.txt
+.vercel
