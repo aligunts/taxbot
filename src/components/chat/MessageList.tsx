@@ -192,7 +192,7 @@ export default function MessageList({
           key={index}
           className={`flex ${message.role === "user" ? "justify-end" : "justify-start"}`}
         >
-          <div className="flex items-start max-w-[99%] sm:max-w-[85%]">
+          <div className="flex items-start max-w-[95%] sm:max-w-[85%]">
             {message.role === "assistant" && (
               <div className="flex-shrink-0 w-5 h-5 sm:w-7 sm:h-7 rounded-full bg-blue-600 flex items-center justify-center text-white mr-1 sm:mr-2 shadow-sm">
                 <svg
@@ -263,11 +263,11 @@ export default function MessageList({
 
       {isLoading && (
         <div className="flex justify-start">
-          <div className="flex items-start max-w-[98%] sm:max-w-[85%]">
-            <div className="flex-shrink-0 w-6 h-6 sm:w-7 sm:h-7 rounded-full bg-blue-600 flex items-center justify-center text-white mr-1 sm:mr-2 shadow-sm">
+          <div className="flex items-start max-w-[95%] sm:max-w-[85%]">
+            <div className="flex-shrink-0 w-5 h-5 sm:w-7 sm:h-7 rounded-full bg-blue-600 flex items-center justify-center text-white mr-1 sm:mr-2 shadow-sm">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
-                className="h-3.5 w-3.5 sm:h-4 sm:w-4"
+                className="h-3 w-3 sm:h-4 sm:w-4"
                 fill="none"
                 viewBox="0 0 24 24"
                 stroke="currentColor"
@@ -280,15 +280,15 @@ export default function MessageList({
                 />
               </svg>
             </div>
-            <div className="py-2 px-3 rounded-lg bg-white border border-gray-200 text-gray-800 rounded-bl-none shadow-md w-full">
-              <div className="flex space-x-1.5">
-                <div className="h-2 w-2 bg-blue-400 rounded-full animate-[bounce_1.4s_infinite_ease-in-out_both]" />
+            <div className="py-1.5 sm:py-2 px-2.5 sm:px-3 rounded-lg bg-white border border-gray-200 text-gray-800 rounded-bl-none shadow-md w-full">
+              <div className="flex space-x-1.5 justify-center">
+                <div className="h-1.5 w-1.5 sm:h-2 sm:w-2 bg-blue-400 rounded-full animate-[bounce_1.4s_infinite_ease-in-out_both]" />
                 <div
-                  className="h-2 w-2 bg-blue-500 rounded-full animate-[bounce_1.4s_infinite_ease-in-out_both]"
+                  className="h-1.5 w-1.5 sm:h-2 sm:w-2 bg-blue-500 rounded-full animate-[bounce_1.4s_infinite_ease-in-out_both]"
                   style={{ animationDelay: "0.2s" }}
                 />
                 <div
-                  className="h-2 w-2 bg-blue-600 rounded-full animate-[bounce_1.4s_infinite_ease-in-out_both]"
+                  className="h-1.5 w-1.5 sm:h-2 sm:w-2 bg-blue-600 rounded-full animate-[bounce_1.4s_infinite_ease-in-out_both]"
                   style={{ animationDelay: "0.4s" }}
                 />
               </div>

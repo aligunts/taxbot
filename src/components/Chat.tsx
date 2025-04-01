@@ -126,10 +126,10 @@ export default function Chat() {
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.4, ease: "easeOut" }}
-      className="flex flex-col h-[600px] md:h-[600px] h-[95vh] rounded-lg overflow-hidden bg-white shadow-md border border-gray-200"
+      className="flex flex-col h-[600px] md:h-[600px] h-[95vh] rounded-lg overflow-hidden bg-white shadow-md border border-gray-200 mx-auto"
     >
       <motion.div
-        className="bg-gradient-to-r from-blue-700 to-blue-800 px-2 sm:px-6 py-2 sm:py-3 text-white flex items-center justify-between"
+        className="bg-gradient-to-r from-blue-700 to-blue-800 px-2 sm:px-6 py-2 sm:py-3 text-white flex items-center justify-center sm:justify-between"
         initial={{ backgroundColor: "#2563eb" }}
         animate={{ backgroundColor: "#1d4ed8" }}
         transition={{ duration: 0.5 }}
