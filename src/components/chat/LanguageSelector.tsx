@@ -9,12 +9,8 @@ interface LanguageSelectorProps {
   onLanguageChange: (language: SupportedLanguage) => void;
 }
 
-const languageOptions: { value: SupportedLanguage; label: string; flag: string }[] = [
+const languageOptions: { value: string; label: string; flag: string }[] = [
   { value: "english", label: "English", flag: "🇬🇧" },
-  { value: "yoruba", label: "Yorùbá", flag: "🇳🇬" },
-  { value: "hausa", label: "Hausa", flag: "🇳🇬" },
-  { value: "igbo", label: "Igbo", flag: "🇳🇬" },
-  { value: "pidgin", label: "Pidgin", flag: "🇳🇬" },
 ];
 
 /**
