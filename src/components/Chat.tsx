@@ -132,9 +132,9 @@ export default function Chat() {
       className="flex flex-col h-[600px] md:h-[600px] h-[95vh] rounded-lg overflow-hidden bg-white shadow-md border border-gray-200 mx-auto"
     >
       <motion.div
-        className="bg-gradient-to-r from-blue-700 to-blue-800 px-2 sm:px-6 py-2 sm:py-3 text-white flex items-center justify-center sm:justify-between"
-        initial={{ backgroundColor: "#2563eb" }}
-        animate={{ backgroundColor: "#1d4ed8" }}
+        className="bg-gradient-to-r from-primary-500 to-primary-600 px-2 sm:px-6 py-2 sm:py-3 text-white flex items-center justify-center sm:justify-between"
+        initial={{ backgroundColor: "#4A4A4A" }}
+        animate={{ backgroundColor: "#3d3d3d" }}
         transition={{ duration: 0.5 }}
       >
         <h2 className="text-base font-medium tracking-wide">Tax Assistant</h2>

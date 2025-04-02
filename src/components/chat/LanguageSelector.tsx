@@ -1,8 +1,8 @@
 "use client";
 
-import React, { useState, useRef, useEffect } from 'react';
-import { ChevronDown, Globe } from 'lucide-react';
-import { SupportedLanguage } from '@/utils';
+import React, { useState, useRef, useEffect } from "react";
+import { ChevronDown, Globe } from "lucide-react";
+import { SupportedLanguage } from "@/utils";
 
 interface LanguageSelectorProps {
   selectedLanguage: SupportedLanguage;
@@ -10,20 +10,17 @@ interface LanguageSelectorProps {
 }
 
 const languageOptions: { value: SupportedLanguage; label: string; flag: string }[] = [
-  { value: 'english', label: 'English', flag: '🇬🇧' },
-  { value: 'yoruba', label: 'Yorùbá', flag: '🇳🇬' },
-  { value: 'hausa', label: 'Hausa', flag: '🇳🇬' },
-  { value: 'igbo', label: 'Igbo', flag: '🇳🇬' },
-  { value: 'pidgin', label: 'Pidgin', flag: '🇳🇬' },
+  { value: "english", label: "English", flag: "🇬🇧" },
+  { value: "yoruba", label: "Yorùbá", flag: "🇳🇬" },
+  { value: "hausa", label: "Hausa", flag: "🇳🇬" },
+  { value: "igbo", label: "Igbo", flag: "🇳🇬" },
+  { value: "pidgin", label: "Pidgin", flag: "🇳🇬" },
 ];
 
 /**
  * LanguageSelector component for switching between supported languages
  */
-const LanguageSelector = ({
-  selectedLanguage,
-  onLanguageChange,
-}: LanguageSelectorProps) => {
+const LanguageSelector = ({ selectedLanguage, onLanguageChange }: LanguageSelectorProps) => {
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
 
@@ -35,16 +32,15 @@ const LanguageSelector = ({
       }
     };
 
-    document.addEventListener('mousedown', handleClickOutside);
+    document.addEventListener("mousedown", handleClickOutside);
     return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
+      document.removeEventListener("mousedown", handleClickOutside);
     };
   }, []);
 
   // Find the currently selected language option
-  const currentLanguage = languageOptions.find(
-    option => option.value === selectedLanguage
-  ) || languageOptions[0];
+  const currentLanguage =
+    languageOptions.find((option) => option.value === selectedLanguage) || languageOptions[0];
 
   return (
     <div className="relative" ref={dropdownRef}>
@@ -56,7 +52,7 @@ const LanguageSelector = ({
       >
         <Globe className="h-3 w-3" />
         <span className="text-sm">{currentLanguage.flag}</span>
-        <ChevronDown className={`h-3 w-3 transition-transform ${isOpen ? 'rotate-180' : ''}`} />
+        <ChevronDown className={`h-3 w-3 transition-transform ${isOpen ? "rotate-180" : ""}`} />
       </button>
 
       {isOpen && (
@@ -75,8 +71,8 @@ const LanguageSelector = ({
                 }}
                 className={`cursor-pointer px-2 py-1.5 flex items-center space-x-1.5 text-xs ${
                   selectedLanguage === option.value
-                    ? 'bg-blue-100 text-blue-800'
-                    : 'text-gray-700 hover:bg-gray-100'
+                    ? "bg-accent-50 text-accent-800"
+                    : "text-gray-700 hover:bg-gray-100"
                 }`}
                 role="option"
                 aria-selected={selectedLanguage === option.value}
@@ -84,8 +80,19 @@ const LanguageSelector = ({
                 <span className="text-sm">{option.flag}</span>
                 <span>{option.label}</span>
                 {selectedLanguage === option.value && (
-                  <svg className="h-3 w-3 ml-auto text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                  <svg
+                    className="h-3 w-3 ml-auto text-accent-600"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M5 13l4 4L19 7"
+                    />
                   </svg>
                 )}
               </li>
@@ -97,4 +104,4 @@ const LanguageSelector = ({
   );
 };
 
-export default LanguageSelector; 
+export default LanguageSelector;

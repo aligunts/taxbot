@@ -10,7 +10,7 @@ export default function Home() {
       <header className="bg-white shadow-sm py-2 sm:py-3">
         <div className="container mx-auto px-3 sm:px-4 flex items-center justify-between">
           <div className="flex items-center space-x-2">
-            <div className="bg-blue-600 text-white p-1.5 rounded-lg">
+            <div className="bg-accent-500 text-white p-1.5 rounded-lg">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 className="h-3.5 w-3.5 sm:h-4 sm:w-4"

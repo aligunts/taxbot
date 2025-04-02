@@ -51,10 +51,10 @@ export default function MessageList({
   if (hasError && messages.length === 0) {
     return (
       <div className="flex flex-col items-center justify-center h-48 text-center">
-        <div className="bg-red-100 p-2.5 rounded-full mb-3 shadow-sm">
+        <div className="bg-accent-100 p-2.5 rounded-full mb-3 shadow-sm">
           <svg
             xmlns="http://www.w3.org/2000/svg"
-            className="h-5 w-5 text-red-600"
+            className="h-5 w-5 text-accent-500"
             fill="none"
             viewBox="0 0 24 24"
             stroke="currentColor"
@@ -73,7 +73,7 @@ export default function MessageList({
         </p>
         <button
           onClick={handleRetry}
-          className="mt-4 px-4 py-2 bg-blue-600 text-white rounded-lg text-sm font-medium hover:bg-blue-700 transition-colors"
+          className="mt-4 px-4 py-2 bg-firs-gray text-white rounded-lg text-sm font-medium hover:bg-accent-500 transition-colors"
         >
           Try Again
         </button>
@@ -85,10 +85,10 @@ export default function MessageList({
   if (messages.length === 0) {
     return (
       <div className="flex flex-col items-center justify-center min-h-[300px] sm:min-h-[400px] py-6 sm:py-8 text-center">
-        <div className="bg-blue-100 p-2.5 sm:p-3 rounded-full mb-3 sm:mb-4 shadow-sm">
+        <div className="bg-accent-100 p-2.5 sm:p-3 rounded-full mb-3 sm:mb-4 shadow-sm">
           <svg
             xmlns="http://www.w3.org/2000/svg"
-            className="h-5 w-5 sm:h-6 sm:w-6 text-blue-600"
+            className="h-5 w-5 sm:h-6 sm:w-6 text-accent-500"
             fill="none"
             viewBox="0 0 24 24"
             stroke="currentColor"
@@ -123,7 +123,7 @@ export default function MessageList({
               </span>
               <svg
                 xmlns="http://www.w3.org/2000/svg"
-                className="h-4 w-4 text-gray-400 group-hover:text-blue-500 transition-colors"
+                className="h-4 w-4 text-gray-400 group-hover:text-accent-500 transition-colors"
                 fill="none"
                 viewBox="0 0 24 24"
                 stroke="currentColor"
@@ -143,7 +143,7 @@ export default function MessageList({
               <span className="flex-1">What reliefs can I claim on my personal income tax?</span>
               <svg
                 xmlns="http://www.w3.org/2000/svg"
-                className="h-4 w-4 text-gray-400 group-hover:text-blue-500 transition-colors"
+                className="h-4 w-4 text-gray-400 group-hover:text-accent-500 transition-colors"
                 fill="none"
                 viewBox="0 0 24 24"
                 stroke="currentColor"
@@ -163,7 +163,7 @@ export default function MessageList({
               <span className="flex-1">How is CGT calculated on property sales?</span>
               <svg
                 xmlns="http://www.w3.org/2000/svg"
-                className="h-4 w-4 text-gray-400 group-hover:text-blue-500 transition-colors"
+                className="h-4 w-4 text-gray-400 group-hover:text-accent-500 transition-colors"
                 fill="none"
                 viewBox="0 0 24 24"
                 stroke="currentColor"
@@ -194,7 +194,7 @@ export default function MessageList({
         >
           <div className="flex items-start max-w-[95%] sm:max-w-[85%]">
             {message.role === "assistant" && (
-              <div className="flex-shrink-0 w-5 h-5 sm:w-7 sm:h-7 rounded-full bg-blue-600 flex items-center justify-center text-white mr-1 sm:mr-2 shadow-sm">
+              <div className="flex-shrink-0 w-5 h-5 sm:w-7 sm:h-7 rounded-full bg-firs-gray flex items-center justify-center text-white mr-1 sm:mr-2 shadow-sm">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   className="h-3 w-3 sm:h-4 sm:w-4"
@@ -215,7 +215,7 @@ export default function MessageList({
               <div
                 className={`py-1.5 sm:py-2 px-2.5 sm:px-3 rounded-lg w-full ${
                   message.role === "user"
-                    ? "bg-blue-600 text-white rounded-br-none shadow-md"
+                    ? "bg-firs-gray text-white rounded-br-none shadow-md"
                     : "bg-white border border-gray-200 text-gray-800 rounded-bl-none shadow-md"
                 }`}
               >
@@ -264,7 +264,7 @@ export default function MessageList({
       {isLoading && (
         <div className="flex justify-start">
           <div className="flex items-start max-w-[95%] sm:max-w-[85%]">
-            <div className="flex-shrink-0 w-5 h-5 sm:w-7 sm:h-7 rounded-full bg-blue-600 flex items-center justify-center text-white mr-1 sm:mr-2 shadow-sm">
+            <div className="flex-shrink-0 w-5 h-5 sm:w-7 sm:h-7 rounded-full bg-firs-gray flex items-center justify-center text-white mr-1 sm:mr-2 shadow-sm">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 className="h-3 w-3 sm:h-4 sm:w-4"
@@ -282,13 +282,13 @@ export default function MessageList({
             </div>
             <div className="py-1.5 sm:py-2 px-2.5 sm:px-3 rounded-lg bg-white border border-gray-200 text-gray-800 rounded-bl-none shadow-md w-full">
               <div className="flex space-x-1.5 justify-center">
-                <div className="h-1.5 w-1.5 sm:h-2 sm:w-2 bg-blue-400 rounded-full animate-[bounce_1.4s_infinite_ease-in-out_both]" />
+                <div className="h-1.5 w-1.5 sm:h-2 sm:w-2 bg-gray-300 rounded-full animate-[bounce_1.4s_infinite_ease-in-out_both]" />
                 <div
-                  className="h-1.5 w-1.5 sm:h-2 sm:w-2 bg-blue-500 rounded-full animate-[bounce_1.4s_infinite_ease-in-out_both]"
+                  className="h-1.5 w-1.5 sm:h-2 sm:w-2 bg-gray-400 rounded-full animate-[bounce_1.4s_infinite_ease-in-out_both]"
                   style={{ animationDelay: "0.2s" }}
                 />
                 <div
-                  className="h-1.5 w-1.5 sm:h-2 sm:w-2 bg-blue-600 rounded-full animate-[bounce_1.4s_infinite_ease-in-out_both]"
+                  className="h-1.5 w-1.5 sm:h-2 sm:w-2 bg-gray-500 rounded-full animate-[bounce_1.4s_infinite_ease-in-out_both]"
                   style={{ animationDelay: "0.4s" }}
                 />
               </div>

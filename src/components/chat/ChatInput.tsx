@@ -54,7 +54,7 @@ export default function ChatInput({
           onChange={onChange}
           disabled={disabled}
           placeholder="Ask me about tax regulations..."
-          className="w-full py-2 pl-3 pr-10 text-xs sm:text-sm bg-gray-50 border border-gray-200 rounded-lg focus:outline-none focus:ring-1 focus:ring-blue-600 focus:border-blue-600"
+          className="w-full py-2 pl-3 pr-10 text-xs sm:text-sm bg-gray-50 border border-gray-200 rounded-lg focus:outline-none focus:ring-1 focus:ring-firs-gray focus:border-accent-500"
         />
         {isLoading && (
           <div className="absolute inset-y-0 right-0 flex items-center pr-3">
@@ -84,7 +84,7 @@ export default function ChatInput({
       <button
         type="submit"
         disabled={disabled || !value.trim()}
-        className="bg-blue-600 text-white p-2 rounded-lg hover:bg-blue-700 transition-colors disabled:bg-blue-400 disabled:cursor-not-allowed flex-shrink-0"
+        className="bg-firs-gray text-white p-2 rounded-lg hover:bg-accent-500 transition-colors disabled:bg-gray-400 disabled:cursor-not-allowed flex-shrink-0"
       >
         <svg
           xmlns="http://www.w3.org/2000/svg"
