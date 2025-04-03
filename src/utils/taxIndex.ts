@@ -11,7 +11,7 @@ export * from "./taxCalculations";
 export * from "./vatExemptionsGuide";
 
 // Re-export TaxChain for Mistral AI integration
-export { default as taxChain } from "./taxChain";
+export { createTaxChain, extractNumericValues } from "./taxChain";
 
 // Export interfaces and types to make them available to consumers
 export interface TaxResult {
