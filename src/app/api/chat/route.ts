@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { isItemLikelyExempt, getSuggestedCategories } from "../../../utils/vatExemptionsGuide";
 
 // Function to detect and enhance a query about a specific amount
 const enhanceUserMessage = (message: string): string => {
@@ -6,31 +7,183 @@ const enhanceUserMessage = (message: string): string => {
   const amountRegex = /₦?\s*([\d,]+(?:\.\d+)?)\s*(?:naira)?/i;
   const match = message.match(amountRegex);
 
-  if (match) {
+  // Extract product or item name if mentioned
+  const productRegex =
+    /(?:(?:for|on|of|buying|purchasing|selling|taking|using|about|like|such as)\s+(?:a|an|the|some)?\s*([a-zA-Z\s]+?)(?:\s+at|\s+worth|\s+costing|\s+for|\s+with|\?|\.|\!|$))|(?:(?:a|an|the|some)\s+([a-zA-Z\s]+?)(?:\s+(?:is|are|costs?|costs|priced|at|for|with)|\?|\.|\!|$))/i;
+  const productMatch = message.match(productRegex);
+  let productName = productMatch ? (productMatch[1] || productMatch[2] || "").trim() : "";
+
+  // If no product is found with the regex, check if common exempt product names are mentioned
+  if (!productName) {
+    // Common medicines
+    const medicineNames = [
+      "panadol",
+      "paracetamol",
+      "ibuprofen",
+      "aspirin",
+      "medicine",
+      "drug",
+      "pharmaceutical",
+    ];
+
+    // Common baby products
+    const babyProductNames = [
+      "pampers",
+      "huggies",
+      "diaper",
+      "nappy",
+      "baby product",
+      "baby food",
+      "baby formula",
+    ];
+
+    // Common educational items
+    const educationalItems = [
+      "textbook",
+      "notebook",
+      "pencil",
+      "pen",
+      "ruler",
+      "eraser",
+      "calculator",
+      "school supply",
+    ];
+
+    // Common basic food items
+    const basicFoodItems = [
+      "rice",
+      "beans",
+      "yam",
+      "cassava",
+      "potato",
+      "vegetable",
+      "fruit",
+      "fish",
+      "meat",
+      "egg",
+    ];
+
+    // Combine all exempt product types
+    const exemptProducts = [
+      ...medicineNames,
+      ...babyProductNames,
+      ...educationalItems,
+      ...basicFoodItems,
+    ];
+
+    for (const product of exemptProducts) {
+      if (message.toLowerCase().includes(product)) {
+        productName = product;
+        break;
+      }
+    }
+  }
+
+  // If we have both an amount and a product, check if the product is VAT exempt
+  if (match && productName) {
     // Extract and clean the amount (remove commas)
     const amount = parseFloat(match[1].replace(/,/g, ""));
 
     // Skip if not a valid number
     if (isNaN(amount)) return message;
 
-    // Calculate with proper precision
-    const priceBeforeVAT = Math.round((amount / 1.075) * 100) / 100;
-    const vatAmount = Math.round((amount - priceBeforeVAT) * 100) / 100;
+    // Check if the product is likely VAT exempt
+    const isExempt = isItemLikelyExempt(productName);
+    const suggestedCategories = getSuggestedCategories(productName);
 
-    // Verify calculations
-    const checkTotal = Math.round((priceBeforeVAT + vatAmount) * 100) / 100;
-    const checkVAT = Math.round(priceBeforeVAT * 0.075 * 100) / 100;
+    if (isExempt) {
+      // Format numbers with commas for thousands
+      const formatNumber = (num: number) => {
+        return num.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+      };
+
+      return (
+        message +
+        `\n\nIMPORTANT: The product "${productName}" appears to fall under VAT-exempt categories in Nigeria (${suggestedCategories.join(", ")}). No VAT should be calculated for this item.
+      
+For VAT-exempt items:
+1. Price before VAT = ₦${formatNumber(amount)} (no VAT is applicable)
+2. VAT amount = ₦0.00
+3. Total price = ₦${formatNumber(amount)}`
+      );
+    }
+
+    // Check if the amount is explicitly mentioned as VAT-inclusive
+    const isVatInclusive =
+      /vat[\s-]*inclusive|including vat|includes vat|with vat|price after vat/i.test(message);
 
     // Format numbers with commas for thousands
     const formatNumber = (num: number) => {
       return num.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ",");
     };
 
-    // Add specific guidance for this amount
-    return (
-      message +
-      `\n\nIMPORTANT: For a VAT-inclusive amount of ₦${formatNumber(amount)}, use these precise calculations:
-    
+    if (isVatInclusive) {
+      // If VAT-inclusive, calculate price before VAT
+      const priceBeforeVAT = Math.round((amount / 1.075) * 100) / 100;
+      const vatAmount = Math.round((amount - priceBeforeVAT) * 100) / 100;
+
+      // Verify calculations
+      const checkTotal = Math.round((priceBeforeVAT + vatAmount) * 100) / 100;
+
+      return (
+        message +
+        `\n\nIMPORTANT: The product "${productName}" does not appear to be VAT-exempt in Nigeria. For a VAT-inclusive amount of ₦${formatNumber(amount)}, use these precise calculations:
+      
+1. Price before VAT = ₦${formatNumber(amount)} ÷ 1.075 = ₦${formatNumber(priceBeforeVAT)}
+2. VAT amount = ₦${formatNumber(amount)} - ₦${formatNumber(priceBeforeVAT)} = ₦${formatNumber(vatAmount)}
+
+Verification:
+- Price before VAT + VAT amount = ₦${formatNumber(priceBeforeVAT)} + ₦${formatNumber(vatAmount)} = ₦${formatNumber(checkTotal)}
+
+Always use exactly these values in your response and round to 2 decimal places.`
+      );
+    } else {
+      // Default to VAT-exclusive calculations
+      const vatAmount = Math.round(amount * 0.075 * 100) / 100;
+      const totalAmount = Math.round((amount + vatAmount) * 100) / 100;
+
+      return (
+        message +
+        `\n\nIMPORTANT: The product "${productName}" does not appear to be VAT-exempt in Nigeria. For a VAT-exclusive amount of ₦${formatNumber(amount)}, use these precise calculations:
+      
+1. VAT amount = ₦${formatNumber(amount)} × 0.075 = ₦${formatNumber(vatAmount)}
+2. Total price = ₦${formatNumber(amount)} + ₦${formatNumber(vatAmount)} = ₦${formatNumber(totalAmount)}
+
+Always use exactly these values in your response and round to 2 decimal places.`
+      );
+    }
+  }
+
+  // If we only have an amount but no product name
+  if (match && !productName) {
+    // Extract and clean the amount (remove commas)
+    const amount = parseFloat(match[1].replace(/,/g, ""));
+
+    // Skip if not a valid number
+    if (isNaN(amount)) return message;
+
+    // Check if the amount is explicitly mentioned as VAT-inclusive
+    const isVatInclusive =
+      /vat[\s-]*inclusive|including vat|includes vat|with vat|price after vat/i.test(message);
+
+    // Format numbers with commas for thousands
+    const formatNumber = (num: number) => {
+      return num.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    };
+
+    if (isVatInclusive) {
+      // Calculate with proper precision for VAT-inclusive amount
+      const priceBeforeVAT = Math.round((amount / 1.075) * 100) / 100;
+      const vatAmount = Math.round((amount - priceBeforeVAT) * 100) / 100;
+
+      // Verify calculations
+      const checkTotal = Math.round((priceBeforeVAT + vatAmount) * 100) / 100;
+      const checkVAT = Math.round(priceBeforeVAT * 0.075 * 100) / 100;
+
+      return (
+        message +
+        `\n\nIMPORTANT: For a VAT-inclusive amount of ₦${formatNumber(amount)}, use these precise calculations:
+      
 1. Price before VAT = ₦${formatNumber(amount)} ÷ 1.075 = ₦${formatNumber(priceBeforeVAT)}
 2. VAT amount = ₦${formatNumber(amount)} - ₦${formatNumber(priceBeforeVAT)} = ₦${formatNumber(vatAmount)}
 
@@ -39,7 +192,25 @@ Verification:
 - VAT amount can also be calculated as: Price before VAT × 0.075 = ₦${formatNumber(priceBeforeVAT)} × 0.075 = ₦${formatNumber(checkVAT)}
 
 Always use exactly these values in your response and round to 2 decimal places.`
-    );
+      );
+    } else {
+      // Default to VAT-exclusive calculations
+      const vatAmount = Math.round(amount * 0.075 * 100) / 100;
+      const totalAmount = Math.round((amount + vatAmount) * 100) / 100;
+
+      return (
+        message +
+        `\n\nIMPORTANT: For a VAT-exclusive amount of ₦${formatNumber(amount)}, use these precise calculations:
+      
+1. VAT amount = ₦${formatNumber(amount)} × 0.075 = ₦${formatNumber(vatAmount)}
+2. Total price = ₦${formatNumber(amount)} + ₦${formatNumber(vatAmount)} = ₦${formatNumber(totalAmount)}
+
+Verification:
+- Net price + VAT amount = ₦${formatNumber(amount)} + ₦${formatNumber(vatAmount)} = ₦${formatNumber(totalAmount)}
+
+Always use exactly these values in your response and round to 2 decimal places.`
+      );
+    }
   }
 
   return message;
@@ -65,25 +236,151 @@ const getFallbackResponse = (message: string): string => {
       }
     }
 
-    // Calculate with proper precision
-    const priceBeforeVAT = Math.round((amount / 1.075) * 100) / 100;
-    const vatAmount = Math.round((amount - priceBeforeVAT) * 100) / 100;
+    // Extract product or item name if mentioned
+    const productRegex =
+      /(?:(?:for|on|of|buying|purchasing|selling|taking|using|about|like|such as)\s+(?:a|an|the|some)?\s*([a-zA-Z\s]+?)(?:\s+at|\s+worth|\s+costing|\s+for|\s+with|\?|\.|\!|$))|(?:(?:a|an|the|some)\s+([a-zA-Z\s]+?)(?:\s+(?:is|are|costs?|costs|priced|at|for|with)|\?|\.|\!|$))/i;
+    const productMatch = lowerMessage.match(productRegex);
+    let productName = productMatch ? (productMatch[1] || productMatch[2] || "").trim() : "";
+
+    // If no product is found with the regex, check if common exempt product names are mentioned
+    if (!productName) {
+      // Common medicines
+      const medicineNames = [
+        "panadol",
+        "paracetamol",
+        "ibuprofen",
+        "aspirin",
+        "medicine",
+        "drug",
+        "pharmaceutical",
+      ];
+
+      // Common baby products
+      const babyProductNames = [
+        "pampers",
+        "huggies",
+        "diaper",
+        "nappy",
+        "baby product",
+        "baby food",
+        "baby formula",
+      ];
+
+      // Common educational items
+      const educationalItems = [
+        "textbook",
+        "notebook",
+        "pencil",
+        "pen",
+        "ruler",
+        "eraser",
+        "calculator",
+        "school supply",
+      ];
+
+      // Common basic food items
+      const basicFoodItems = [
+        "rice",
+        "beans",
+        "yam",
+        "cassava",
+        "potato",
+        "vegetable",
+        "fruit",
+        "fish",
+        "meat",
+        "egg",
+      ];
+
+      // Combine all exempt product types
+      const exemptProducts = [
+        ...medicineNames,
+        ...babyProductNames,
+        ...educationalItems,
+        ...basicFoodItems,
+      ];
+
+      for (const product of exemptProducts) {
+        if (lowerMessage.includes(product)) {
+          productName = product;
+          break;
+        }
+      }
+    }
+
+    // Check if the product is VAT exempt
+    if (productName) {
+      const isExempt = isItemLikelyExempt(productName);
+      const suggestedCategories = getSuggestedCategories(productName);
+
+      if (isExempt && suggestedCategories.length > 0) {
+        // Format numbers with commas for thousands
+        const formatNumber = (num: number) => {
+          return num.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+        };
+
+        return `Value Added Tax (VAT) in Nigeria is charged at 7.5% on most goods and services. Some items are VAT exempt or zero-rated, including basic food items, medical supplies, and educational materials.
+
+The product "${productName}" appears to fall under the following VAT-exempt category in Nigeria: ${suggestedCategories.join(", ")}.
+
+For VAT-exempt items:
+- No VAT is calculated or charged
+- The price before VAT equals the total price
+- For your item priced at ₦${formatNumber(amount)}, the full amount is the actual cost with no VAT component
+
+This means:
+- Net price: ₦${formatNumber(amount)}
+- VAT amount: ₦0.00
+- Total price: ₦${formatNumber(amount)}`;
+      }
+    }
+
+    // Check if the query is explicitly about VAT-inclusive prices
+    const isVatInclusive =
+      /vat[\s-]*inclusive|including vat|includes vat|with vat|price after vat/i.test(lowerMessage);
 
     // Format numbers with commas for thousands
     const formatNumber = (num: number) => {
       return num.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ",");
     };
 
-    return `Value Added Tax (VAT) in Nigeria is charged at 7.5% on most goods and services. Some items are VAT exempt or zero-rated, including basic food items, medical supplies, and educational materials.
+    if (isVatInclusive) {
+      // Calculate with proper precision for VAT-inclusive amount
+      const priceBeforeVAT = Math.round((amount / 1.075) * 100) / 100;
+      const vatAmount = Math.round((amount - priceBeforeVAT) * 100) / 100;
 
-To calculate the price before VAT from a VAT-inclusive amount: Divide the total price by (1 + 7.5/100) = 1.075.
+      return `Value Added Tax (VAT) in Nigeria is charged at 7.5% on most goods and services. Some items are VAT exempt or zero-rated, including basic food items, medical supplies, and educational materials.
 
-For a product costing ₦${formatNumber(amount)} (VAT inclusive):
+For VAT-inclusive prices, you need to extract the original price before VAT:
 
-1. Price before VAT = ₦${formatNumber(amount)} ÷ 1.075 = ₦${formatNumber(priceBeforeVAT)}
-2. VAT amount = ₦${formatNumber(amount)} - ₦${formatNumber(priceBeforeVAT)} = ₦${formatNumber(vatAmount)}
+1. To calculate the price before VAT from a VAT-inclusive amount: 
+   Divide the total price by (1 + 7.5/100) = 1.075
+
+2. For a product costing ₦${formatNumber(amount)} (VAT-inclusive):
+   Price before VAT = ₦${formatNumber(amount)} ÷ 1.075 = ₦${formatNumber(priceBeforeVAT)}
+
+3. VAT amount = ₦${formatNumber(amount)} - ₦${formatNumber(priceBeforeVAT)} = ₦${formatNumber(vatAmount)}
 
 It's important to round calculations to 2 decimal places for currency values.`;
+    } else {
+      // Default to VAT-exclusive calculations
+      const vatAmount = Math.round(amount * 0.075 * 100) / 100;
+      const totalAmount = Math.round((amount + vatAmount) * 100) / 100;
+
+      return `Value Added Tax (VAT) in Nigeria is charged at 7.5% on most goods and services. Some items are VAT exempt or zero-rated, including basic food items, medical supplies, and educational materials.
+
+For VAT-exclusive prices (the default when a price is quoted):
+
+1. To calculate the VAT amount from a net price: 
+   Multiply the net price by the VAT rate (7.5/100 = 0.075)
+
+2. For a product costing ₦${formatNumber(amount)} (VAT-exclusive):
+   VAT amount = ₦${formatNumber(amount)} × 0.075 = ₦${formatNumber(vatAmount)}
+
+3. Total price = ₦${formatNumber(amount)} + ₦${formatNumber(vatAmount)} = ₦${formatNumber(totalAmount)}
+
+It's important to round calculations to 2 decimal places for currency values.`;
+    }
   }
 
   if (lowerMessage.includes("capital gains") || lowerMessage.includes("cgt")) {
@@ -166,7 +463,7 @@ export async function POST(req: Request) {
             {
               role: "system",
               content:
-                "You are a knowledgeable tax assistant focused on Nigerian tax regulations. Provide clear, accurate information about tax types, rates, calculations, and compliance requirements based on current Nigerian tax laws. Always aim to be helpful and educational.\n\nWhen explaining VAT calculations, always use the correct methodology as follows:\n\n1. For calculating price before VAT from VAT-inclusive amount: Divide the total price by (1 + VAT rate/100). For Nigeria's 7.5% VAT: Price Before VAT = Total Price ÷ (1 + 7.5/100) = Total Price ÷ 1.075\n\n2. For calculating VAT amount: Subtract the price before VAT from the total price. VAT Amount = Total Price - Price Before VAT\n\nAlways provide a clear step-by-step explanation for each calculation, showing the formula used and how each value was derived. Format currency values with the Naira symbol (₦) and always use proper comma separators for thousands.\n\nIMPORTANT: When a user mentions a specific amount like ₦10,000, use EXACTLY that amount in your calculations and examples. Do not substitute it with ₦50,000 or any other amount. Be very precise and accurate with the values the user provides.\n\nCORRECT CALCULATIONS WITH PROPER DECIMAL PRECISION:\n- For ₦10,000 (VAT inclusive): Price before VAT = ₦10,000 ÷ 1.075 = ₦9,302.33, VAT = ₦697.67\n- For ₦50,000 (VAT inclusive): Price before VAT = ₦50,000 ÷ 1.075 = ₦46,511.63, VAT = ₦3,488.37\n- For ₦100,000 (VAT inclusive): Price before VAT = ₦100,000 ÷ 1.075 = ₦93,023.26, VAT = ₦6,976.74\n\nAlways double-check your calculations before responding to ensure they satisfy these mathematical relationships:\n1. Price Before VAT + VAT Amount = Total Price (VAT inclusive)\n2. VAT Amount = Price Before VAT × (7.5/100)\n3. Total amounts should be rounded to 2 decimal places for currency values.",
+                "You are a knowledgeable tax assistant focused on Nigerian tax regulations. Provide clear, accurate information about tax types, rates, calculations, and compliance requirements based on current Nigerian tax laws. Always aim to be helpful and educational.\n\nWhen dealing with VAT, ALWAYS check if the product or service is VAT exempt BEFORE calculating VAT. The following categories are generally VAT exempt in Nigeria:\n\n- Basic/unprocessed food items (raw vegetables, fruits, grains, unprocessed meat, eggs in shell, rice, beans, yams, potatoes, etc.)\n- Medical and pharmaceutical products (ALL medicines including Panadol, paracetamol, aspirin, ibuprofen, prescription medicines, over-the-counter medicines, medical equipment, hospital services, etc.)\n- Educational materials and services (tuition fees, educational books, textbooks, school supplies, notebooks, pens, pencils, rulers, etc.)\n- Books, newspapers, and educational resources (textbooks, religious books, magazines, dictionaries, encyclopedias, etc.)\n- Essential baby products (baby food, infant formula, diapers/nappies including branded products like Pampers and Huggies, baby toiletries, etc.)\n- Agricultural equipment and inputs (fertilizers, farm equipment, seeds)\n- Exported goods and services\n\nIMPORTANT: ALL MEDICINES AND MEDICAL PRODUCTS INCLUDING PANADOL ARE VAT EXEMPT. ALL ESSENTIAL BABY PRODUCTS INCLUDING PAMPERS AND OTHER DIAPER BRANDS ARE VAT EXEMPT. If a product is a medication, medical product, baby essential, or falls in other exempt categories, it is VAT exempt and NO VAT should be calculated.\n\nIf a product falls into these categories, clearly state that it is VAT exempt and NO VAT should be calculated.\n\nVAT CALCULATION APPROACH:\n\nIMPORTANT: ALWAYS ASSUME PRICES ARE VAT-EXCLUSIVE UNLESS SPECIFICALLY TOLD THE PRICE IS VAT-INCLUSIVE. By default, treat all prices as net prices that do not include VAT yet.\n\n1. For VAT-exclusive prices (DEFAULT assumption - when the user mentions a price without specifying if it includes VAT):\n   - Use the formula: VAT Amount = Net Price × VAT Rate\n   - For Nigeria's 7.5% VAT: VAT Amount = Net Price × 0.075\n   - Total Price = Net Price + VAT Amount\n   - Example: If an item costs ₦10,000 (VAT-exclusive), VAT Amount = ₦10,000 × 0.075 = ₦750, Total Price = ₦10,000 + ₦750 = ₦10,750\n\n2. For VAT-inclusive prices (ONLY when explicitly told the price already includes VAT):\n   - Use the formula: Price Before VAT = Total Price ÷ (1 + VAT Rate)\n   - For Nigeria's 7.5% VAT: Price Before VAT = Total Price ÷ 1.075\n   - VAT Amount = Total Price - Price Before VAT\n   - Example: If an item costs ₦10,000 (VAT-inclusive), Price Before VAT = ₦10,000 ÷ 1.075 = ₦9,302.33, VAT Amount = ₦10,000 - ₦9,302.33 = ₦697.67\n\nAlways provide a clear step-by-step explanation for each calculation, showing the formula used and how each value was derived. Format currency values with the Naira symbol (₦) and always use proper comma separators for thousands.\n\nIMPORTANT: When a user mentions a specific amount like ₦10,000, use EXACTLY that amount in your calculations and examples. Do not substitute it with ₦50,000 or any other amount. Be very precise and accurate with the values the user provides.\n\nCORRECT CALCULATIONS WITH PROPER DECIMAL PRECISION:\n- For ₦10,000 (VAT-exclusive): VAT Amount = ₦10,000 × 0.075 = ₦750, Total = ₦10,750\n- For ₦50,000 (VAT-exclusive): VAT Amount = ₦50,000 × 0.075 = ₦3,750, Total = ₦53,750\n- For ₦10,000 (VAT-inclusive): Price Before VAT = ₦10,000 ÷ 1.075 = ₦9,302.33, VAT = ₦697.67\n\nAlways double-check your calculations before responding to ensure they satisfy these mathematical relationships:\n1. For VAT-exclusive: Net Price + VAT Amount = Total Price\n2. For VAT-inclusive: Price Before VAT + VAT Amount = Total Price\n3. Total amounts should be rounded to 2 decimal places for currency values.",
             },
             ...enhancedMessages,
           ],

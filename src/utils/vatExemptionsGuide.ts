@@ -16,6 +16,18 @@ export const vatExemptionsGuide = {
       "Eggs in shell",
       "Milk (not packaged)",
       "Yams, cassava and other tubers",
+      "Rice (uncooked)",
+      "Beans",
+      "Maize",
+      "Millet",
+      "Sorghum",
+      "Wheat",
+      "Potatoes",
+      "Onions",
+      "Tomatoes",
+      "Plantains",
+      "Fresh fish",
+      "Fresh meat",
       "Salt",
       "Fresh vegetables",
       "Fresh fruits",
@@ -26,6 +38,13 @@ export const vatExemptionsGuide = {
     description: "Medical and pharmaceutical products",
     examples: [
       "Prescription medicines",
+      "Over-the-counter medicines",
+      "Panadol",
+      "Paracetamol",
+      "Aspirin",
+      "Ibuprofen",
+      "Antibiotics",
+      "Antimalarials",
       "Medical equipment",
       "Medical/hospital services",
       "Ambulance services",
@@ -33,20 +52,42 @@ export const vatExemptionsGuide = {
       "Vaccines and immunization supplies",
       "Diagnostic equipment",
       "First aid kits",
+      "Medicine",
+      "Drug",
+      "Pharmaceutical",
+      "Tablet",
+      "Capsule",
+      "Syrup",
+      "Injection",
+      "Hospital",
+      "Clinic",
+      "Pharmacy",
     ],
-    notes: "Some cosmetic medical procedures may be subject to VAT",
+    notes:
+      "Most medicines and medical products are VAT-exempt. Some cosmetic procedures may be subject to VAT",
   },
   educational: {
     description: "Educational materials and services",
     examples: [
       "Tuition fees",
+      "School fees",
       "Educational services",
       "School supplies",
+      "Notebooks",
+      "Exercise books",
+      "Pencils",
+      "Pens",
+      "Rulers",
+      "Erasers",
       "Educational books",
+      "Textbooks",
       "School uniforms",
       "Chalk, slates, mathematical sets",
+      "Scientific calculators",
       "Teaching aids",
       "Laboratory equipment for educational use",
+      "School bags",
+      "Educational software",
     ],
     notes: "Luxury stationery and certain non-essential educational items may be subject to VAT",
   },
@@ -55,12 +96,20 @@ export const vatExemptionsGuide = {
     examples: [
       "Textbooks",
       "Educational books",
+      "Academic journals",
       "Research publications",
       "Religious books",
+      "Bibles",
+      "Qurans",
+      "Dictionaries",
+      "Encyclopedias",
+      "Children's books",
       "Newspapers",
       "Magazines",
       "Journals",
       "Braille materials",
+      "Educational maps",
+      "Atlases",
     ],
     notes: "Excludes e-books and digital publications in some cases",
   },
@@ -70,11 +119,23 @@ export const vatExemptionsGuide = {
       "Baby food",
       "Infant formula",
       "Diapers",
+      "Pampers",
+      "Huggies",
+      "Baby wipes",
+      "Baby lotion",
+      "Baby powder",
+      "Baby soap",
       "Baby clothes",
       "Baby toiletries",
       "Baby feeding equipment",
+      "Baby bottles",
+      "Pacifiers",
       "Baby cots and furniture",
       "Baby toys",
+      "Baby oil",
+      "Baby shampoo",
+      "Baby cream",
+      "Diaper rash cream",
     ],
     notes: "Luxury or non-essential baby items may still be subject to VAT",
   },
@@ -116,6 +177,49 @@ export const isItemLikelyExempt = (item: string, category?: string): boolean => 
   // Convert to lowercase for case-insensitive matching
   const itemLower = item.toLowerCase().trim();
 
+  // Special case for common medications - these should always be VAT exempt
+  const commonMedicines = [
+    "panadol",
+    "paracetamol",
+    "acetaminophen",
+    "ibuprofen",
+    "aspirin",
+    "medicine",
+    "medication",
+    "drug",
+    "tablet",
+    "pill",
+    "capsule",
+    "syrup",
+    "antibiotic",
+    "antimalarial",
+    "vitamin",
+    "supplement",
+    "pharmaceutical",
+    "prescription",
+    "bandage",
+    "first aid",
+    "thermometer",
+    "antiseptic",
+    "ointment",
+    "cough",
+    "cold",
+    "flu",
+    "fever",
+    "pain relief",
+    "analgesic",
+    "blood pressure",
+    "diabetes",
+    "insulin",
+    "inhaler",
+    "sanitizer",
+    "disinfectant",
+  ];
+
+  if (commonMedicines.some((med) => itemLower.includes(med))) {
+    return true;
+  }
+
   // List of common words to exclude from word-level matching to avoid false positives
   const commonWords = [
     "the",
@@ -130,6 +234,10 @@ export const isItemLikelyExempt = (item: string, category?: string): boolean => 
     "from",
     "by",
     "services",
+    "item",
+    "product",
+    "thing",
+    "stuff",
   ];
 
   // If category is provided, check only within that category
@@ -159,7 +267,9 @@ export const isItemLikelyExempt = (item: string, category?: string): boolean => 
     // If the query has specific words (like "fresh vegetables"),
     // all of those specific words should appear in the target
     if (queryWords.length > 0) {
-      return queryWords.every((word) => targetWords.some((tw) => tw === word || tw.includes(word)));
+      return queryWords.some((word) =>
+        targetWords.some((tw) => tw === word || tw.includes(word) || word.includes(tw))
+      );
     }
 
     return false;
@@ -175,6 +285,127 @@ export const getSuggestedCategories = (item: string): string[] => {
   const itemLower = item.toLowerCase().trim();
   const matches: string[] = [];
 
+  // Special handling for common medicines and pharmaceutical terms
+  const medicalTerms = [
+    "panadol",
+    "paracetamol",
+    "acetaminophen",
+    "ibuprofen",
+    "aspirin",
+    "medicine",
+    "medication",
+    "drug",
+    "tablet",
+    "pill",
+    "capsule",
+    "syrup",
+    "antibiotic",
+    "antimalarial",
+    "vitamin",
+    "supplement",
+    "pharmaceutical",
+    "pharmacy",
+    "hospital",
+    "clinic",
+    "medical",
+    "health",
+  ];
+
+  if (medicalTerms.some((term) => itemLower.includes(term))) {
+    return ["medical"];
+  }
+
+  // Special handling for education terms
+  const educationTerms = [
+    "book",
+    "textbook",
+    "education",
+    "school",
+    "university",
+    "teaching",
+    "learning",
+    "notebook",
+    "pen",
+    "pencil",
+    "ruler",
+    "eraser",
+    "calculator",
+    "tuition",
+    "dictionary",
+    "encyclopedia",
+    "magazine",
+    "newspaper",
+    "journal",
+    "bible",
+    "quran",
+    "atlas",
+    "map",
+    "educational",
+    "academic",
+    "study",
+    "student",
+  ];
+  if (educationTerms.some((term) => itemLower.includes(term))) {
+    return ["educational", "books"];
+  }
+
+  // Special handling for food terms
+  const foodTerms = [
+    "vegetable",
+    "fruit",
+    "cereal",
+    "grain",
+    "raw food",
+    "unprocessed food",
+    "rice",
+    "beans",
+    "yam",
+    "cassava",
+    "potato",
+    "onion",
+    "tomato",
+    "plantain",
+    "fish",
+    "meat",
+    "egg",
+    "milk",
+    "maize",
+    "wheat",
+    "millet",
+    "sorghum",
+    "fresh produce",
+    "tuber",
+    "salt",
+  ];
+  if (foodTerms.some((term) => itemLower.includes(term))) {
+    return ["basic-food"];
+  }
+
+  // Special handling for baby products
+  const babyTerms = [
+    "baby",
+    "infant",
+    "diaper",
+    "nappy",
+    "pampers",
+    "huggies",
+    "formula",
+    "pacifier",
+    "bottle",
+    "baby food",
+    "baby milk",
+    "baby oil",
+    "baby soap",
+    "baby lotion",
+    "baby powder",
+    "baby cream",
+    "baby toy",
+    "baby cloth",
+  ];
+  if (babyTerms.some((term) => itemLower.includes(term))) {
+    return ["baby-products"];
+  }
+
   // List of common words to exclude from word-level matching
   const commonWords = [
     "the",
@@ -189,6 +420,10 @@ export const getSuggestedCategories = (item: string): string[] => {
     "from",
     "by",
     "services",
+    "item",
+    "product",
+    "thing",
+    "stuff",
   ];
 
   // Split into words, filter out common words and very short words
@@ -228,7 +463,8 @@ export const getSuggestedCategories = (item: string): string[] => {
         (word) =>
           exampleLower.split(/\s+/).includes(word) ||
           exampleLower.includes(word + " ") ||
-          exampleLower.includes(" " + word)
+          exampleLower.includes(" " + word) ||
+          word.includes(exampleLower)
       );
     });
 
@@ -236,7 +472,7 @@ export const getSuggestedCategories = (item: string): string[] => {
     const descriptionLower = info.description.toLowerCase();
     const matchesDescription =
       itemWords.length > 0 &&
-      itemWords.some((word) => word.length > 4 && descriptionLower.includes(word));
+      itemWords.some((word) => word.length > 3 && descriptionLower.includes(word));
 
     if (matchesExample || matchesDescription) {
       matches.push(category);
