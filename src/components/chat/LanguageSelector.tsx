@@ -2,7 +2,8 @@
 
 import React, { useState, useRef, useEffect } from "react";
 import { ChevronDown, Globe } from "lucide-react";
-import { SupportedLanguage } from "@/utils";
+
+type SupportedLanguage = string;
 
 interface LanguageSelectorProps {
   selectedLanguage: SupportedLanguage;

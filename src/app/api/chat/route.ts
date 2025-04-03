@@ -1,5 +1,50 @@
 import { NextResponse } from "next/server";
 
+// Function to detect and enhance a query about a specific amount
+const enhanceUserMessage = (message: string): string => {
+  // Check for specific amount mentions with regex for various formats
+  const amountRegex = /₦?\s*([\d,]+(?:\.\d+)?)\s*(?:naira)?/i;
+  const match = message.match(amountRegex);
+
+  if (match) {
+    // Extract and clean the amount (remove commas)
+    const amount = parseFloat(match[1].replace(/,/g, ""));
+
+    // Skip if not a valid number
+    if (isNaN(amount)) return message;
+
+    // Calculate with proper precision
+    const priceBeforeVAT = Math.round((amount / 1.075) * 100) / 100;
+    const vatAmount = Math.round((amount - priceBeforeVAT) * 100) / 100;
+
+    // Verify calculations
+    const checkTotal = Math.round((priceBeforeVAT + vatAmount) * 100) / 100;
+    const checkVAT = Math.round(priceBeforeVAT * 0.075 * 100) / 100;
+
+    // Format numbers with commas for thousands
+    const formatNumber = (num: number) => {
+      return num.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    };
+
+    // Add specific guidance for this amount
+    return (
+      message +
+      `\n\nIMPORTANT: For a VAT-inclusive amount of ₦${formatNumber(amount)}, use these precise calculations:
+    
+1. Price before VAT = ₦${formatNumber(amount)} ÷ 1.075 = ₦${formatNumber(priceBeforeVAT)}
+2. VAT amount = ₦${formatNumber(amount)} - ₦${formatNumber(priceBeforeVAT)} = ₦${formatNumber(vatAmount)}
+
+Verification:
+- Price before VAT + VAT amount = ₦${formatNumber(priceBeforeVAT)} + ₦${formatNumber(vatAmount)} = ₦${formatNumber(checkTotal)}
+- VAT amount can also be calculated as: Price before VAT × 0.075 = ₦${formatNumber(priceBeforeVAT)} × 0.075 = ₦${formatNumber(checkVAT)}
+
+Always use exactly these values in your response and round to 2 decimal places.`
+    );
+  }
+
+  return message;
+};
+
 // Basic fallback responses for common tax-related questions
 const getFallbackResponse = (message: string): string => {
   const lowerMessage = message.toLowerCase();
@@ -9,7 +54,36 @@ const getFallbackResponse = (message: string): string => {
   }
 
   if (lowerMessage.includes("vat") || lowerMessage.includes("value added tax")) {
-    return "Value Added Tax (VAT) in Nigeria is charged at 7.5% on most goods and services. Some items are VAT exempt or zero-rated, including basic food items, medical supplies, and educational materials.";
+    // Extract any mentioned amount
+    const amountMatch = lowerMessage.match(/₦?\s*([\d,]+(?:\.\d+)?)\s*(?:naira)?/i);
+    let amount = 10000; // Default example
+
+    if (amountMatch) {
+      const extractedAmount = parseFloat(amountMatch[1].replace(/,/g, ""));
+      if (!isNaN(extractedAmount)) {
+        amount = extractedAmount;
+      }
+    }
+
+    // Calculate with proper precision
+    const priceBeforeVAT = Math.round((amount / 1.075) * 100) / 100;
+    const vatAmount = Math.round((amount - priceBeforeVAT) * 100) / 100;
+
+    // Format numbers with commas for thousands
+    const formatNumber = (num: number) => {
+      return num.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    };
+
+    return `Value Added Tax (VAT) in Nigeria is charged at 7.5% on most goods and services. Some items are VAT exempt or zero-rated, including basic food items, medical supplies, and educational materials.
+
+To calculate the price before VAT from a VAT-inclusive amount: Divide the total price by (1 + 7.5/100) = 1.075.
+
+For a product costing ₦${formatNumber(amount)} (VAT inclusive):
+
+1. Price before VAT = ₦${formatNumber(amount)} ÷ 1.075 = ₦${formatNumber(priceBeforeVAT)}
+2. VAT amount = ₦${formatNumber(amount)} - ₦${formatNumber(priceBeforeVAT)} = ₦${formatNumber(vatAmount)}
+
+It's important to round calculations to 2 decimal places for currency values.`;
   }
 
   if (lowerMessage.includes("capital gains") || lowerMessage.includes("cgt")) {
@@ -66,6 +140,20 @@ export async function POST(req: Request) {
 
       console.log("Calling Mistral API with key:", apiKey ? "Key exists" : "No key");
 
+      // Create a copy of the messages array to avoid modifying the original
+      const enhancedMessages = [...messages];
+
+      // Enhance the last user message if it contains specific amounts
+      if (
+        enhancedMessages.length > 0 &&
+        enhancedMessages[enhancedMessages.length - 1].role === "user"
+      ) {
+        enhancedMessages[enhancedMessages.length - 1] = {
+          ...enhancedMessages[enhancedMessages.length - 1],
+          content: enhanceUserMessage(enhancedMessages[enhancedMessages.length - 1].content),
+        };
+      }
+
       const response = await fetch("https://api.mistral.ai/v1/chat/completions", {
         method: "POST",
         headers: {
@@ -78,9 +166,9 @@ export async function POST(req: Request) {
             {
               role: "system",
               content:
-                "You are a knowledgeable tax assistant focused on Nigerian tax regulations. Provide clear, accurate information about tax types, rates, calculations, and compliance requirements based on current Nigerian tax laws. Always aim to be helpful and educational.",
+                "You are a knowledgeable tax assistant focused on Nigerian tax regulations. Provide clear, accurate information about tax types, rates, calculations, and compliance requirements based on current Nigerian tax laws. Always aim to be helpful and educational.\n\nWhen explaining VAT calculations, always use the correct methodology as follows:\n\n1. For calculating price before VAT from VAT-inclusive amount: Divide the total price by (1 + VAT rate/100). For Nigeria's 7.5% VAT: Price Before VAT = Total Price ÷ (1 + 7.5/100) = Total Price ÷ 1.075\n\n2. For calculating VAT amount: Subtract the price before VAT from the total price. VAT Amount = Total Price - Price Before VAT\n\nAlways provide a clear step-by-step explanation for each calculation, showing the formula used and how each value was derived. Format currency values with the Naira symbol (₦) and always use proper comma separators for thousands.\n\nIMPORTANT: When a user mentions a specific amount like ₦10,000, use EXACTLY that amount in your calculations and examples. Do not substitute it with ₦50,000 or any other amount. Be very precise and accurate with the values the user provides.\n\nCORRECT CALCULATIONS WITH PROPER DECIMAL PRECISION:\n- For ₦10,000 (VAT inclusive): Price before VAT = ₦10,000 ÷ 1.075 = ₦9,302.33, VAT = ₦697.67\n- For ₦50,000 (VAT inclusive): Price before VAT = ₦50,000 ÷ 1.075 = ₦46,511.63, VAT = ₦3,488.37\n- For ₦100,000 (VAT inclusive): Price before VAT = ₦100,000 ÷ 1.075 = ₦93,023.26, VAT = ₦6,976.74\n\nAlways double-check your calculations before responding to ensure they satisfy these mathematical relationships:\n1. Price Before VAT + VAT Amount = Total Price (VAT inclusive)\n2. VAT Amount = Price Before VAT × (7.5/100)\n3. Total amounts should be rounded to 2 decimal places for currency values.",
             },
-            ...messages,
+            ...enhancedMessages,
           ],
           max_tokens: 1024,
         }),

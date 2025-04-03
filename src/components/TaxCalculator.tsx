@@ -1,11 +1,14 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import { Calculator, Landmark, User, DollarSign, Percent } from "lucide-react";
+import { Calculator, Landmark, User, DollarSign, Percent, AlertCircle } from "lucide-react";
 import {
   calculatePersonalIncomeTax,
   calculateCompanyIncomeTax,
   TaxationMethod,
+  validateIncomeTaxInputs,
+  validateCompanyTaxInputs,
+  formatCurrency as formatCurrencyUtil,
 } from "../utils/taxCalculations";
 
 interface TaxResultProps {
@@ -18,6 +21,11 @@ interface TaxResultProps {
   taxRate?: number;
 }
 
+interface ValidationError {
+  message: string;
+  type: "error" | "warning";
+}
+
 const TaxCalculator = () => {
   const [isVisible, setIsVisible] = useState(false);
   const [taxType, setTaxType] = useState<"personal" | "company">("personal");
@@ -25,6 +33,7 @@ const TaxCalculator = () => {
   const [turnover, setTurnover] = useState("");
   const [taxMethod, setTaxMethod] = useState<TaxationMethod>(TaxationMethod.Progressive);
   const [calculatedTax, setCalculatedTax] = useState<TaxResultProps | null>(null);
+  const [validationErrors, setValidationErrors] = useState<ValidationError[]>([]);
 
   // Add useEffect to check if the calculator should be visible
   useEffect(() => {
@@ -110,40 +119,52 @@ const TaxCalculator = () => {
 
   const calculateTax = (e: React.FormEvent) => {
     e.preventDefault();
+    setValidationErrors([]);
 
     // Process income input
     const incomeStr = income.replace(/[₦N,]/g, "");
     const incomeNum = parseFloat(incomeStr);
 
-    // Validate input
+    // Validate income input
     if (isNaN(incomeNum)) {
-      alert("Please enter a valid number for your income");
+      setValidationErrors([
+        { message: "Please enter a valid number for your income", type: "error" },
+      ]);
       return;
     }
 
     if (incomeNum < 0) {
-      alert("Income cannot be negative");
+      setValidationErrors([{ message: "Income cannot be negative", type: "error" }]);
       return;
     }
 
-    if (incomeNum > 1000000000) {
-      alert("Please enter an amount less than 1 billion naira");
-      return;
-    }
-
-    // For company tax, also validate turnover
+    // For company tax, validate turnover
     if (taxType === "company") {
       const turnoverStr = turnover.replace(/[₦N,]/g, "");
       const turnoverNum = parseFloat(turnoverStr);
 
-      if (isNaN(turnoverNum)) {
-        alert("Please enter a valid number for company turnover");
+      const validation = validateCompanyTaxInputs(turnoverNum, "medium");
+      if (!validation.isValid) {
+        setValidationErrors(validation.messages.map((msg) => ({ message: msg, type: "error" })));
         return;
       }
 
-      if (turnoverNum < 0) {
-        alert("Turnover cannot be negative");
+      // Validate that profit is less than turnover
+      if (incomeNum >= turnoverNum) {
+        setValidationErrors([
+          { message: "Annual profit must be less than annual turnover", type: "error" },
+        ]);
         return;
+      }
+
+      // Add warning for high values
+      if (turnoverNum > 10000000000) {
+        setValidationErrors([
+          {
+            message: "Very large turnover value detected. Please verify accuracy.",
+            type: "warning",
+          },
+        ]);
       }
 
       // Determine company size based on turnover
@@ -162,6 +183,20 @@ const TaxCalculator = () => {
         taxRate: taxResult.taxRate,
       });
     } else {
+      // Validate personal income tax inputs
+      const validation = validateIncomeTaxInputs(incomeNum, 0, 0);
+      if (!validation.isValid) {
+        setValidationErrors(validation.messages.map((msg) => ({ message: msg, type: "error" })));
+        return;
+      }
+
+      // Add warning for high values
+      if (incomeNum > 100000000) {
+        setValidationErrors([
+          { message: "Very large income value detected. Please verify accuracy.", type: "warning" },
+        ]);
+      }
+
       // Calculate personal income tax using the utility
       const taxResult = calculatePersonalIncomeTax(incomeNum, 0, taxMethod);
 
@@ -190,6 +225,20 @@ const TaxCalculator = () => {
         </div>
 
         <div className="p-3">
+          {validationErrors.length > 0 && (
+            <div className="mb-3">
+              {validationErrors.map((error, index) => (
+                <div
+                  key={index}
+                  className={`text-xs p-2 rounded mb-1 flex items-start ${error.type === "error" ? "bg-red-50 text-red-700" : "bg-amber-50 text-amber-700"}`}
+                >
+                  <AlertCircle className="h-3 w-3 mr-1 mt-0.5 flex-shrink-0" />
+                  <span>{error.message}</span>
+                </div>
+              ))}
+            </div>
+          )}
+
           <form onSubmit={calculateTax} className="space-y-3">
             <div className="grid grid-cols-1 gap-3">
               <div className="space-y-3">
