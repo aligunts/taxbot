@@ -40,7 +40,7 @@ export default function Chat() {
             "Content-Type": "application/json",
           },
           body: JSON.stringify({
-            messages: currentMessages,
+            message: messageText,
           }),
         });
 
@@ -71,8 +71,7 @@ export default function Chat() {
           { role: "user", content: messageText },
           {
             role: "assistant",
-            content:
-              "I'm sorry, I'm having trouble connecting to my knowledge base right now. Please try a different question or try again later.",
+            content: "I'm sorry, I'm having trouble connecting. Please try again in a moment.",
           },
         ]);
 
