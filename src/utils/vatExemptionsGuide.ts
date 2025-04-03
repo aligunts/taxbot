@@ -576,6 +576,7 @@ export const checkOnlineVatExemption = async (
   category?: string;
   confidence?: number;
   source?: string;
+  uncertain?: boolean;
 }> => {
   try {
     // Handle generic terms explicitly
@@ -595,6 +596,7 @@ export const checkOnlineVatExemption = async (
         isExempt: false,
         confidence: 0.98,
         source: "policy-rule",
+        uncertain: false,
       };
     }
 
@@ -609,6 +611,7 @@ export const checkOnlineVatExemption = async (
         category: suggestedCategories[0],
         confidence: 0.95,
         source: "local-database",
+        uncertain: false,
       };
     }
 
@@ -621,6 +624,7 @@ export const checkOnlineVatExemption = async (
       category?: string;
       confidence?: number;
       source?: string;
+      uncertain?: boolean;
     }>((resolve) => {
       // This is a simulated response with a shorter timeout
       setTimeout(() => {
@@ -659,8 +663,33 @@ export const checkOnlineVatExemption = async (
               category,
               confidence: 0.85,
               source: "online-api",
+              uncertain: false,
             });
           }
+        }
+
+        // List of potentially ambiguous items that may need clarification
+        const ambiguousItems = [
+          "milk", // Could be raw milk (exempt) or packaged milk (non-exempt)
+          "juice", // Could be fresh juice (exempt) or packaged juice (non-exempt)
+          "bread", // Could be basic bread (exempt in some interpretations) or specialty bread
+          "toy", // Could be educational toy (exempt) or regular toy (non-exempt)
+          "water", // Could be tap water (exempt) or bottled water (non-exempt)
+          "cream", // Could be medicinal cream (exempt) or cosmetic cream (non-exempt)
+          "oil", // Could be cooking oil (exempt) or other oils
+          "computer", // Could be educational (exempt) or regular use
+          "paper", // Could be educational (exempt) or regular use
+          "mat", // Could be prayer mat (exempt) or regular mat
+        ];
+
+        // If item might be ambiguous, mark as uncertain
+        if (ambiguousItems.some((term) => itemLower.includes(term))) {
+          return resolve({
+            isExempt: false, // Default to non-exempt
+            confidence: 0.5, // Low confidence
+            source: "online-api",
+            uncertain: true, // Flag as uncertain, needs clarification
+          });
         }
 
         // If no match in extended database, return non-exempt
@@ -668,6 +697,7 @@ export const checkOnlineVatExemption = async (
           isExempt: false,
           confidence: 0.7,
           source: "online-api",
+          uncertain: false,
         });
       }, 200); // Reduced from 300ms to 200ms for faster response
     });
@@ -678,6 +708,7 @@ export const checkOnlineVatExemption = async (
       category?: string;
       confidence?: number;
       source?: string;
+      uncertain?: boolean;
     }>((_, reject) => {
       setTimeout(() => {
         reject(new Error("API timeout"));
@@ -694,6 +725,7 @@ export const checkOnlineVatExemption = async (
         category: suggestedCategories.length > 0 ? suggestedCategories[0] : undefined,
         confidence: 0.6,
         source: "local-fallback",
+        uncertain: suggestedCategories.length === 0 && !localCheck,
       };
     });
   } catch (error) {
@@ -708,6 +740,7 @@ export const checkOnlineVatExemption = async (
       category: suggestedCategories.length > 0 ? suggestedCategories[0] : undefined,
       confidence: 0.6,
       source: "local-fallback",
+      uncertain: suggestedCategories.length === 0 && !localCheck,
     };
   }
 };

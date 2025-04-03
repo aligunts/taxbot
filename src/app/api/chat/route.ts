@@ -136,6 +136,25 @@ Always use exactly these values in your response and round to 2 decimal places.`
     const category = exemptionCheck.category || "";
     const source = exemptionCheck.source || "online-check";
     const confidence = exemptionCheck.confidence || 0;
+    const uncertain = exemptionCheck.uncertain || false;
+
+    // If we're uncertain about the product, ask for clarification
+    if (uncertain) {
+      return (
+        message +
+        `\n\nI'm not completely certain about the VAT status of "${productName}" as it could fall under different categories. 
+
+Could you please clarify which category your product falls under? Is it:
+- A medical or pharmaceutical product
+- A baby product
+- An educational material or book
+- A basic/unprocessed food item
+- An agricultural input
+- A religious item
+
+This will help me determine whether it's VAT-exempt or not.`
+      );
+    }
 
     if (isExempt) {
       // Format numbers with commas for thousands
@@ -367,6 +386,22 @@ const getFallbackResponse = async (message: string): Promise<string> => {
     const category = exemptionCheck.category || "";
     const source = exemptionCheck.source || "online-check";
     const confidence = exemptionCheck.confidence || 0;
+    const uncertain = exemptionCheck.uncertain || false;
+
+    // If we're uncertain about the product, ask for clarification
+    if (uncertain) {
+      return `I'm not completely certain about the VAT status of "${productName}" as it could fall under different categories.
+
+Could you please clarify which category your product falls under? Is it:
+- A medical or pharmaceutical product
+- A baby product
+- An educational material or book
+- A basic/unprocessed food item
+- An agricultural input
+- A religious item
+
+This will help me determine whether it's VAT-exempt or not.`;
+    }
 
     if (isExempt) {
       return `"${productName}" falls under the VAT-exempt category in Nigeria: ${category}. 
@@ -455,7 +490,7 @@ export async function POST(req: Request) {
 Key information about VAT in Nigeria:
 - The current VAT rate is 7.5%
 - ALWAYS assume prices are VAT-exclusive by default unless explicitly stated as VAT-inclusive
-- Generic terms like "good", "item", or "product" are NOT automatically VAT-exempt. Only specific product types in exempt categories are exempt.
+- IMPORTANT: Generic terms like "good", "item", or "product" are NEVER VAT-exempt. Generic terms ALWAYS require VAT calculation of 7.5%. Only specific products in exempt categories are exempt.
 - VAT exempt categories include:
   - Basic food items (rice, beans, yam, cassava, etc.)
   - Medical and pharmaceutical products (ALL medicines are VAT EXEMPT)
@@ -488,7 +523,11 @@ Example 2: For a VAT-inclusive price of ₦10,000:
 2. VAT amount = ₦10,000 - ₦9,302.33 = ₦697.67
 3. Verify: ₦9,302.33 + ₦697.67 = ₦10,000.00
 
-IMPORTANT: If a user asks about a "good" or "product" without specifying what type of product it is, DO NOT assume it is VAT-exempt. Most goods in Nigeria are subject to VAT unless they fall into a specific exempt category.
+NEVER EVER say an "item" or "product" is VAT-exempt without knowing the specific type. If someone asks about "an item" or "a product" without specifying what it is, ALWAYS calculate VAT at 7.5%.
+
+DO NOT use phrases like "It seems there might be a misunderstanding" or "not all items are VAT-exempt" in your responses. Instead, focus on answering the specific question and providing accurate tax information.
+
+If you're unsure whether a product is VAT-exempt, ASK the user which category their product falls under. For example: "Could you please clarify which category your product falls under? Is it a medical product, baby product, educational material, basic food item, etc.?"
 
 Remember to check if a product is VAT exempt before calculating VAT, in which case no VAT applies.
 
