@@ -141,7 +141,7 @@ Always use exactly these values in your response and round to 2 decimal places.`
       // Format numbers with commas for thousands
       return (
         message +
-        `\n\nIMPORTANT: Online tax database check (${source}, confidence: ${Math.round(confidence * 100)}%) shows the product "${productName}" falls under VAT-exempt category in Nigeria: ${category}. No VAT should be calculated for this item.
+        `\n\nIMPORTANT: "${productName}" falls under VAT-exempt category in Nigeria: ${category}. No VAT should be calculated for this item.
       
 For VAT-exempt items:
 1. Price before VAT = ₦${formatNumber(amount)} (no VAT is applicable)
@@ -160,7 +160,7 @@ For VAT-exempt items:
 
       return (
         message +
-        `\n\nIMPORTANT: Online tax database check (${source}, confidence: ${Math.round(confidence * 100)}%) shows the product "${productName}" is NOT VAT-exempt in Nigeria. For a VAT-inclusive amount of ₦${formatNumber(amount)}, use these precise calculations:
+        `\n\nIMPORTANT: "${productName}" is NOT VAT-exempt in Nigeria. For a VAT-inclusive amount of ₦${formatNumber(amount)}, use these precise calculations:
       
 1. Price before VAT = ₦${formatNumber(amount)} ÷ 1.075 = ₦${formatNumber(priceBeforeVAT)}
 2. VAT amount = ₦${formatNumber(amount)} - ₦${formatNumber(priceBeforeVAT)} = ₦${formatNumber(vatAmount)}
@@ -177,7 +177,7 @@ Always use exactly these values in your response and round to 2 decimal places.`
 
       return (
         message +
-        `\n\nIMPORTANT: Online tax database check (${source}, confidence: ${Math.round(confidence * 100)}%) shows the product "${productName}" is NOT VAT-exempt in Nigeria. For a VAT-exclusive amount of ₦${formatNumber(amount)}, use these precise calculations:
+        `\n\nIMPORTANT: "${productName}" is NOT VAT-exempt in Nigeria. For a VAT-exclusive amount of ₦${formatNumber(amount)}, use these precise calculations:
       
 1. VAT amount = ₦${formatNumber(amount)} × 0.075 = ₦${formatNumber(vatAmount)}
 2. Total price = ₦${formatNumber(amount)} + ₦${formatNumber(vatAmount)} = ₦${formatNumber(totalAmount)}
@@ -369,7 +369,7 @@ const getFallbackResponse = async (message: string): Promise<string> => {
     const confidence = exemptionCheck.confidence || 0;
 
     if (isExempt) {
-      return `I checked our online tax database (${source}, confidence: ${Math.round(confidence * 100)}%) and found that "${productName}" falls under the VAT-exempt category in Nigeria: ${category}. 
+      return `"${productName}" falls under the VAT-exempt category in Nigeria: ${category}. 
 
 For VAT-exempt items like ${productName}:
 1. Price before VAT = ₦${formatNumber(amount)} (no VAT is applicable)
@@ -384,9 +384,7 @@ Remember that in Nigeria, VAT exemptions apply to essential items including medi
   const isVatInclusive =
     /vat[\s-]*inclusive|including vat|includes vat|with vat|price after vat/i.test(message);
 
-  const productInfo = productName
-    ? `for "${productName}" (which is not VAT-exempt based on our online tax database)`
-    : "";
+  const productInfo = productName ? `for "${productName}" (which is not VAT-exempt)` : "";
 
   if (isVatInclusive) {
     // Calculate with proper precision for VAT-inclusive amount
@@ -462,7 +460,7 @@ Key information about VAT in Nigeria:
   - Basic food items (rice, beans, yam, cassava, etc.)
   - Medical and pharmaceutical products (ALL medicines are VAT EXEMPT)
   - Books and educational materials
-  - Baby products (such as Pampers and Huggies diapers are VAT EXEMPT)
+  - Baby products (such as Pampers, Huggies, and Molfix diapers are VAT EXEMPT)
   - Agricultural equipment and fertilizers
   - Exports (zero-rated)
   - Religious items
@@ -494,7 +492,9 @@ IMPORTANT: If a user asks about a "good" or "product" without specifying what ty
 
 Remember to check if a product is VAT exempt before calculating VAT, in which case no VAT applies.
 
-If a user gives you an example with specific amounts, use EXACTLY those amounts in your calculations rather than making up new ones.`,
+If a user gives you an example with specific amounts, use EXACTLY those amounts in your calculations rather than making up new ones.
+
+IMPORTANT: DO NOT say that you checked an online database. Simply state whether a product is VAT-exempt or not based on the categories.`,
       },
       {
         role: "user",
