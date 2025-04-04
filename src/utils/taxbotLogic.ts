@@ -1,3 +1,9 @@
+export function calculateCRA(grossIncome: number): number {
+  const baseCRA = Math.max(0.01 * grossIncome, 200_000);
+  const additionalCRA = 0.2 * grossIncome;
+  return baseCRA + additionalCRA;
+}
+
 export function calculatePersonalIncomeTax({
   grossIncome,
   pensionRate = 0.08,
@@ -30,9 +36,8 @@ export function calculatePersonalIncomeTax({
   // Calculate pension
   const pension = roundToNaira(grossIncome * pensionRate);
 
-  // Calculate CRA (Consolidated Relief Allowance)
-  // Formula: Fixed amount of ₦200,000 plus 20% of gross income
-  const craTotal = roundToNaira(0.2 * grossIncome + 200_000);
+  // Calculate CRA (Consolidated Relief Allowance) using the calculateCRA function
+  const craTotal = roundToNaira(calculateCRA(grossIncome));
 
   // Calculate total reliefs
   const totalReliefs = pension + craTotal;
