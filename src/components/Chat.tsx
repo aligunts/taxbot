@@ -4,6 +4,7 @@ import { useState, useCallback, useEffect, useRef } from "react";
 import toast from "react-hot-toast";
 import { Message } from "@/types";
 import { motion } from "framer-motion";
+import { sendChatMessage, checkApiAvailability } from "@/utils/apiHelpers";
 
 // Import chat components individually to avoid case sensitivity issues
 import MessageList from "./chat/MessageList";
@@ -15,6 +16,49 @@ export default function Chat() {
   const [input, setInput] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [hasError, setHasError] = useState(false);
+  const [apiStatus, setApiStatus] = useState<{
+    checked: boolean;
+    available: boolean;
+    message: string;
+    missingKeys?: string[];
+  }>({
+    checked: false,
+    available: true,
+    message: "",
+  });
+
+  // Check API availability on mount
+  useEffect(() => {
+    const checkApi = async () => {
+      try {
+        const status = await checkApiAvailability();
+        setApiStatus({
+          checked: true,
+          available: status.available,
+          message: status.message,
+          missingKeys: status.missingKeys,
+        });
+
+        if (!status.available) {
+          setMessages([
+            {
+              role: "assistant",
+              content: `API configuration issue: ${status.message}. Please check your environment variables.`,
+            },
+          ]);
+        }
+      } catch (error) {
+        console.error("Failed to check API availability:", error);
+        setApiStatus({
+          checked: true,
+          available: false,
+          message: "Could not connect to API service",
+        });
+      }
+    };
+
+    checkApi();
+  }, []);
 
   // Scroll to bottom when messages change
   useEffect(() => {
@@ -27,33 +71,36 @@ export default function Chat() {
    * Handle sending a message to the API
    */
   const handleApiMessage = useCallback(
-    async (messageText: string, retryCount = 0) => {
+    async (messageText: string) => {
       setIsLoading(true);
 
-      try {
-        // Create a new messages array that includes the current conversation history
-        const currentMessages = [...messages, { role: "user", content: messageText }];
-
-        const response = await fetch("/api/chat", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            message: messageText,
-          }),
-        });
-
-        const data = await response.json();
-
-        if (!response.ok) {
-          throw new Error(data.error || "Failed to get response from API");
-        }
-
-        // Add the user message and the response to the messages state
+      // Show error if API is not available
+      if (!apiStatus.available && apiStatus.checked) {
         setMessages((prevMessages) => [
           ...prevMessages,
           { role: "user", content: messageText },
+          {
+            role: "assistant",
+            content: `API configuration issue: ${apiStatus.message}. Missing environment variables: ${
+              apiStatus.missingKeys?.join(", ") || "unknown"
+            }. Please check your Vercel environment variables.`,
+          },
+        ]);
+        setIsLoading(false);
+        setInput("");
+        return;
+      }
+
+      try {
+        // Add user message immediately for better UX
+        setMessages((prevMessages) => [...prevMessages, { role: "user", content: messageText }]);
+
+        // Send message to API
+        const data = await sendChatMessage(messageText);
+
+        // Add the API response to messages
+        setMessages((prevMessages) => [
+          ...prevMessages,
           { role: "assistant", content: data.content },
         ]);
 
@@ -65,18 +112,18 @@ export default function Chat() {
         // Set error state
         setHasError(true);
 
-        // Add the user message with an error response
+        // Add error message
         setMessages((prevMessages) => [
           ...prevMessages,
-          { role: "user", content: messageText },
           {
             role: "assistant",
-            content: "I'm sorry, I'm having trouble connecting. Please try again in a moment.",
+            content:
+              "I'm having trouble connecting to the server. This might be due to missing API keys in the environment. Please check your Vercel environment variables.",
           },
         ]);
 
         // Show error toast
-        toast.error("Connection error. Please try again.", {
+        toast.error("Connection error. Please check API keys in Vercel settings.", {
           duration: 4000,
         });
       } finally {
@@ -84,7 +131,7 @@ export default function Chat() {
         setInput("");
       }
     },
-    [messages]
+    [apiStatus]
   );
 
   /**
