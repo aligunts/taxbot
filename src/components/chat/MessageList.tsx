@@ -111,16 +111,10 @@ export default function MessageList({
           </div>
           <div className="grid grid-cols-1 gap-2">
             <button
-              onClick={() =>
-                setInputValue?.(
-                  "How do I calculate my company&apos;s income tax if my turnover is ₦80 million?"
-                )
-              }
+              onClick={() => setInputValue?.("How much tax am I required to pay as a teacher?")}
               className="text-sm text-left px-4 py-2.5 bg-gray-50 hover:bg-gray-100 rounded-lg transition-colors border border-gray-200 shadow-sm font-medium group flex items-center"
             >
-              <span className="flex-1">
-                How do I calculate my company&apos;s income tax if my turnover is ₦80 million?
-              </span>
+              <span className="flex-1">How much tax am I required to pay as a teacher?</span>
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 className="h-4 w-4 text-gray-400 group-hover:text-accent-500 transition-colors"

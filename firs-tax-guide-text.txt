@@ -1,0 +1,1261 @@
+
+
+Taxes Administered by the Federal Inland Revenue Service in 
+Nigeria 
+Executive Summary 
+The Federal Inland Revenue Service (FIRS) stands as the principal tax administrator for 
+the Federal Government of Nigeria, overseeing a diverse array of taxes that form the 
+bedrock of national revenue generation. This report provides a comprehensive 
+analysis of the taxes under the FIRS's jurisdiction, detailing their tax bases, applicable 
+rates, legislative frameworks, and the purpose and allocation of the generated 
+revenue. Recent changes and updates in the Nigerian tax landscape, particularly 
+those affecting FIRS-administered taxes, are also explored. Furthermore, the report 
+outlines the process for obtaining a Tax Identification Number (TIN) from the FIRS, 
+investigates the role and functions of the FIRS in tax administration and enforcement, 
+and highlights the official resources available to taxpayers for navigating the Nigerian 
+federal tax system. Understanding these aspects is crucial for businesses, investors, 
+and researchers seeking to operate within or analyze the Nigerian economic 
+environment. 
+Introduction to the Nigerian Federal Tax System 
+Taxation in Nigeria is structured across three tiers of government, each with specific 
+responsibilities for revenue collection.
+1
+ This decentralized system includes the Federal 
+Government, State Governments, and Local Governments, as enshrined in the 1999 
+Constitution of the Federal Republic of Nigeria.
+1
+ The Constitution grants the Federal 
+Government, through its exclusive legislative list, the authority to tax the income and 
+profits of businesses, individuals, and corporate entities.
+1 
+The primary agency responsible for administering federal taxes is the Federal Inland 
+Revenue Service (FIRS).
+1
+ Established to manage taxes due to the Federal Government, 
+the FIRS plays a pivotal role in the nation's fiscal framework.
+1
+ In contrast, State Boards 
+of Internal Revenue (SBIRs) are tasked with administering taxes owed to the 
+respective State Governments. Their main responsibility lies in the administration of 
+Personal Income Tax (PIT) as stipulated by the Personal Income Tax Act CAP P8 LFN 
+2011 (as amended), alongside other revenue items as defined by state administrative 
+laws.
+1
+ This delineation of responsibilities ensures that tax collection aligns with the 
+jurisdictional powers of each government level. 
+Local Governments, at the third tier, administer levies within their area councils, 
+operating under the framework of the approved Taxes and Levies (Approved List for 
+
+Collection) Act (LFN 1998 No.2, 1998).
+1
+ These levies are typically localized and address 
+specific revenue needs at the grassroots level. 
+The hierarchical structure of the Nigerian tax system, with its division of 
+responsibilities, presents a framework for revenue generation tailored to each level of 
+governance. For taxpayers, navigating this system requires a clear understanding of 
+which tax authority is responsible for administering specific taxes to ensure 
+compliance at the appropriate level. 
+Specific Taxes Administered by the Federal Inland Revenue 
+Service (FIRS) 
+The Federal Inland Revenue Service (FIRS) is mandated to administer a comprehensive 
+range of taxes on behalf of the Federal Government of Nigeria.
+1
+ These taxes cover 
+various aspects of economic activity and serve as the primary sources of federal 
+revenue. The key taxes under the jurisdiction of the FIRS include: 
+● 
+Companies Income Tax (CIT): A tax imposed on the profits of companies 
+operating within Nigeria.
+1 
+● 
+Tertiary Education Tax (TET): A levy payable by all Nigerian companies on their 
+assessable profits, with the revenue dedicated to the development of tertiary 
+education in the country.
+1 
+● 
+Stamp Duties: A tax charged on various written and electronic instruments that 
+have legal effect.
+1 
+● 
+Withholding Tax (WHT): An advance payment of income tax deducted at the 
+source of certain transactions, applicable to companies, residents of the Federal 
+Capital Territory (FCT), and non-resident individuals.
+1 
+● 
+Value Added Tax (VAT): A consumption tax levied on the supply of most goods 
+and services within Nigeria, as well as on imports.
+1 
+● 
+Petroleum Profit Tax (PPT): A tax specifically targeting the profits generated 
+from petroleum operations, primarily upstream activities related to oil and gas 
+exploration and production.
+1 
+● 
+Capital Gains Tax (CGT): A tax imposed on the profits realized from the sale or 
+exchange of certain capital assets.
+1 
+● 
+Pay As You Earn (PAYE): An income tax system where tax is deducted directly 
+from the salaries and wages of employees who are residents of the FCT, members 
+of the armed forces, the police force, and other paramilitary organizations.
+1 
+● 
+Police Trust Fund Levy: A levy established to provide funding for the training, 
+welfare, and equipment needs of the Nigeria Police Force.
+1 
+● 
+National Information Technology Development Levy (NITDL): A levy payable 
+
+by specified companies with an annual turnover exceeding N100 million, aimed at 
+fostering the development of information technology in Nigeria.
+1 
+● 
+Education Tax (ET): While mentioned in some contexts, this term likely refers to 
+the Tertiary Education Tax (TET) due to the similarity in purpose and the absence 
+of distinct details.
+3 
+● 
+National Housing Fund (NHF): While businesses and organizations are involved 
+in filing returns related to the NHF, its primary administration falls under the 
+purview of the Federal Mortgage Bank of Nigeria. The FIRS's role may primarily 
+involve collection for certain entities.
+4 
+This comprehensive list underscores the FIRS's central role in federal revenue 
+mobilization, encompassing broad-based taxes on income and consumption, as well 
+as sector-specific levies designed to support targeted development initiatives. The 
+Nigerian federal tax system, as administered by the FIRS, employs a diverse set of 
+instruments to generate revenue from various facets of the economy. 
+Detailed Analysis of Major FIRS-Administered Taxes 
+Companies Income Tax (CIT) 
+Companies Income Tax (CIT), Nigeria's equivalent of corporate tax, is levied on the 
+profits of companies operating within the country.
+5
+ The tax base encompasses a wide 
+range of income sources, including profits from trade or business, rental income from 
+properties, investment income such as premiums and interest, dividends, royalties, 
+fees derived from Nigeria, and any income accruing in, derived from, or brought into 
+Nigeria.
+5
+ For tax purposes, a company's residency is determined by its place of 
+incorporation. Nigerian companies are taxed on their global income, regardless of its 
+origin. In contrast, Non-Resident Companies (NRCs) are subject to CIT only on profits 
+earned within Nigeria, specifically those attributable to their Nigerian operations or if 
+they have established a Significant Economic Presence (SEP).
+6 
+The applicable CIT rate is structured based on a company's annual turnover. Small 
+companies, with a turnover of less than NGN25 million, are exempt from CIT. 
+Medium-sized companies, with a turnover between NGN25 million and NGN100 
+million, are taxed at a rate of 20%. Large companies, with a turnover exceeding 
+NGN100 million, are subject to the standard CIT rate of 30%.
+6
+ Taxable profit is 
+calculated by aggregating all trading income and subtracting allowable expenses, 
+which include costs incurred wholly, exclusively, necessarily, and reasonably for the 
+purpose of generating profit. Companies can also deduct capital allowances on 
+qualifying assets and carry forward tax losses.
+5
+ Furthermore, various tax credits, such 
+as Withholding Tax Credits, Foreign Tax Credits, and sector-specific credits, can be 
+
+claimed against the final CIT liability.
+5
+ To ensure a minimum contribution, a minimum 
+tax may be imposed at a rate of 0.5% of turnover less franked investment income, 
+applicable when a company reports a loss, has no tax payable, or the tax payable is 
+below the minimum threshold. However, exemptions from minimum tax exist for new 
+companies and those in certain sectors like primary agriculture.
+7 
+The primary legal framework governing CIT is the Companies Income Tax Act (CITA).
+5
+ 
+This Act has been amended over the years, notably through the Finance Acts of 2019, 
+2020, and 2021, to reflect changes in economic realities and government policies.
+9 
+Company Income Tax serves as a substantial source of revenue for the Nigerian 
+government.
+9
+ The funds generated are crucial for financing public services, 
+developing infrastructure, and supporting various government initiatives aimed at 
+fostering economic growth and enhancing the quality of life for citizens.
+15
+ CIT revenue, 
+along with other federal taxes, is typically deposited into the Federation Account and 
+subsequently distributed among the federal, state, and local government levels based 
+on a predetermined revenue allocation formula.
+16 
+The tiered CIT rate structure reflects a principle of progressive taxation, where larger 
+and more profitable entities contribute a greater share of their earnings to public 
+revenue. The distinction in tax treatment between resident and non-resident 
+companies, along with the introduction of the Significant Economic Presence (SEP) 
+rule, addresses the complexities of taxing multinational corporations and businesses 
+operating in the digital economy. The minimum tax provision ensures a baseline 
+contribution from companies, while the availability of tax credits incentivizes 
+compliance and prevents double taxation for companies already subject to 
+withholding taxes or taxes in other jurisdictions. 
+Table: Companies Income Tax (CIT) Rates 
+Company Turnover CIT Rate 
+Less than NGN25 million 0% 
+Between NGN25 million and NGN100 million 20% 
+Above NGN100 million 30% 
+Petroleum Profit Tax (PPT) 
+
+Petroleum Profit Tax (PPT) is a specialized tax levied on the profits of companies 
+engaged in upstream petroleum operations within Nigeria, encompassing activities 
+such as exploration, production, and the initial transportation or sale of crude oil and 
+natural gas.
+3
+ The tax base is the petroleum profit, calculated as the difference 
+between a company's taxable income and allowable expenses, as defined by the 
+Petroleum Profit Tax Act.
+3
+ For PPT assessment, revenue includes income from the sale 
+of petroleum products, royalties received, interest from petroleum-related activities, 
+and other income directly related to these operations.
+19 
+The rates for PPT vary based on the nature of the operations. For non-PSC 
+operations, which include joint ventures, the tax rate is 65.75% for the first five years 
+of operation under continuous production where pre-production costs have not been 
+fully amortized, and 85% thereafter.
+3
+ For operations under production sharing 
+contracts (PSC) with the Nigerian National Petroleum Corporation (NNPC), a rate of 
+50% applies.
+9
+ Additionally, the Petroleum Industry Act (PIA) 2021 introduced a 
+hydrocarbon tax (HT) applicable to holders of Petroleum Prospecting Licences (PPL) 
+and Petroleum Mining Leases (PML) for onshore and shallow water operations, with 
+rates of 15% and 30% respectively. Upstream gas profits are taxed at a rate of 30%.
+6
+ 
+Allowable deductions for PPT calculation include operational costs, capital allowances 
+on qualifying expenditures, and royalties paid to the Nigerian government. Investment 
+tax credits may also be available to incentivize specific investments within the 
+petroleum sector.
+18 
+The primary legislation governing PPT is the Petroleum Profit Tax Act (PPTA).
+3
+ The 
+Petroleum Industry Act (PIA) 2021 has brought about a significant overhaul of the 
+fiscal and regulatory framework for the petroleum industry, introducing the 
+Hydrocarbon Tax alongside modifications to the PPT regime.
+10
+ The Finance Act 2023 
+has further clarified certain aspects of the PPTA.
+23 
+Given the oil and gas sector's pivotal role in Nigeria's economy, Petroleum Profit Tax is 
+a major source of governmental revenue.
+19
+ The revenue generated from PPT is crucial 
+for funding government operations across all tiers, as it is remitted into the Federation 
+Account and forms a substantial portion of the national budget.
+3
+ The fundamental aim 
+of PPT is to ensure that the Nigerian government secures a fair share of the profits 
+derived from the exploitation of the nation's oil and gas reserves.
+18 
+The complex structure of PPT rates and regulations reflects the strategic importance 
+of the petroleum industry and the government's dual objectives of maximizing 
+revenue and encouraging continued investment. The introduction of the Hydrocarbon 
+Tax under the PIA represents a significant evolution in the fiscal framework for this 
+
+sector. The high tax rates, particularly for established non-PSC operations, highlight 
+the government's focus on capturing a substantial portion of the economic rent from 
+petroleum resources. 
+Table: Petroleum Profit Tax (PPT) and Hydrocarbon Tax (HT) Rates 
+Operation Type Tax Rate (PPT) Tax Rate (HT) Legislation 
+Non-PSC (First 5 
+Years) 
+65.75% N/A PPTA 
+Non-PSC (After 5 
+Years) 
+85% N/A PPTA 
+PSC with NNPC 50% N/A PPTA 
+Upstream Gas Profits 30% N/A PPTA 
+Onshore/Shallow 
+Offshore PML 
+(Converted/Renewed
+) 
+30% 30% PIA 
+Onshore/Shallow 
+Onshore PPL & 
+Marginal Fields 
+N/A 15% PIA 
+Deep Offshore N/A 0% PIA 
+Value Added Tax (VAT) 
+Value Added Tax (VAT) in Nigeria is a consumption tax imposed on the supply of all 
+goods and services within the country, as well as on the importation of goods and 
+services, except for specific exemptions outlined in the VAT Act.
+3
+ As a multi-stage tax, 
+VAT is collected at each point in the production and distribution chain where value is 
+added, but the final consumer ultimately bears the cost.
+3
+ The tax is calculated as a 
+percentage of the value added at each stage of the supply. 
+The standard VAT rate in Nigeria is 7.5%, an increase from the previous rate of 5% 
+effective February 1, 2020.
+3
+ Certain goods and services are zero-rated, meaning VAT 
+is charged at 0%, allowing businesses to claim back any VAT incurred on inputs. 
+
+Additionally, a range of items are exempt from VAT, including basic food items, 
+medical products and services, pharmaceutical products, books, and educational 
+materials.
+27
+ For compliance, VAT invoices must contain specific details such as the 
+names, addresses, and Tax Identification Numbers of both the supplier and the 
+customer, a unique VAT invoice number, the date of supply, a description of the goods 
+or services provided, the VAT rate, the amount of VAT charged, and the total gross 
+amount.
+34
+ Registered businesses are required to file VAT returns with the Federal 
+Inland Revenue Service (FIRS) on a monthly basis, by the 21st day of the month 
+following the month of the transaction.
+9 
+The primary legislation governing VAT in Nigeria is the VAT Act LFN 2004 as 
+amended.
+3
+ The Finance Acts from 2019 to 2023, along with the Value Added Tax 
+(Modification) Order of 2021, have introduced significant amendments to the VAT Act, 
+outlining the scope, exemptions, and administrative procedures for VAT.
+29 
+Value Added Tax is a critical source of non-oil revenue for the Nigerian government.
+9
+ 
+The revenue generated supports various government expenditures and contributes to 
+the nation's fiscal stability. A significant portion of VAT revenue, 85%, is allocated to 
+state and local governments, making it a vital component of subnational financing. 
+The remaining 15% is retained by the Federal Government.
+38
+ The formula for VAT 
+revenue allocation and the principle of derivation have been subjects of ongoing 
+discussions and proposed reforms.
+38 
+The increase in the VAT rate to 7.5% in 2020 was a strategic move to boost non-oil 
+revenue. The application of the destination principle ensures that VAT is levied where 
+consumption occurs. The substantial allocation of VAT revenue to subnational 
+governments highlights its role in supporting their financial autonomy. The continuing 
+debates around the distribution formula underscore the complexities inherent in 
+revenue sharing within a federal system. 
+Table: Value Added Tax (VAT) Rates and Examples 
+Category VAT Rate Examples 
+Standard Rate 7.5% Most goods and services 
+Zero-Rated 0% Non-oil exports, 
+goods/services purchased by 
+diplomats, humanitarian 
+projects 
+
+Exempt N/A Basic food items, medical 
+services, pharmaceutical 
+products, books 
+Withholding Tax (WHT) 
+Withholding Tax (WHT) in Nigeria is an advance payment of income tax, deducted at 
+the source when certain payments are made to individuals or companies.
+3
+ The 
+responsibility for withholding and remitting the tax lies with the payer. WHT is 
+applicable to various types of income, including rents on properties, dividends and 
+profits from companies, interest on bank deposits or securities, and royalties.
+41
+ It also 
+covers transactions such as contracts for construction, surveys, and supply, 
+consultancy and professional services, and management fees.
+41 
+The rates for withholding tax vary based on the nature of the payment and the status 
+of the recipient, generally ranging from 2% to 10%.
+9
+ For instance, payments for rents, 
+dividends, and interest typically attract a 10% WHT rate for both companies and 
+individuals. Royalties are subject to 10% for companies and 5% for individuals, while 
+fees for commission, consultancy, technical, and professional services are taxed at 
+10% for companies and 5% for individuals.
+9
+ Recent amendments introduced by the 
+Withholding Tax Regulations 2024, effective January 1, 2025, have adjusted some of 
+these rates, including reductions for certain services and increases for non-resident 
+entertainers, sportspersons, and directors' fees.
+46 
+The legal basis for Withholding Tax is found within the enabling laws of other tax 
+types, such as the Companies Income Tax Act, Petroleum Profit Tax Act, Personal 
+Income Tax Act, and Value Added Tax Act.
+3
+ The Deduction of Tax at Source 
+(Withholding) Regulations 2024, which came into effect on January 1, 2025, 
+consolidate and update the rules governing WHT, superseding previous regulations.
+47 
+Withholding Tax serves as a mechanism for the advance payment of income tax, 
+aiming to broaden the tax base and reduce tax evasion by collecting tax at the point 
+income is generated.
+3
+ The amounts withheld can then be used as a credit against the 
+recipient's final income tax liability. WHT on payments to non-resident individuals, 
+residents of the FCT, police and armed forces personnel, and foreign affairs officers is 
+remitted to the FIRS. For other individuals, the tax is payable to the State Internal 
+Revenue Service of their residence.
+42
+ Companies are required to file WHT returns 
+within 21 days of the obligation to deduct arising, with penalties of 10% of the 
+un-deducted or un-remitted amount for non-compliance.
+43 
+
+Withholding Tax is a vital tool for ensuring tax compliance and efficient collection. The 
+varied rates based on income type and recipient status allow for a tailored approach. 
+The recent regulatory overhaul reflects the government's commitment to modernizing 
+the WHT system. The division of WHT revenue between the FIRS and state tax 
+authorities highlights the collaborative nature of tax administration in Nigeria. 
+Table: Key Withholding Tax (WHT) Rates 
+Type of Payment Rate (Companies) Rate (Individuals) 
+Rents, Dividends, Interest 10% 10% 
+Royalties 10% 5% 
+Commission, Consultancy, 
+Technical, Prof. Services 
+10% 5% 
+Management Fees 10% 5% 
+Construction (Roads, 
+Buildings, Bridges) 
+2.5% 5% 
+Contracts (Other than 
+Ordinary Sales) 
+5% 5% 
+Tertiary Education Tax (TET) 
+Tertiary Education Tax (TET) is levied on the assessable profit of all companies 
+registered in Nigeria, with the exception of small companies having a gross turnover of 
+NGN 25 million or less.
+3
+ The assessable profit is defined as the tax-adjusted profit 
+before accounting for capital allowances.
+3
+ Non-resident companies and 
+unincorporated entities are exempt from TET.
+10 
+The current rate of the Tertiary Education Tax is 3% of the assessable profit per 
+annum, increased from 2.5% for accounting periods ending on or after September 1, 
+2023.
+10
+ For companies subject to PPT under the PPTA, TET is considered an allowable 
+deduction when calculating assessable profit. However, for other companies, income 
+and profit taxes are not deductible for the purpose of TET, and this also applies to 
+companies under the Petroleum Industry Act 2021.
+10
+ While the tax is officially payable 
+within two months of receiving an assessment notice from the FIRS, many companies 
+
+remit TET on a self-assessment basis concurrently with their Companies Income Tax.
+10 
+The Tertiary Education Tax is administered through the Tertiary Education Trust Fund 
+(TETFund), which was established by the TETFund Act of 2011.
+3
+ The TETFund Act 
+replaced the earlier Education Tax Act of 1993, tasking TETFund with the responsibility 
+of imposing, managing, and disbursing the collected tax to public tertiary education 
+institutions across Nigeria.
+54
+ The Finance Act 2023 brought about the increase in the 
+TET rate.
+55 
+The primary purpose of the Tertiary Education Tax is to generate a dedicated funding 
+stream for the development, maintenance, and improvement of tertiary education 
+institutions in Nigeria.
+52
+ TETFund channels these funds to public universities, 
+polytechnics, and colleges of education, with a distribution ratio of 2:1:1 respectively.
+52
+ 
+The funds are utilized for various critical needs, including the construction and 
+renovation of infrastructure, procurement of instructional materials and equipment, 
+support for research and publications, and the training and development of academic 
+staff.
+52 
+The Tertiary Education Tax represents a targeted fiscal intervention aimed at 
+addressing the persistent funding challenges within Nigeria's tertiary education 
+sector. The recent increase in the tax rate underscores the government's ongoing 
+commitment to enhancing the quality and accessibility of higher education. TETFund's 
+role in the collection and distribution of these funds ensures a direct investment in the 
+development of tertiary institutions nationwide. The specific tax treatment of TET for 
+companies under the PPTA acknowledges the unique fiscal regime governing the 
+petroleum sector. 
+Capital Gains Tax (CGT) 
+Capital Gains Tax (CGT) in Nigeria is imposed on the profits, or capital gains, realized 
+from the disposal of certain assets, known as chargeable assets.
+3
+ Chargeable assets 
+encompass a broad range of property, whether situated within or outside Nigeria, 
+including land, buildings, stocks, foreign currencies, copyrights, bonds, and qualifying 
+machinery.
+11
+ However, certain exemptions apply, such as gains from Nigerian 
+government securities, treasury bonds, savings and premium bonds, life insurance 
+policies, an individual's primary residence (under specific conditions), compensation 
+for personal injury or professional wrong (up to a threshold), and decorations for 
+valor.
+3
+ Since January 1, 2022, gains from the disposal of shares in Nigerian companies 
+exceeding NGN100 million within a 12-month period are also subject to CGT, with 
+exemptions for reinvestment within the same tax year.
+69 
+
+Capital Gains Tax is levied at a flat rate of 10% on the chargeable gain.
+9
+ The capital 
+gain is calculated by subtracting the original cost of the asset and any expenses 
+incurred on improvements or during the disposal process from the proceeds of the 
+sale.
+33
+ Taxpayers who dispose of chargeable assets are required to compute the tax, 
+file a self-assessment return, and make payment by June 30th and December 31st of 
+the same year for disposals made in the respective halves of the year.
+67 
+The governing legislation for Capital Gains Tax is the Capital Gains Tax Act, Cap C1 
+LFN 2004 (as amended).
+3
+ The Finance Acts of 2019, 2020, and 2021 have introduced 
+amendments to this Act, particularly concerning the taxation of gains from the sale of 
+shares and the stipulations for filing returns.
+67 
+Capital Gains Tax contributes to the Federal Government's revenue, taxing the profits 
+generated from the disposal of specific assets.
+9
+ This revenue becomes part of the 
+government's general fiscal resources, used to fund public services and contribute to 
+economic development. The precise mechanism for allocating CGT revenue typically 
+involves its deposit into the Federation Account. 
+The Capital Gains Tax ensures that the government shares in the appreciation of asset 
+values upon their disposal. The uniform rate of 10% simplifies the calculation and 
+compliance. Amendments through the Finance Acts, especially regarding the taxation 
+of shares, demonstrate the government's adaptation to financial market activities. 
+Exemptions for certain assets aim to encourage investment and protect primary 
+residences and specific compensations. 
+National Information Technology Development Levy (NITDL) 
+The National Information Technology Development Levy (NITDL) is imposed on 
+specific companies operating in Nigeria with an annual turnover of NGN100 million or 
+more.
+3
+ The levy is calculated as 1% of the company's profit before tax, as reported in 
+their audited financial statements.
+79
+ Companies liable for NITDL include those in the 
+telecommunications sector (GSM service providers and all telecommunication 
+companies), cyber companies and internet providers, pension managers and related 
+companies, banks and other financial institutions, and insurance companies.
+3
+ Foreign 
+companies meeting the turnover threshold and operating within these sectors in 
+Nigeria are also subject to the levy.
+78 
+The applicable rate for NITDL is 1% of the profit before tax of the liable companies.
+4
+ 
+Notably, the levy paid is tax-deductible for the purposes of the company's income 
+tax.
+3
+ The NITDL is due within 60 days of the company receiving an assessment notice 
+from the FIRS or within six months following the end of the company's accounting 
+
+year, coinciding with the filing of CIT returns.
+78
+ Failure to remit the levy within the 
+specified period attracts a penalty of 2% of the unpaid amount.
+78 
+The NITDL is imposed and governed by the National Information Technology 
+Development Agency (NITDA) Act 2007.
+3
+ The Federal Inland Revenue Service (FIRS) is 
+the agency responsible for the administration of the NITDL, including its assessment 
+and collection.
+78 
+The revenue generated from the NITDL is specifically earmarked to support the 
+planning, development, and promotion of information technology within Nigeria.
+3
+ 
+These funds are managed by the National Information Technology Development Fund 
+(NITDF).
+79
+ The NITDF's objectives include establishing a framework for IT 
+development, providing guidelines for IT application across various sectors, enhancing 
+internet penetration, and promoting effective internet governance.
+79 
+The NITDL is a targeted levy aimed at key sectors of the Nigerian economy that are 
+significant consumers and drivers of information technology and financial services. 
+The turnover threshold ensures that the levy primarily applies to larger entities within 
+these sectors. The tax-deductible nature of the levy helps to mitigate its impact on 
+the profitability of these companies while still contributing to the advancement of 
+Nigeria's IT infrastructure. Recent data suggests a notable increase in contributions to 
+the NITDEF, indicating improved compliance or more rigorous enforcement.
+81 
+Recent Changes and Updates Related to FIRS-Administered 
+Taxes 
+The Nigerian tax landscape, particularly concerning taxes administered by the FIRS, 
+has witnessed several recent changes and proposed updates, reflecting the 
+government's ongoing efforts to modernize the system and enhance revenue 
+collection.
+51 
+The Tertiary Education Tax (TET) rate was increased from 2.5% to 3% for 
+accounting periods ending on or after September 1, 2023.
+55
+ This adjustment aims to 
+provide more resources for the development of Nigeria's tertiary education sector. 
+Significant changes have occurred in Withholding Tax (WHT) with the introduction 
+of the Deduction of Tax at Source (Withholding) Regulations 2024, effective January 1, 
+2025.
+47
+ These new regulations repeal all previous WHT regulations and include revised 
+rates for various services, as well as exemptions for small businesses under specific 
+conditions.
+46 
+
+While the standard Value Added Tax (VAT) rate remains at 7.5% 
+51
+, there have been 
+considerable discussions and proposed reforms regarding the formula for sharing VAT 
+revenue among the federal, state, and local governments.
+38
+ Additionally, the VAT 
+Exemption List has been expanded and amended, particularly to support the 
+government's energy transition initiatives, especially concerning gas.
+51 
+Regarding Capital Gains Tax (CGT), a key update was the introduction of a 10% tax 
+on gains from the disposal of shares in Nigerian companies exceeding NGN100 million 
+within a 12-month period, effective January 1, 2022. This change was brought about 
+by an amendment to Section 30 of the Capital Gains Tax Act through the Finance Act 
+2021.
+59 
+A comprehensive Nigeria Tax Bill 2024 has been proposed by the Presidential 
+Committee on Fiscal Policy and Tax Reforms, aiming to overhaul the entire tax 
+system.
+90
+ The bill suggests a gradual reduction in the Corporate Income Tax (CIT) rate, 
+a phased increase in the Value Added Tax (VAT) rate, reforms to the Personal Income 
+Tax (PIT) structure, and the introduction of a new Development Levy that would 
+consolidate several existing levies. 
+In February 2024, the government introduced the Expatriate Employment Levy 
+(EEL), a mandatory contribution for employers who hire expatriate staff in Nigeria.
+51
+ 
+Furthermore, a windfall tax on the foreign exchange gains of Nigerian banks, 
+resulting from the devaluation of the Naira, was proposed in 2024.
+51
+ To incentivize 
+investment in the gas sector, President Bola Ahmed Tinubu signed the Gas 
+Incentives Order 2024 in March 2024, outlining specific incentives for 
+Non-Associated Gas (NAG) development.
+51 
+The FIRS has also been active in issuing various guidelines and circulars to provide 
+clarity and updates on tax administration. These include guidelines on VAT compliance 
+for non-resident digital service providers (October 2021), procedures for desk 
+examination, tax audit, investigation, and inquiry (October 2023), and the process for 
+Value Added Tax refunds for diplomats and international organizations (2024).
+51 
+These recent changes and proposed reforms indicate a dynamic tax environment in 
+Nigeria, with the government actively seeking to modernize its tax system, improve 
+revenue generation, and adapt to evolving economic conditions. Taxpayers need to 
+remain vigilant about these developments to ensure they meet their compliance 
+obligations. 
+Obtaining a Tax Identification Number (TIN) from the FIRS 
+
+Obtaining a Tax Identification Number (TIN) is a crucial step for both individuals and 
+businesses operating in Nigeria, as it is required for various tax-related and official 
+transactions.
+97
+ The Federal Inland Revenue Service (FIRS) has established processes 
+for TIN registration, catering to different categories of taxpayers.
+4 
+For Individuals: 
+Individuals have several options for registering and obtaining a TIN 
+99
+: 
+● 
+Online Registration: The most convenient method is through the Joint Tax Board 
+(JTB) TIN registration portal (https://tin.jtb.gov.ng/).
+99
+ This typically involves 
+completing an online form, which may require linking your Bank Verification 
+Number (BVN) or National Identification Number (NIN).
+99
+ You might also need to 
+upload supporting documents such as a valid identification (National ID, Driver's 
+License, or Passport) and a recent utility bill.
+99 
+● 
+In-Person Registration: You can visit the nearest FIRS or State Internal Revenue 
+Service (SIRS) tax office.
+26
+ Ensure you bring the required documents, which 
+usually include a valid ID, a utility bill, and a passport photograph.
+102
+ You will need 
+to fill out the necessary application forms at the tax office. 
+● 
+Through a Tax Agent: You can also hire an accredited tax professional or agent 
+to handle the TIN registration process on your behalf.
+101 
+For Businesses and Organizations: 
+Businesses and organizations can also register for a TIN through online or in-person 
+methods 
+4
+: 
+● 
+Online Registration: Non-individual entities can register via the JTB portal or the 
+FIRS TaxPro Max portal (https://taxpromax.firs.gov.ng).
+4
+ This requires providing 
+detailed business information, such as the company name, registration number 
+obtained from the Corporate Affairs Commission (CAC), and the business 
+address.
+4
+ You will typically need to upload supporting documents like the 
+Certificate of Incorporation, Memorandum & Articles of Association (MEMART), 
+particulars of directors, and a recent utility bill.
+4 
+● 
+In-Person Registration: Alternatively, businesses can visit the nearest FIRS office 
+and submit their CAC documents to complete the TIN registration process.
+4 
+General Information: 
+The process of applying for a TIN is free of charge.
+99
+ A TIN is essential for various 
+purposes, including filing tax returns, making tax payments, opening corporate bank 
+accounts, applying for government loans and trade licenses, and obtaining Tax 
+
+Clearance Certificates (TCCs).
+97
+ Due to potential system integration issues between 
+the FIRS and JTB, registrations done on the JTB website might need to be validated at 
+the nearest FIRS office for full activation.
+98 
+Role and Functions of the FIRS in Tax Administration and 
+Enforcement 
+The Federal Inland Revenue Service (FIRS) is the central authority responsible for the 
+administration and enforcement of federal tax laws in Nigeria.
+3
+ Its core mandate 
+includes the assessment, collection, and accounting for all revenues accruing to the 
+Federal Government of Nigeria.
+3
+ The FIRS's functions are broad and encompass the 
+entire tax administration lifecycle 
+3
+: 
+● 
+Assessment: The FIRS is responsible for determining the tax liability of 
+individuals, companies, and other taxable entities.
+3
+ This involves reviewing tax 
+returns, conducting audits, and ensuring accurate reporting of income and 
+profits. 
+● 
+Collection: A primary function of the FIRS is to collect taxes due to the Federal 
+Government.
+3
+ The agency employs various methods to facilitate tax payment, 
+including online platforms and designated bank branches. 
+● 
+Accounting: The FIRS is tasked with the responsibility of accounting for all taxes 
+collected, ensuring that these revenues are properly recorded and remitted to the 
+designated government accounts, such as the Federation Account, Consolidated 
+Account, and VAT Account.
+3 
+● 
+Enforcement: The FIRS is empowered to enforce compliance with tax laws.
+3
+ This 
+includes conducting investigations into tax evasion and fraud, imposing penalties 
+for non-compliance, and, in collaboration with law enforcement agencies, 
+prosecuting tax offenders. 
+● 
+Taxpayer Services: The FIRS also plays a crucial role in providing services to 
+taxpayers.
+3
+ This includes issuing Taxpayer Identification Numbers (TINs), 
+providing tax education and information through various channels, issuing tax 
+rulings and clarifications, and processing tax refunds. 
+● 
+Policy and Collaboration: The FIRS collaborates with relevant government 
+ministries and agencies to review tax policies and promote the use of tax 
+revenues to stimulate economic activities and development.
+104
+ The agency also 
+works to determine the extent of financial losses to the government resulting from 
+tax fraud, evasion, and waivers.
+104 
+To enhance its operations, the FIRS has been actively involved in organizational 
+restructuring and the implementation of technological solutions, such as the TaxPro 
+
+Max platform, to streamline tax processes and improve service delivery.
+92
+ The 
+agency's organizational structure includes a Management Board that provides policy 
+guidelines and oversees the administration of the revenue assessment, collection, and 
+accounting systems.
+105
+ The FIRS is committed to becoming a more efficient and 
+trusted revenue service, focusing on taxpayer convenience and maximizing revenue 
+for national development.
+104 
+Official Resources and Guides Provided by the FIRS 
+The Federal Inland Revenue Service (FIRS) offers a wide array of official resources and 
+guides to assist taxpayers in understanding and complying with Nigeria's federal tax 
+laws.
+26
+ The primary hub for this information is the FIRS website (www.firs.gov.ng).
+4
+ 
+This platform provides access to: 
+● 
+Comprehensive Tax Information: Detailed explanations of various tax types 
+administered by the FIRS, including their tax bases, applicable rates, and the 
+relevant legislation governing them. 
+● 
+Downloadable Tax Forms and Instructions: A wide range of tax forms for 
+different tax obligations, along with detailed instructions to guide taxpayers on 
+how to accurately complete and submit these forms.
+5 
+● 
+Official Tax Circulars, Regulations, and Public Notices: These resources 
+contain the latest pronouncements, updates, and clarifications on tax laws, 
+administrative practices, and policy changes issued by the FIRS.
+14 
+● 
+Full Text of Tax Laws: Direct access to the complete legal texts of various tax 
+acts and related legislation in Nigeria.
+14 
+● 
+Guidelines and Clarifications: Specific guidelines and explanatory notes 
+addressing critical tax issues and providing further clarity on complex aspects of 
+tax laws and their application.
+14 
+● 
+Information on Tax Benefits and Incentives: Details about various tax reliefs, 
+exemptions, and incentives available to taxpayers, encouraging compliance and 
+promoting specific economic activities.
+14 
+● 
+Tax Calendar: An essential tool providing a schedule of important dates and 
+deadlines for tax filing, payment, and other compliance requirements. 
+● 
+FIRS Tax Office Locator: A utility that helps taxpayers find the addresses and 
+contact information of the nearest FIRS offices across the country.
+4 
+In addition to the website, the FIRS has implemented the TaxPro Max System 
+(https://taxpromax.firs.gov.ng), an electronic platform designed to facilitate various 
+tax-related processes online. This includes TIN registration, filing of tax returns, 
+making tax payments, and obtaining Tax Clearance Certificates (TCCs).
+93
+ Individuals 
+
+and non-individual entities can also utilize the Joint Tax Board (JTB) TIN 
+Registration Portal (https://tin.jtb.gov.ng/) for obtaining their Tax Identification 
+Numbers.
+4 
+For a historical perspective on tax reforms, the FIRS Handbook on Reforms in the 
+Tax System 2004-2011 offers valuable insights into the evolution of Nigeria's tax 
+system.
+113
+ Furthermore, the FIRS has introduced a convenient USSD Code (*829#), 
+allowing taxpayers to access basic tax services such as TIN retrieval, TCC verification, 
+tax rates inquiry, and location of the nearest tax office via their mobile phones.
+109
+ To 
+further support taxpayers, the FIRS has established a Taxpayer Service Department 
+and the position of a National Taxpayer Advocate to address concerns and provide 
+assistance.
+105 
+These official resources demonstrate the FIRS's commitment to providing taxpayers 
+with the necessary tools and information to navigate the Nigerian federal tax system 
+effectively and ensure compliance. Taxpayers are encouraged to utilize these 
+resources to stay informed and meet their tax obligations. 
+Conclusion 
+The Federal Inland Revenue Service (FIRS) plays a pivotal role in Nigeria's fiscal 
+management by administering a wide range of federal taxes that are critical for 
+funding national development. This report has provided a detailed overview of the 
+major taxes under the FIRS's jurisdiction, including their tax bases, rates, legislative 
+frameworks, and revenue allocation. The recent changes and ongoing reforms within 
+the Nigerian tax system highlight the government's commitment to modernization and 
+efficiency. The streamlined processes for obtaining a Tax Identification Number (TIN) 
+and the comprehensive resources offered by the FIRS aim to enhance taxpayer 
+compliance and facilitate a more robust revenue generation framework. As Nigeria 
+continues to evolve economically, the effective administration of these taxes by the 
+FIRS will remain central to achieving sustainable growth and development. 
+Works cited 
+1. Tax administration | KT-IRS, accessed on April 3, 2025, 
+https://irs.kt.gov.ng/tax-informations/tax-administration.php 
+2. Tax Administration | ZIRS - Zamfara State Internal Revenue Service, accessed on 
+April 3, 2025, https://irs.zm.gov.ng/tax-administration/ 
+3. FEDERAL INLAND REVENUE SERVICE (FIRS), accessed on April 3, 2025, 
+https://neiti.gov.ng/cms/wp-content/uploads/2021/08/FASD-2012-2016-FIRS-Rep
+ort.pdf 
+4. Filing annual tax returns - FIRS - Simplifying Tax, Maximizing Revenue, accessed 
+
+on April 3, 2025, https://www.firs.gov.ng/businesses-and-organizations 
+5. Company Income Tax - FIRS - Simplifying Tax, Maximizing Revenue, accessed on 
+April 3, 2025, https://www.firs.gov.ng/company-income-tax 
+6. Corporate Tax 2024 - Nigeria - Global Practice Guides - Chambers and Partners, 
+accessed on April 3, 2025, 
+https://practiceguides.chambers.com/practice-guides/corporate-tax-2024/nigeri
+a/trends-and-developments 
+7. Nigeria Fiscal Guide 2023 - KPMG International, accessed on April 3, 2025, 
+https://kpmg.com/ng/en/home/insights/2023/07/nigeria-fiscal-guide-2023.html 
+8. How to Calculate Company Income Tax in Nigeria, accessed on April 3, 2025, 
+https://www.myworkpay.com/blogs/how-to-calculate-company-income-tax-in-ni
+geria 
+9. Overview of Business Taxes in Nigeria - Legal 500, accessed on April 3, 2025, 
+https://www.legal500.com/developments/thought-leadership/overview-of-busin
+ess-taxes-in-nigeria/ 
+10. Nigeria - Corporate - Taxes on corporate income - PwC Tax Summaries, accessed 
+on April 3, 2025, 
+https://taxsummaries.pwc.com/nigeria/corporate/taxes-on-corporate-income 
+11. International Tax Nigeria Highlights 2023 - Deloitte, accessed on April 3, 2025, 
+https://www2.deloitte.com/content/dam/Deloitte/global/Documents/Tax/dttl-tax-n
+igeriahighlights-2023.pdf 
+12. COMPANIES INCOME TAX ACT - Top Nigerian Law Firm with a Global appeal., 
+accessed on April 3, 2025, 
+https://akabogulaw.com/general-statutes/companies-income-tax-act/ 
+13. Companies Income Tax Act, 2007 | PolicyVault.Africa, accessed on April 3, 2025, 
+https://policyvault.africa/policy/companies-income-tax-act-2007/ 
+14. Tax Resources - FIRS - Simplifying Tax, Maximizing Revenue, accessed on April 3, 
+2025, https://firs.gov.ng/tax-resources 
+15. The Impact of Company Income Tax Revenue on Developing Economies- A 
+Comparative Analysis of Kenya, India, and Nigeria - CEF Insights, accessed on 
+April 3, 2025, 
+https://cefinsights.com/the-impact-of-company-income-tax-revenue-on-develo
+ping-economies-a-comparative-analysis-of-kenya-india-and-nigeria/ 
+16. Nigeria generating more taxes from companies, but they are leaving | The 
+Guardian, accessed on April 3, 2025, 
+https://ippmedia.com/the-guardian/business/read/nigeria-generating-more-taxes
+-from-companies-but-they-are-leaving-2024-09-21-101123 
+17. Revenue Allocation | NEITI - Nigeria Extractive Industries Transparency Initiative, 
+accessed on April 3, 2025, https://neiti.gov.ng/revenue-allocation 
+18. Petroleum Profit Tax - FIRS - Simplifying Tax, Maximizing Revenue, accessed on 
+April 3, 2025, https://www.firs.gov.ng/petroluem-profit-tax 
+19. (PDF) ASSESSMENT OF PETROLEUM PROFIT TAX UNDER THE PETROLEUM 
+INDUSTRY ACT - ResearchGate, accessed on April 3, 2025, 
+https://www.researchgate.net/publication/384562130_ASSESSMENT_OF_PETROLE
+UM_PROFIT_TAX_UNDER_THE_PETROLEUM_INDUSTRY_ACT 
+
+20. The Effect of Petroleum Profit Tax on the Profitability of Listed Oil and Gas 
+Companies in Nigeria - American International Journal of Social Science, 
+accessed on April 3, 2025, 
+https://www.aijssnet.com/journals/Vol_6_No_2_June_2017/6.pdf 
+21. Tax - KPMG International, accessed on April 3, 2025, 
+https://assets.kpmg.com/content/dam/kpmg/pdf/2016/05/Nigeria-Fiscal-Guide-2
+015-2016.pdf 
+22. Nigeria's Petroleum Industry Bill - Akin Gump, accessed on April 3, 2025, 
+https://www.akingump.com/a/web/33366/ALB-Online-article-pdf-Udo-Udoma-Ak
+in-Gump-EV-Nigeria.pdf 
+23. CLARIFICATION ON FINANCE ACT, 2023 AMENDMENT TO PETROLEUM PROFITS 
+TAX ACT. This circular is issued for the informatio - FIRS, accessed on April 3, 
+2025, 
+https://firs.gov.ng/pdf/CLARIFICATION_ON_FINANCE_ACT_2023_AMENDMENT_T
+O_PPTA.pdf 
+24. The Petroleum Sector: Potential Impact of Tax Reforms on Nigeria's Economic 
+Stability, accessed on April 3, 2025, 
+https://ng.andersen.com/the-petroleum-sector-potential-impact-of-tax-reforms
+-on-nigerias-economic-stability/ 
+25. (PDF) THE ROLE OF PETROLEUM PROFIT TAX IN NIGERIA'S REVENUE 
+GENERATION: A CRITICAL REVIEW - ResearchGate, accessed on April 3, 2025, 
+https://www.researchgate.net/publication/382051476_THE_ROLE_OF_PETROLEU
+M_PROFIT_TAX_IN_NIGERIA'S_REVENUE_GENERATION_A_CRITICAL_REVIEW 
+26. Personal Income Tax - FIRS - Simplifying Tax, Maximizing Revenue, accessed on 
+April 3, 2025, https://www.firs.gov.ng/personal-income-tax 
+27. Nigeria - Corporate - Other taxes - PwC Tax Summaries, accessed on April 3, 
+2025, https://taxsummaries.pwc.com/nigeria/corporate/other-taxes 
+28. Value Added Tax - FIRS - Simplifying Tax, Maximizing Revenue, accessed on April 
+3, 2025, https://www.firs.gov.ng/vat 
+29. Value Added Tax and Digital Services in Nigeria - Legal 500, accessed on April 3, 
+2025, 
+https://www.legal500.com/developments/thought-leadership/value-added-tax-a
+nd-digital-services-in-nigeria/ 
+30. VAT / GST | Nigeria | VAT/GST Rates & Thresholds - Baker McKenzie Resource Hub, 
+accessed on April 3, 2025, 
+https://resourcehub.bakermckenzie.com/en/resources/vatgst-rates--thresholds/e
+mea-noneu/nigeria/topics/vat--gst 
+31. Subject: CLARIFICATION ON THE IMPLEMENTATION OF THE VALUE ADDED TAX 
+(VAT) ACT This circular is issued for the information and, accessed on April 3, 
+2025, 
+https://assets.kpmg.com/content/dam/kpmg/ng/pdf/clarification-on-the-impleme
+ntation-of-the-value-added-tax-vat-act.pdf 
+32. Nigeria | VAT in Africa | PwC, accessed on April 3, 2025, 
+https://www.pwc.co.za/en/publications/vat-in-africa-ess/nigeria-overview.html 
+33. Tax rates in Nigeria - International Trade Portal, accessed on April 3, 2025, 
+
+https://www.lloydsbanktrade.com/en/market-potential/nigeria/taxes 
+34. Nigerian VAT rates and VAT compliance - Avalara, accessed on April 3, 2025, 
+https://www.avalara.com/vatlive/en/country-guides/africa-and-middle-east/nigeri
+a/nigerian-vat-rates-and-vat-compliance.html 
+35. Value-added tax (VAT) rates, accessed on April 3, 2025, 
+https://taxsummaries.pwc.com/quick-charts/value-added-tax-vat-rates 
+36. Value Added Tax (VAT) Q4 2023 - Reports | National Bureau of Statistics, accessed 
+on April 3, 2025, https://www.nigerianstat.gov.ng/elibrary/read/1241469 
+37. The Roles of Value Added Tax in the Economic Growth of Nigeria - ResearchGate, 
+accessed on April 3, 2025, 
+https://www.researchgate.net/publication/272758568_The_Roles_of_Value_Added
+_Tax_in_the_Economic_Growth_of_Nigeria 
+38. Value Added Tax (VAT) Inflow Rises 14.16% QoQ to N1.78trn - Proshare, accessed 
+on April 3, 2025, 
+https://proshare.co/articles/value-added-tax-vat-inflow-rises-14.16-qoq-to-n1.78t
+rn?menu=Economy&classification=Read&category=Nigeria%20Economy 
+39. MEMORANDUM ON THE POSITION OF THE REVENUE MOBILISATION 
+ALLOCATION AND FISCAL COMMISSION ON FOUR (4) BILLS IN RESPECT OF THE 
+TAX, accessed on April 3, 2025, 
+https://rmafc.gov.ng/wp-content/uploads/2024/12/MEMORANDUM_TO_NATIONA
+L_ASSEMBLY_-VAT-SENATE_PRESIDENT1.pdf 
+40. Nigeria tax reforms: Concerns about value added tax allocation to states - 
+YouTube, accessed on April 3, 2025, 
+https://www.youtube.com/watch?v=uZojA3rc-Uo 
+41. Withholding Tax (WHT) - FIRS - Simplifying Tax, Maximizing Revenue, accessed on 
+April 3, 2025, https://www.firs.gov.ng/withholding-tax 
+42. FEDERAL INLAND REVENUE SERVICE, accessed on April 3, 2025, 
+https://old.firs.gov.ng/wp-content/uploads/2021/06/GUIDELINES-ON-THE-COLLE
+CTION-PROCEDURE-FOR-WITHHODING-TAX-W-1-1.pdf 
+43. Nigeria - Corporate - Withholding taxes - PwC Tax Summaries, accessed on April 
+3, 2025, https://taxsummaries.pwc.com/nigeria/corporate/withholding-taxes 
+44. Nigeria Withholding Tax Rate - Trading Economics, accessed on April 3, 2025, 
+https://tradingeconomics.com/nigeria/withholding-tax-rate 
+45. Withholding tax (WHT) rates - PwC Tax Summaries, accessed on April 3, 2025, 
+https://taxsummaries.pwc.com/quick-charts/withholding-tax-wht-rates 
+46. Nigeria's Withholding Tax Reforms: Key Changes and Sectoral Impacts, accessed 
+on April 3, 2025, 
+https://www.reanda-international.com/news/nigeria-nigerias-withholding-tax-ref
+orms-key-changes-and-sectoral-impacts 
+47. kpmg.com, accessed on April 3, 2025, 
+https://kpmg.com/us/en/taxnewsflash/news/2024/10/tnf-nigeria-new-withholding
+-tax-regulations-effective-2025.html#:~:text=Nigeria%3A%20New%20withholdin
+g%20tax%20regulations%20effective%20January%201%2C%202025,-Repeal%2
+0all%20existing&text=The%20Federal%20Ministry%20of%20Finance,%2C%20eff
+ective%20January%201%2C%202025. 
+
+48. An Overview of Withholding Tax Regulations 2024 - Grant Thornton Nigeria, 
+accessed on April 3, 2025, 
+https://www.grantthornton.com.ng/insights/Withholding-Tax-Regulation-2024/ 
+49. deduction-of-tax-at-source-withholding-regulations-2024_gazetted.pdf - 
+Nigeria, accessed on April 3, 2025, 
+https://pwcnigeria.typepad.com/files/deduction-of-tax-at-source-withholding-re
+gulations-2024_gazetted.pdf 
+50. Nigeria: New withholding tax regulations effective January 1, 2025 - KPMG 
+International, accessed on April 3, 2025, 
+https://kpmg.com/us/en/taxnewsflash/news/2024/10/tnf-nigeria-new-withholding
+-tax-regulations-effective-2025.html 
+51. Navigating Nigeria's Tax Landscape: Key Trends and Developments in 2024 and 
+Outlook for 2025, accessed on April 3, 2025, 
+https://uubo.org/wp-content/uploads/2025/02/Navigating-Nigerias-Tax-Landscap
+e-Key-Trends-and-Developments-in-2024-and-Outlook-for-2025.pdf 
+52. TERTIARY EDUCATION TAX - SOBANJO INTERNATIONAL, accessed on April 3, 
+2025, https://sobanjointernational.com/tertiary-education-tax/ 
+53. Information Circular on Administration of the Tertiary Education Tax, accessed on 
+April 3, 2025, 
+https://assets.kpmg.com/content/dam/kpmg/ng/pdf/information-circular-for-the-
+administration-of-the-tertiary-education-tax.pdf 
+54. Tertiary Education Trust Fund (Establishment) Act 2011 - Bomes Resources 
+Consulting (BRC), accessed on April 3, 2025, 
+https://www.bomesresourcesconsulting.com/wp-content/uploads/2024/03/Tertia
+ry-Education-Trust-Fund-Establishment-Act-2011.pdf?x93052 
+55. Nigeria - Overview - Worldwide Tax Summaries - PwC, accessed on April 3, 2025, 
+https://taxsummaries.pwc.com/nigeria 
+56. Nigeria - Overview - Worldwide Tax Summaries Online, accessed on April 3, 2025, 
+https://taxsummaries.pwc.com/nigeria?topicTypeId=399bcbae-2967-429b-b371-
+99be91a47b34 
+57. Education Tax - FIRS - Simplifying Tax, Maximizing Revenue, accessed on April 3, 
+2025, https://www.firs.gov.ng/education-tax 
+58. Tax Alert - Issue No. 8.1 - KPMG Nigeria, accessed on April 3, 2025, 
+https://kpmg.com/ng/en/home/insights/2023/08/firs-announces-the-effective-da
+te-for-the-changes-introduced-by-.html 
+59. federal - inland - FIRS, accessed on April 3, 2025, 
+https://old.firs.gov.ng/wp-content/uploads/2022/03/Key_Changes_to_2021_Financ
+e-Act.pdf 
+60. 
+Mission - Tetfund, accessed on April 3, 2025, https://tetfund.unn.edu.ng/mission/ 
+61. Tertiary Education Trust Fund - Wikipedia, accessed on April 3, 2025, 
+https://en.wikipedia.org/wiki/Tertiary_Education_Trust_Fund 
+62. Tertiary Education Trust Fund (Establishment, Etc.) Act, 2011 | PolicyVault.Africa, 
+accessed on April 3, 2025, 
+https://policyvault.africa/policy/tertiary-education-trust-fund-establishment-etc-
+act-2011/ 
+
+63. TERTIARY EDUCATION TRUST FUND INTERVENTION IN ACADEMIC STAFF 
+TRAINING IN NIGERIAN UNIVERSITIES - Journal of Public Administration, Finance 
+and Law (JOPAFL), accessed on April 3, 2025, 
+https://www.jopafl.com/uploads/issue27/TERTIARY_EDUCATION_TRUST_FUND_INT
+ERVENTION_IN_ACADEMIC_STAFF_TRAINING_IN_NIGERIAN_UNIVERSITIES.pdf 
+64. Mandate & Objectives - TERTIARY EDUCATION TRUST FUND, accessed on April 3, 
+2025, https://tetfund.gov.ng/index.php/mandate-objectives/ 
+65. Taxes to finance tertiary education: lessons from Nigeria's TETFund - Globaldev 
+Blog, accessed on April 3, 2025, 
+https://globaldev.blog/taxes-to-finance-tertiary-education-lessons-from-nigerias
+-tetfund/ 
+66. Increase in Education Tax Improves Tertiary Institutions Development- TetFund, 
+accessed on April 3, 2025, 
+https://von.gov.ng/increase-in-education-tax-improves-tertiary-institutions-devel
+opment-tetfund/ 
+67. Finance Act: Review of the Changes to the Capital Gains Tax Act - Forvis Mazars - 
+Nigeria, accessed on April 3, 2025, 
+https://www.forvismazars.com/ng/en/insights/publications/local-insights/finance-
+act-review-of-the-changes-to-the-cgt-act 
+68. Capital Gains Tax - FIRS - Simplifying Tax, Maximizing Revenue, accessed on April 
+3, 2025, https://www.firs.gov.ng/capital-gains-tax 
+69. Subject: CLARIFICATIONS ON THE PROVISIONS OF CAPITAL GAINS TAX (CGT) 
+ACT. This circular is issued for the information and guida, accessed on April 3, 
+2025, 
+https://assets.kpmg.com/content/dam/kpmg/ng/pdf/clarifications-on-the-provisio
+ns-of-capital-gains-tax-act.pdf 
+70. International Tax Nigeria Highlights 2024 - Deloitte, accessed on April 3, 2025, 
+https://www2.deloitte.com/content/dam/Deloitte/global/Documents/Tax/dttl-tax-n
+igeriahighlights-2024.pdf 
+71. Capital gains tax (CGT) rates - PwC Tax Summaries, accessed on April 3, 2025, 
+https://taxsummaries.pwc.com/quick-charts/capital-gains-tax-cgt-rates 
+72. Capital Gains Tax Administration in Nigeria - Taraba State Internal Revenue 
+Service, accessed on April 3, 2025, 
+https://www.tarababir.gov.ng/capital-gains-tax-administration-in-nigeria/ 
+73. FEDERAL INLAND REVENUE SERVICE 15, SOKODE CRESCENT, WUSE ZONE 5, 
+ABUJA, NIGERIA PUBLIC NOTICE ON THE CHARGE OF CAPITAL GAINS TA, 
+accessed on April 3, 2025, 
+https://assets.kpmg.com/content/dam/kpmg/ng/pdf/public-notice-on-charge-of-
+cgt-on-proceeds-from-disposal-of-shares-pursuant-to-the-amendment-of-sec
+tion-30-of-the-cgt-act.pdf 
+74. Tax implications of disposal of shares in Nigeria - OAKE Legal, accessed on April 3, 
+2025, https://oakelegal.com/tax-implications-of-disposal-of-shares-in-nigeria/ 
+75. An Overview Of The Personal Income Tax And Capital Gains Tax Regime In 
+Nigeria, accessed on April 3, 2025, 
+https://ideas.repec.org/a/bfy/ojtajl/v3y2021i1p1-37id881.html 
+
+76. Impact of Capital Gains Tax on Nigeria Economy - ARCN Journals, accessed on 
+April 3, 2025, https://www.arcnjournals.org/images/6472-208-9-125-38-962.pdf 
+77. National Information Technology Development Levy (NITDL) - FIRS - Simplifying 
+Tax, Maximizing Revenue, accessed on April 3, 2025, https://www.firs.gov.ng/nitdl 
+78. National Information Technology Development (NITD) Levy: What You Should 
+Know and Do About It - Proshare, accessed on April 3, 2025, 
+https://www.proshare.co/articles/national-information-technology-development-
+nitd-levy-what-you-should-know-and-do-about-it?menu=Economy&classificatio
+n=Read&category=Taxes%20%26%20Tariffs 
+79. nitdl booklet | firs, accessed on April 3, 2025, 
+https://old.firs.gov.ng/wp-content/uploads/2020/10/NITDL-BOOKLET.pdf 
+80. Nigeria's National Information Technology Development Levy - Daily Tax Report ®, 
+accessed on April 3, 2025, 
+https://news.bloombergtax.com/daily-tax-report-international/nigerias-national-i
+nformation-technology-development-levy 
+81. Ten banks contribute N33.7 billion to Nigeria's tech development fund in 2023, 
+accessed on April 3, 2025, 
+https://nairametrics.com/2024/06/04/ten-banks-contribute-n33-7-billion-to-nige
+rias-tech-development-fund-in-2023/ 
+82. FIRS: National Information Technology Development Levy - Aluko & Oyebode, 
+accessed on April 3, 2025, https://www.aluko-oyebode.com/insights/3732/ 
+83. NITDEF LEVY - SIAO, accessed on April 3, 2025, 
+https://siao.ng/compliance-guide/tax-systems/ntdef-levy/ 
+84. National Information Technology Development Agency - Wikipedia, accessed on 
+April 3, 2025, 
+https://en.wikipedia.org/wiki/National_Information_Technology_Development_Age
+ncy 
+85. Nigerian National Information Technology Development Agency (NITDA) Act of 
+2007, accessed on April 3, 2025, 
+https://dig.watch/resource/nigerian-national-information-technology-developme
+nt-agency-nitda-act-of-2007 
+86. National Information Technology Development Agency (NITDA) - WeGO, 
+accessed on April 3, 2025, https://we-gov.org/?kboard_content_redirect=705 
+87. 
+NITDA Act, accessed on April 3, 2025, https://nitda.gov.ng/nitda-act/ 
+88. THE REGULATION OF TECHNOLOGY COMPANIES IN NIGERIA – THE PROPOSED 
+NITDA ACT 2021 - Global Law Experts, accessed on April 3, 2025, 
+https://globallawexperts.com/the-regulation-of-technology-companies-in-nigeri
+a-the-proposed-nitda-act-2021/ 
+89. Impact of the National Information Technology Development Act, 2007 and Its 
+Proposed Amendment on Nigeria's Tech Space - Omaplex Law Firm, accessed on 
+April 3, 2025, 
+https://omaplex.com.ng/impact-of-the-national-information-technology-develop
+ment-act-2007-and-its-proposed-amendment-on-nigerias-tech-space/ 
+90. Nigeria: Navigating the Future - Key Tax Reforms in Nigeria for 2024 and Beyond, 
+accessed on April 3, 2025, 
+
+https://wts.com/global/publishing-article/20250102-nigeria-navigating-the-future
+-key-tax-reforms-in-nigeria-for-2024-and-beyond~publishing-article 
+91. The Nigerian Tax Bill 2024 at a Glance: Highlights and Key Provisions - Omaplex 
+Law Firm, accessed on April 3, 2025, 
+https://omaplex.com.ng/the-nigerian-tax-bill-2024-at-a-glance-highlights-and-k
+ey-provisions/ 
+92. FIRS: Tax revenue as Nigeria's new 'crude oil' - Businessday NG, accessed on April 
+3, 2025, 
+https://businessday.ng/opinion/article/firs-tax-revenue-as-nigerias-new-crude-oil
+/ 
+93. FG sets N25.2trn target for FIRS in 2025 - The Nation Newspaper, accessed on 
+April 3, 2025, 
+https://thenationonlineng.net/fg-sets-n25-2trn-target-for-firs-in-2025/ 
+94. Tax Wrap Up Report and Outlook 2025 - The Estero - Olaniwun Ajayi LP, accessed 
+on April 3, 2025, 
+https://www.olaniwunajayi.net/blog/tax-wrap-up-report-and-outlook-2025/ 
+95. Tinubu grapples with the politics of Nigerian tax reforms - African Business, 
+accessed on April 3, 2025, 
+https://african.business/2025/02/politics/tinubu-grapples-with-the-politics-of-nig
+erian-tax-reforms 
+96. 2024 Revenue Reform Bills and their benefit to Nigeria (2) - Businessamlive, 
+accessed on April 3, 2025, 
+https://www.businessamlive.com/2024-revenue-reform-bills-and-their-benefit-t
+o-nigeria-2/ 
+97. Understanding TIN in Nigeria: A Simple and Comprehensive Guide - Blog - Flex 
+Finance, accessed on April 3, 2025, 
+https://blog.flexfinance.ai/blog/understanding-tin-in-nigeria-a-simple-and-compr
+ehensive-guide 
+98. FIRS TIN registration - Bomes Resources Consulting (BRC), accessed on April 3, 
+2025, https://www.bomesresourcesconsulting.com/firs-tin-registration.html 
+99. How to apply for your Tax Identification Number in Nigeria - Nairametrics, 
+accessed on April 3, 2025, 
+https://nairametrics.com/2024/10/15/how-to-apply-for-your-tax-identification-nu
+mber-in-nigeria/ 
+100. Step-by-step Guide on How to Get a Taxpayer Identification Number (TIN) in 
+Nigeria for MSMEs and Individuals - MSME Africa, accessed on April 3, 2025, 
+https://msmeafricaonline.com/step-by-step-guide-on-how-to-get-a-taxpayer-id
+entification-number-tin-in-nigeria-for-msmes-and-individuals/ 
+101. Tax Identification Number (TIN) - FIRS - Simplifying Tax, Maximizing Revenue, 
+accessed on April 3, 2025, https://www.firs.gov.ng/individual-income-tax 
+102. How to Generate TIN | How to Create TIN in Nigeria | SOW Professional, 
+accessed on April 3, 2025, 
+https://sowprofessional.com/how-to-generate-tin-https-jtb-gov-ng-apply-for-tin
+-https-apps-firs-gov-ng-tinverification/ 
+103. FIRS TIN Verification: How to Revalidate Your Tax Identification Number (TIN) 
+
+and Register with Taxpromax at the FIRS Office - ICA - Ibe Chido & Associates, 
+accessed on April 3, 2025, 
+https://ica.ng/how-to-revalidate-your-tax-identification-number-tin-and-register
+-with-taxpromax-at-the-federal-inland-revenue-service-firs-office/ 
+104. Mission, Vision & Core Values - FIRS - Simplifying Tax, Maximizing Revenue, 
+accessed on April 3, 2025, https://www.firs.gov.ng/firs-organization/goals 
+105. Federal Inland Revenue Service - Wikipedia, accessed on April 3, 2025, 
+https://en.wikipedia.org/wiki/Federal_Inland_Revenue_Service 
+106. federal inland revenue service (establishment) act, accessed on April 3, 2025, 
+https://www.placng.org/lawsofnigeria/laws/F36.pdf 
+107. FIRS - - Home Home Federal Government Agencies and Parastatals, accessed 
+on April 3, 2025, https://itcbb.com.ng/firs/ 
+108. Nigeria Income Tax and Corporate Tax Brackets | QuickBooks Global, 
+accessed on April 3, 2025, 
+https://quickbooks.intuit.com/global/tax-tables/nigeria-tax-tables/ 
+109. FIRS - Simplifying Tax, Maximizing Revenue, accessed on April 3, 2025, 
+https://www.firs.gov.ng/ 
+110. Nigeria - Individual - Taxes on personal income, accessed on April 3, 2025, 
+https://taxsummaries.pwc.com/nigeria/individual/taxes-on-personal-income 
+111. Tax forms - FIRS - Simplifying Tax, Maximizing Revenue, accessed on April 3, 
+2025, https://www.firs.gov.ng/tax-forms 
+112. FEDERAL INLAND REVENUE SERVICE, accessed on April 3, 2025, 
+https://assets.kpmg.com/content/dam/kpmg/ng/pdf/tax/taxpayer-cit-user-guides.
+pdf 
+113. Nigeria Federal Inland Revenue Service: Books - Amazon.com, accessed on 
+April 3, 2025, 
+https://www.amazon.com/Books-Nigeria-Federal-Inland-Revenue-Service/s?rh=n
+%3A283155%2Cp_27%3ANigeria%2BFederal%2BInland%2BRevenue%2BService 
+114. FIRS Handbook on Reforms in the Tax System 2004-2011 - Amazon.com, 
+accessed on April 3, 2025, 
+https://www.amazon.com/FIRS-Handbook-Reforms-System-2004-2011/dp/9784
+877686 
+115. FIRS Handbook on Reforms in the Tax System 2004-2011 - Project MUSE, 
+accessed on April 3, 2025, https://muse.jhu.edu/book/26141 
+116. FIRS Handbook on Reforms in the Tax System 2004-2011 - African Books 
+Collective, accessed on April 3, 2025, 
+https://www.africanbookscollective.com/books/firs-handbook-on-reforms-in-the
+-tax-system-2004-2011 
+117. FIRS handbook on reforms in the tax system (2004-2011) (eBook) - Catalog 
+Home, accessed on April 3, 2025, 
+https://ins.swanlibraries.net/ebscoebooks/ocn867740837?searchId=136415216&re
+cordIndex=9&page=1 
+118. FIRS handbook on reforms in the tax system (2004-2011) - Eastern Michigan 
+University, accessed on April 3, 2025, 
+https://emich.primo.exlibrisgroup.com/discovery/fulldisplay?docid=alma99140123
+
+71103656&context=L&vid=01EMU_INST:EMU&lang=en&search_scope=Books&ada
+ptor=Local%20Search%20Engine&tab=Books&query=sub%2Cequals%2C%20TA
+X%20SYSTEM%20%2CAND&mode=advanced&offset=0 

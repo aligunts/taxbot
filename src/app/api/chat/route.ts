@@ -7,235 +7,295 @@ import {
 
 // Function to detect and enhance a query about a specific amount
 const enhanceUserMessage = async (message: string): Promise<string> => {
-  // Check for specific amount mentions with regex for various formats
-  const amountRegex = /₦?\s*([\d,]+(?:\.\d+)?)\s*(?:naira)?/i;
-  const match = message.match(amountRegex);
+  const lowercaseMessage = message.toLowerCase();
 
-  // Extract product or item name if mentioned
-  const productRegex =
-    /(?:(?:for|on|of|buying|purchasing|selling|taking|using|about|like|such as)\s+(?:a|an|the|some)?\s*([a-zA-Z\s]+?)(?:\s+at|\s+worth|\s+costing|\s+for|\s+with|\?|\.|\!|$))|(?:(?:a|an|the|some)\s+([a-zA-Z\s]+?)(?:\s+(?:is|are|costs?|costs|priced|at|for|with)|\?|\.|\!|$))/i;
-  const productMatch = message.match(productRegex);
-  let productName = productMatch ? (productMatch[1] || productMatch[2] || "").trim() : "";
+  // Check if the message is about company income tax
+  if (
+    lowercaseMessage.includes("company income tax") ||
+    lowercaseMessage.includes("company tax") ||
+    lowercaseMessage.includes("corporate tax") ||
+    (lowercaseMessage.includes("turnover") && lowercaseMessage.includes("tax")) ||
+    (lowercaseMessage.includes("company") && lowercaseMessage.includes("tax"))
+  ) {
+    // Extract turnover amount if present
+    const turnoverRegex =
+      /(?:turnover|revenue|gross income|sales)(?:\s+is|\s+of|\s*:|\s*=)?\s*[\₦N]?\s*([\d,]+(?:\.\d+)?)\s*(?:million|m|billion|b)?/i;
+    const turnoverMatch = message.match(turnoverRegex);
 
-  // If no product is found with the regex, check if common exempt product names are mentioned
-  if (!productName) {
-    // Common medicines
-    const medicineNames = [
-      "panadol",
-      "paracetamol",
-      "ibuprofen",
-      "aspirin",
-      "medicine",
-      "drug",
-      "pharmaceutical",
-    ];
+    if (turnoverMatch) {
+      const rawAmount = parseFloat(turnoverMatch[1].replace(/,/g, ""));
+      if (!isNaN(rawAmount)) {
+        let turnover = rawAmount;
 
-    // Common baby products
-    const babyProductNames = [
-      "pampers",
-      "huggies",
-      "diaper",
-      "nappy",
-      "baby product",
-      "baby food",
-      "baby formula",
-    ];
+        // Check if there's a unit (million, billion)
+        if (
+          turnoverMatch[0].toLowerCase().includes("billion") ||
+          turnoverMatch[0].toLowerCase().includes("b")
+        ) {
+          turnover = rawAmount * 1000000000;
+        } else if (
+          turnoverMatch[0].toLowerCase().includes("million") ||
+          turnoverMatch[0].toLowerCase().includes("m")
+        ) {
+          turnover = rawAmount * 1000000;
+        }
 
-    // Common educational items
-    const educationalItems = [
-      "textbook",
-      "notebook",
-      "pencil",
-      "pen",
-      "ruler",
-      "eraser",
-      "calculator",
-      "school supply",
-    ];
+        // Determine company size based on turnover
+        const companySize =
+          turnover < 25000000 ? "small" : turnover < 100000000 ? "medium" : "large";
 
-    // Common basic food items
-    const basicFoodItems = [
-      "rice",
-      "beans",
-      "yam",
-      "cassava",
-      "potato",
-      "vegetable",
-      "fruit",
-      "fish",
-      "meat",
-      "egg",
-    ];
+        // Determine tax rate based on company size
+        const taxRate = companySize === "small" ? 0.2 : 0.3;
 
-    // Combine all exempt product types
-    const exemptProducts = [
-      ...medicineNames,
-      ...babyProductNames,
-      ...educationalItems,
-      ...basicFoodItems,
-    ];
+        // Assume profit is 40% of turnover for calculation purposes
+        const estimatedProfit = turnover * 0.4;
+        const taxPayable = estimatedProfit * taxRate;
 
-    for (const product of exemptProducts) {
-      if (message.toLowerCase().includes(product)) {
-        productName = product;
-        break;
+        // Format numbers with commas for thousands
+        const formatNumber = (num: number) => {
+          return num.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+        };
+
+        const turnoverInMillions = turnover / 1000000;
+        const unitLabel = turnoverInMillions >= 1000 ? "billion" : "million";
+        const displayValue =
+          turnoverInMillions >= 1000
+            ? formatNumber(turnoverInMillions / 1000)
+            : formatNumber(turnoverInMillions);
+
+        return `${message}
+
+## Company Income Tax Calculation (₦${displayValue} ${unitLabel} Turnover)
+
+1. Company Size: ${companySize.charAt(0).toUpperCase() + companySize.slice(1)}
+2. Tax Rate: ${(taxRate * 100).toFixed(1)}%
+3. Estimated Taxable Profit: ₦${formatNumber(estimatedProfit)}
+4. Tax Payable: ₦${formatNumber(taxPayable)}
+
+Note: Small (<₦25M): 20% tax; Medium/Large: 30% tax`;
       }
     }
   }
 
-  // If we have both an amount and a product, check if the product is VAT exempt
-  if (match && productName) {
-    // Extract and clean the amount (remove commas)
+  // Extract the amount mentioned in the message
+  const amountRegex = /₦?\s*([\d,]+(?:\.\d+)?)\s*(?:naira)?/i;
+  const match = message.match(amountRegex);
+
+  if (match) {
     const amount = parseFloat(match[1].replace(/,/g, ""));
 
-    // Skip if not a valid number
-    if (isNaN(amount)) return message;
+    // Extract product or item name if mentioned
+    const productRegex =
+      /(?:(?:for|on|of|buying|purchasing|selling|taking|using|about|like|such as)\s+(?:a|an|the|some)?\s*([a-zA-Z\s]+?)(?:\s+at|\s+worth|\s+costing|\s+for|\s+with|\?|\.|\!|$))|(?:(?:a|an|the|some)\s+([a-zA-Z\s]+?)(?:\s+(?:is|are|costs?|costs|priced|at|for|with)|\?|\.|\!|$))/i;
+    const productMatch = message.match(productRegex);
+    let productName = productMatch ? (productMatch[1] || productMatch[2] || "").trim() : "";
 
-    // Format numbers with commas for thousands
-    const formatNumber = (num: number) => {
-      return num.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-    };
+    // If no product is found with the regex, check if common exempt product names are mentioned
+    if (!productName) {
+      // Common medicines
+      const medicineNames = [
+        "panadol",
+        "paracetamol",
+        "ibuprofen",
+        "aspirin",
+        "medicine",
+        "drug",
+        "pharmaceutical",
+      ];
 
-    // Check if they're asking for "price before VAT" for a VAT-inclusive price
-    const askingForPriceBeforeVAT =
-      message.toLowerCase().includes("price before vat") ||
-      message.toLowerCase().includes("calculate the price before vat") ||
-      message.toLowerCase().includes("what is the price before vat") ||
-      (message.toLowerCase().includes("before vat") && message.toLowerCase().includes("price"));
+      // Common baby products
+      const babyProductNames = [
+        "pampers",
+        "huggies",
+        "diaper",
+        "nappy",
+        "baby product",
+        "baby food",
+        "baby formula",
+      ];
 
-    // Check if the amount is explicitly mentioned as VAT-inclusive
-    const isVatInclusive =
-      /vat[\s-]*inclusive|including vat|includes vat|with vat|price after vat/i.test(message);
+      // Common educational items
+      const educationalItems = [
+        "textbook",
+        "notebook",
+        "pencil",
+        "pen",
+        "ruler",
+        "eraser",
+        "calculator",
+        "school supply",
+      ];
 
-    // If asking specifically about price before VAT, treat the amount as VAT-inclusive
-    if (askingForPriceBeforeVAT) {
-      // When asking for "price before VAT", we treat the amount as VAT-inclusive
-      const priceBeforeVAT = Math.round((amount / 1.075) * 100) / 100;
-      const vatAmount = Math.round((amount - priceBeforeVAT) * 100) / 100;
+      // Common basic food items
+      const basicFoodItems = [
+        "rice",
+        "beans",
+        "yam",
+        "cassava",
+        "potato",
+        "vegetable",
+        "fruit",
+        "fish",
+        "meat",
+        "egg",
+      ];
 
-      // Verify calculations
-      const checkTotal = Math.round((priceBeforeVAT + vatAmount) * 100) / 100;
+      // Combine all exempt product types
+      const exemptProducts = [
+        ...medicineNames,
+        ...babyProductNames,
+        ...educationalItems,
+        ...basicFoodItems,
+      ];
 
-      return (
-        message +
-        `\n\nIMPORTANT: When asking for the "price before VAT", I need to calculate what the price was before VAT was added. For a total amount of ₦${formatNumber(amount)} (VAT-inclusive), the calculations are:
-
-1. Price before VAT = ₦${formatNumber(amount)} ÷ 1.075 = ₦${formatNumber(priceBeforeVAT)}
-2. VAT amount = ₦${formatNumber(amount)} - ₦${formatNumber(priceBeforeVAT)} = ₦${formatNumber(vatAmount)}
-
-Verification:
-- Price before VAT + VAT amount = ₦${formatNumber(priceBeforeVAT)} + ₦${formatNumber(vatAmount)} = ₦${formatNumber(checkTotal)}
-
-Always use exactly these values in your response and round to 2 decimal places.`
-      );
+      for (const product of exemptProducts) {
+        if (message.toLowerCase().includes(product)) {
+          productName = product;
+          break;
+        }
+      }
     }
 
-    // Check online if the product is VAT exempt
-    const exemptionCheck = await checkOnlineVatExemption(productName);
-    const isExempt = exemptionCheck.isExempt;
-    const category = exemptionCheck.category || "";
-    const source = exemptionCheck.source || "online-check";
-    const confidence = exemptionCheck.confidence || 0;
-    const uncertain = exemptionCheck.uncertain || false;
+    // If we have both an amount and a product, check if the product is VAT exempt
+    if (match && productName) {
+      // Extract and clean the amount (remove commas)
+      const amount = parseFloat(match[1].replace(/,/g, ""));
 
-    // If we're uncertain about the product, ask for clarification
-    if (uncertain) {
-      return (
-        message +
-        `\n\nI'm not completely certain about the VAT status of "${productName}" as it could fall under different categories. 
+      // Skip if not a valid number
+      if (isNaN(amount)) return message;
 
-Could you please clarify which category your product falls under? Is it:
-- A medical or pharmaceutical product
-- A baby product
-- An educational material or book
-- A basic/unprocessed food item
-- An agricultural input
-- A religious item
-
-This will help me determine whether it's VAT-exempt or not.`
-      );
-    }
-
-    if (isExempt) {
       // Format numbers with commas for thousands
-      return (
-        message +
-        `\n\nIMPORTANT: "${productName}" falls under VAT-exempt category in Nigeria: ${category}. No VAT should be calculated for this item.
-      
-For VAT-exempt items:
-1. Price before VAT = ₦${formatNumber(amount)} (no VAT is applicable)
-2. VAT amount = ₦0.00
-3. Total price = ₦${formatNumber(amount)}`
-      );
+      const formatNumber = (num: number) => {
+        return num.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+      };
+
+      // Check if they're asking for "price before VAT" for a VAT-inclusive price
+      const askingForPriceBeforeVAT =
+        message.toLowerCase().includes("price before vat") ||
+        message.toLowerCase().includes("calculate the price before vat") ||
+        message.toLowerCase().includes("what is the price before vat") ||
+        (message.toLowerCase().includes("before vat") && message.toLowerCase().includes("price"));
+
+      // Check if the amount is explicitly mentioned as VAT-inclusive
+      const isVatInclusive =
+        /vat[\s-]*inclusive|including vat|includes vat|with vat|price after vat/i.test(message);
+
+      // If asking specifically about price before VAT, treat the amount as VAT-inclusive
+      if (askingForPriceBeforeVAT) {
+        // When asking for "price before VAT", we treat the amount as VAT-inclusive
+        const priceBeforeVAT = Math.round((amount / 1.075) * 100) / 100;
+        const vatAmount = Math.round((amount - priceBeforeVAT) * 100) / 100;
+
+        // Verify calculations
+        const checkTotal = Math.round((priceBeforeVAT + vatAmount) * 100) / 100;
+
+        return (
+          message +
+          `\n\n## VAT Calculation (VAT-inclusive ₦${formatNumber(amount)})
+
+1. Price before VAT: ₦${formatNumber(priceBeforeVAT)}
+2. VAT (7.5%): ₦${formatNumber(vatAmount)}
+3. Total: ₦${formatNumber(checkTotal)}`
+        );
+      }
+
+      // Check online if the product is VAT exempt
+      const exemptionCheck = await checkOnlineVatExemption(productName);
+      const isExempt = exemptionCheck.isExempt;
+      const category = exemptionCheck.category || "";
+      const source = exemptionCheck.source || "online-check";
+      const confidence = exemptionCheck.confidence || 0;
+      const uncertain = exemptionCheck.uncertain || false;
+
+      // If we're uncertain about the product, ask for clarification
+      if (uncertain) {
+        return (
+          message +
+          `\n\nVAT status of "${productName}" unclear.
+
+Please specify category:
+- Medical/pharmaceutical product
+- Baby product
+- Educational material
+- Basic food item
+- Agricultural input
+- Religious item`
+        );
+      }
+
+      if (isExempt) {
+        // Format numbers with commas for thousands
+        return (
+          message +
+          `\n\n"${productName}" is VAT-exempt (${category}).
+
+1. Price: ₦${formatNumber(amount)}
+2. VAT: ₦0.00
+3. Total: ₦${formatNumber(amount)}`
+        );
+      }
+
+      if (isVatInclusive) {
+        // If VAT-inclusive, calculate price before VAT
+        const priceBeforeVAT = Math.round((amount / 1.075) * 100) / 100;
+        const vatAmount = Math.round((amount - priceBeforeVAT) * 100) / 100;
+
+        // Verify calculations
+        const checkTotal = Math.round((priceBeforeVAT + vatAmount) * 100) / 100;
+
+        return (
+          message +
+          `\n\n## VAT Calculation (VAT-inclusive ₦${formatNumber(amount)})
+
+1. Price before VAT: ₦${formatNumber(priceBeforeVAT)}
+2. VAT (7.5%): ₦${formatNumber(vatAmount)}
+3. Total: ₦${formatNumber(checkTotal)}`
+        );
+      } else {
+        // Default to VAT-exclusive calculations
+        const vatAmount = Math.round(amount * 0.075 * 100) / 100;
+        const totalAmount = Math.round((amount + vatAmount) * 100) / 100;
+
+        return (
+          message +
+          `\n\n## VAT Calculation (VAT-exclusive ₦${formatNumber(amount)})
+
+1. VAT (7.5%): ₦${formatNumber(vatAmount)}
+2. Total: ₦${formatNumber(totalAmount)}`
+        );
+      }
     }
 
-    if (isVatInclusive) {
-      // If VAT-inclusive, calculate price before VAT
-      const priceBeforeVAT = Math.round((amount / 1.075) * 100) / 100;
-      const vatAmount = Math.round((amount - priceBeforeVAT) * 100) / 100;
+    // If we only have an amount but no product name
+    if (match && !productName) {
+      // Extract and clean the amount (remove commas)
+      const amount = parseFloat(match[1].replace(/,/g, ""));
 
-      // Verify calculations
-      const checkTotal = Math.round((priceBeforeVAT + vatAmount) * 100) / 100;
+      // Skip if not a valid number
+      if (isNaN(amount)) return message;
 
-      return (
-        message +
-        `\n\nIMPORTANT: "${productName}" is NOT VAT-exempt in Nigeria. For a VAT-inclusive amount of ₦${formatNumber(amount)}, use these precise calculations:
-      
-1. Price before VAT = ₦${formatNumber(amount)} ÷ 1.075 = ₦${formatNumber(priceBeforeVAT)}
-2. VAT amount = ₦${formatNumber(amount)} - ₦${formatNumber(priceBeforeVAT)} = ₦${formatNumber(vatAmount)}
+      // Format numbers with commas for thousands
+      const formatNumber = (num: number) => {
+        return num.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+      };
 
-Verification:
-- Price before VAT + VAT amount = ₦${formatNumber(priceBeforeVAT)} + ₦${formatNumber(vatAmount)} = ₦${formatNumber(checkTotal)}
+      // Check if they're asking for "price before VAT" calculation
+      const askingForPriceBeforeVAT =
+        message.toLowerCase().includes("price before vat") ||
+        message.toLowerCase().includes("calculate the price before vat") ||
+        message.toLowerCase().includes("what is the price before vat") ||
+        (message.toLowerCase().includes("before vat") && message.toLowerCase().includes("price"));
 
-Always use exactly these values in your response and round to 2 decimal places.`
-      );
-    } else {
-      // Default to VAT-exclusive calculations
-      const vatAmount = Math.round(amount * 0.075 * 100) / 100;
-      const totalAmount = Math.round((amount + vatAmount) * 100) / 100;
+      // If asking about "price before VAT", assume the amount given is VAT-inclusive
+      if (askingForPriceBeforeVAT) {
+        // When asking for "price before VAT", we treat the amount as VAT-inclusive
+        const priceBeforeVAT = Math.round((amount / 1.075) * 100) / 100;
+        const vatAmount = Math.round((amount - priceBeforeVAT) * 100) / 100;
 
-      return (
-        message +
-        `\n\nIMPORTANT: "${productName}" is NOT VAT-exempt in Nigeria. For a VAT-exclusive amount of ₦${formatNumber(amount)}, use these precise calculations:
-      
-1. VAT amount = ₦${formatNumber(amount)} × 0.075 = ₦${formatNumber(vatAmount)}
-2. Total price = ₦${formatNumber(amount)} + ₦${formatNumber(vatAmount)} = ₦${formatNumber(totalAmount)}
+        // Verify calculations
+        const checkTotal = Math.round((priceBeforeVAT + vatAmount) * 100) / 100;
 
-Always use exactly these values in your response and round to 2 decimal places.`
-      );
-    }
-  }
-
-  // If we only have an amount but no product name
-  if (match && !productName) {
-    // Extract and clean the amount (remove commas)
-    const amount = parseFloat(match[1].replace(/,/g, ""));
-
-    // Skip if not a valid number
-    if (isNaN(amount)) return message;
-
-    // Format numbers with commas for thousands
-    const formatNumber = (num: number) => {
-      return num.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-    };
-
-    // Check if they're asking for "price before VAT" calculation
-    const askingForPriceBeforeVAT =
-      message.toLowerCase().includes("price before vat") ||
-      message.toLowerCase().includes("calculate the price before vat") ||
-      message.toLowerCase().includes("what is the price before vat") ||
-      (message.toLowerCase().includes("before vat") && message.toLowerCase().includes("price"));
-
-    // If asking about "price before VAT", assume the amount given is VAT-inclusive
-    if (askingForPriceBeforeVAT) {
-      // When asking for "price before VAT", we treat the amount as VAT-inclusive
-      const priceBeforeVAT = Math.round((amount / 1.075) * 100) / 100;
-      const vatAmount = Math.round((amount - priceBeforeVAT) * 100) / 100;
-
-      // Verify calculations
-      const checkTotal = Math.round((priceBeforeVAT + vatAmount) * 100) / 100;
-
-      return `When asking for the "price before VAT", I need to calculate what the price was before VAT was added. For a total amount of ₦${formatNumber(amount)} (VAT-inclusive), the calculations are:
+        return `When asking for the "price before VAT", I need to calculate what the price was before VAT was added. For a total amount of ₦${formatNumber(amount)} (VAT-inclusive), the calculations are:
 
 1. Price before VAT = ₦${formatNumber(amount)} ÷ 1.075 = ₦${formatNumber(priceBeforeVAT)}
 2. VAT amount = ₦${formatNumber(amount)} - ₦${formatNumber(priceBeforeVAT)} = ₦${formatNumber(vatAmount)}
@@ -244,59 +304,116 @@ Verification:
 - Price before VAT + VAT amount = ₦${formatNumber(priceBeforeVAT)} + ₦${formatNumber(vatAmount)} = ₦${formatNumber(checkTotal)}
 
 These calculations assume the amount you provided (₦${formatNumber(amount)}) is VAT-inclusive, which is the total amount after VAT was added.`;
-    }
+      }
 
-    // Check if the amount is explicitly mentioned as VAT-inclusive
-    const isVatInclusive =
-      /vat[\s-]*inclusive|including vat|includes vat|with vat|price after vat/i.test(message);
+      // Check if the amount is explicitly mentioned as VAT-inclusive
+      const isVatInclusive =
+        /vat[\s-]*inclusive|including vat|includes vat|with vat|price after vat/i.test(message);
 
-    if (isVatInclusive) {
-      // Calculate with proper precision for VAT-inclusive amount
-      const priceBeforeVAT = Math.round((amount / 1.075) * 100) / 100;
-      const vatAmount = Math.round((amount - priceBeforeVAT) * 100) / 100;
+      if (isVatInclusive) {
+        // Calculate with proper precision for VAT-inclusive amount
+        const priceBeforeVAT = Math.round((amount / 1.075) * 100) / 100;
+        const vatAmount = Math.round((amount - priceBeforeVAT) * 100) / 100;
 
-      // Verify calculations
-      const checkTotal = Math.round((priceBeforeVAT + vatAmount) * 100) / 100;
-      const checkVAT = Math.round(priceBeforeVAT * 0.075 * 100) / 100;
+        // Verify calculations
+        const checkTotal = Math.round((priceBeforeVAT + vatAmount) * 100) / 100;
+        const checkVAT = Math.round(priceBeforeVAT * 0.075 * 100) / 100;
 
-      return (
-        message +
-        `\n\nIMPORTANT: For a VAT-inclusive amount of ₦${formatNumber(amount)}, use these precise calculations:
-      
-1. Price before VAT = ₦${formatNumber(amount)} ÷ 1.075 = ₦${formatNumber(priceBeforeVAT)}
-2. VAT amount = ₦${formatNumber(amount)} - ₦${formatNumber(priceBeforeVAT)} = ₦${formatNumber(vatAmount)}
+        return (
+          message +
+          `\n\n## VAT Calculation (VAT-inclusive ₦${formatNumber(amount)})
 
-Verification:
-- Price before VAT + VAT amount = ₦${formatNumber(priceBeforeVAT)} + ₦${formatNumber(vatAmount)} = ₦${formatNumber(checkTotal)}
-- VAT amount can also be calculated as: Price before VAT × 0.075 = ₦${formatNumber(priceBeforeVAT)} × 0.075 = ₦${formatNumber(checkVAT)}
+1. Price before VAT: ₦${formatNumber(priceBeforeVAT)}
+2. VAT (7.5%): ₦${formatNumber(vatAmount)}
+3. Total: ₦${formatNumber(checkTotal)}`
+        );
+      } else {
+        // Default to VAT-exclusive calculations
+        const vatAmount = Math.round(amount * 0.075 * 100) / 100;
+        const totalAmount = Math.round((amount + vatAmount) * 100) / 100;
 
-Always use exactly these values in your response and round to 2 decimal places.`
-      );
-    } else {
-      // Default to VAT-exclusive calculations
-      const vatAmount = Math.round(amount * 0.075 * 100) / 100;
-      const totalAmount = Math.round((amount + vatAmount) * 100) / 100;
+        return (
+          message +
+          `\n\n## VAT Calculation (VAT-exclusive ₦${formatNumber(amount)})
 
-      return (
-        message +
-        `\n\nIMPORTANT: For a VAT-exclusive amount of ₦${formatNumber(amount)}, use these precise calculations:
-      
-1. VAT amount = ₦${formatNumber(amount)} × 0.075 = ₦${formatNumber(vatAmount)}
-2. Total price = ₦${formatNumber(amount)} + ₦${formatNumber(vatAmount)} = ₦${formatNumber(totalAmount)}
-
-Verification:
-- Net price + VAT amount = ₦${formatNumber(amount)} + ₦${formatNumber(vatAmount)} = ₦${formatNumber(totalAmount)}
-
-Always use exactly these values in your response and round to 2 decimal places.`
-      );
+1. VAT (7.5%): ₦${formatNumber(vatAmount)}
+2. Total: ₦${formatNumber(totalAmount)}`
+        );
+      }
     }
   }
 
   return message;
 };
 
-// Function to generate a fallback response when the AI doesn't adequately address a VAT-related question
+// Function to generate a fallback response when the AI doesn't adequately address a tax-related question
 const getFallbackResponse = async (message: string): Promise<string> => {
+  const lowercaseMessage = message.toLowerCase();
+
+  // Check if the query is about company income tax
+  if (
+    lowercaseMessage.includes("company income tax") ||
+    lowercaseMessage.includes("company tax") ||
+    lowercaseMessage.includes("corporate tax") ||
+    (lowercaseMessage.includes("turnover") && lowercaseMessage.includes("tax")) ||
+    (lowercaseMessage.includes("company") && lowercaseMessage.includes("tax"))
+  ) {
+    // Extract turnover amount if present (default to ₦80 million if none found or not parseable)
+    const turnoverRegex =
+      /(?:turnover|revenue|gross income|sales)(?:\s+is|\s+of|\s*:|\s*=)?\s*[\₦N]?\s*([\d,]+(?:\.\d+)?)\s*(?:million|m|billion|b)?/i;
+    const turnoverMatch = message.match(turnoverRegex);
+
+    let turnover = 80000000; // Default turnover ₦80 million
+    let turnoverUnit = "million";
+
+    if (turnoverMatch) {
+      const rawAmount = parseFloat(turnoverMatch[1].replace(/,/g, ""));
+      if (!isNaN(rawAmount)) {
+        // Check if there's a unit (million, billion)
+        if (
+          turnoverMatch[0].toLowerCase().includes("billion") ||
+          turnoverMatch[0].toLowerCase().includes("b")
+        ) {
+          turnover = rawAmount * 1000000000;
+          turnoverUnit = "billion";
+        } else {
+          turnover = rawAmount * 1000000;
+          turnoverUnit = "million";
+        }
+      }
+    }
+
+    // Determine company size based on turnover
+    const companySize = turnover < 25000000 ? "small" : turnover < 100000000 ? "medium" : "large";
+
+    // Determine tax rate based on company size
+    const taxRate = companySize === "small" ? 0.2 : 0.3;
+
+    // Assume profit is 40% of turnover for calculation purposes
+    const estimatedProfit = turnover * 0.4;
+    const taxPayable = estimatedProfit * taxRate;
+
+    // Format numbers with commas for thousands
+    const formatNumber = (num: number) => {
+      return num.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    };
+
+    return `## Company Income Tax Calculation for ₦${formatNumber(turnover / 1000000)} Million Turnover
+
+### Inputs
+- Annual Turnover: ₦${formatNumber(turnover)}
+- Company Size: ${companySize.charAt(0).toUpperCase() + companySize.slice(1)} (turnover-based)
+- Tax Rate: ${(taxRate * 100).toFixed(1)}%
+
+### Calculation
+1. Estimated Taxable Income: ₦${formatNumber(turnover)} × 0.4 = ₦${formatNumber(estimatedProfit)}
+2. Tax Amount: ₦${formatNumber(estimatedProfit)} × ${taxRate} = ₦${formatNumber(taxPayable)}
+
+Company Income Tax Payable: ₦${formatNumber(taxPayable)}
+
+Note: Small companies (<₦25M) pay 20% tax; medium/large companies pay 30%`;
+  }
+
   // Extract the amount mentioned (default to ₦10,000 if none found)
   const amountRegex = /₦?\s*([\d,]+(?:\.\d+)?)\s*(?:naira)?/i;
   const match = message.match(amountRegex);
@@ -390,28 +507,23 @@ const getFallbackResponse = async (message: string): Promise<string> => {
 
     // If we're uncertain about the product, ask for clarification
     if (uncertain) {
-      return `I'm not completely certain about the VAT status of "${productName}" as it could fall under different categories.
+      return `Cannot determine VAT status of "${productName}".
 
-Could you please clarify which category your product falls under? Is it:
-- A medical or pharmaceutical product
-- A baby product
-- An educational material or book
-- A basic/unprocessed food item
-- An agricultural input
-- A religious item
-
-This will help me determine whether it's VAT-exempt or not.`;
+Please clarify category:
+- Medical/pharmaceutical product
+- Baby product
+- Educational material
+- Basic food item
+- Agricultural input
+- Religious item`;
     }
 
     if (isExempt) {
-      return `"${productName}" falls under the VAT-exempt category in Nigeria: ${category}. 
+      return `"${productName}" is VAT-exempt (${category}).
 
-For VAT-exempt items like ${productName}:
-1. Price before VAT = ₦${formatNumber(amount)} (no VAT is applicable)
-2. VAT amount = ₦0.00
-3. Total price = ₦${formatNumber(amount)}
-
-Remember that in Nigeria, VAT exemptions apply to essential items including medicines, basic food items, books and educational materials, baby products, and certain agricultural inputs.`;
+1. Price: ₦${formatNumber(amount)}
+2. VAT amount: ₦0.00
+3. Total: ₦${formatNumber(amount)}`;
     }
   }
 
@@ -430,27 +542,21 @@ Remember that in Nigeria, VAT exemptions apply to essential items including medi
     const checkTotal = Math.round((priceBeforeVAT + vatAmount) * 100) / 100;
     const checkVAT = Math.round(priceBeforeVAT * 0.075 * 100) / 100;
 
-    return `For a VAT-inclusive amount of ₦${formatNumber(amount)} ${productInfo}, here's how to calculate the values correctly:
+    return `## VAT Calculation (VAT-inclusive amount ₦${formatNumber(amount)})
 
-1. Price before VAT = ₦${formatNumber(amount)} ÷ 1.075 = ₦${formatNumber(priceBeforeVAT)}
-2. VAT amount = ₦${formatNumber(amount)} - ₦${formatNumber(priceBeforeVAT)} = ₦${formatNumber(vatAmount)}
+1. Price before VAT: ₦${formatNumber(amount)} ÷ 1.075 = ₦${formatNumber(priceBeforeVAT)}
+2. VAT amount: ₦${formatNumber(amount)} - ₦${formatNumber(priceBeforeVAT)} = ₦${formatNumber(vatAmount)}
 
-Verification:
-- Price before VAT + VAT amount = ₦${formatNumber(priceBeforeVAT)} + ₦${formatNumber(vatAmount)} = ₦${formatNumber(checkTotal)}
-- VAT amount can also be calculated as: Price before VAT × 0.075 = ₦${formatNumber(priceBeforeVAT)} × 0.075 = ₦${formatNumber(checkVAT)}
-
-By default, I assume prices are VAT-exclusive unless specifically stated as VAT-inclusive.`;
+Verification: ₦${formatNumber(priceBeforeVAT)} + ₦${formatNumber(vatAmount)} = ₦${formatNumber(checkTotal)}`;
   } else {
     // Default to VAT-exclusive calculations
     const vatAmount = Math.round(amount * 0.075 * 100) / 100;
     const totalAmount = Math.round((amount + vatAmount) * 100) / 100;
 
-    return `For a VAT-exclusive amount of ₦${formatNumber(amount)} ${productInfo}, here's how to calculate the values correctly:
+    return `## VAT Calculation (VAT-exclusive amount ₦${formatNumber(amount)})
 
-1. VAT amount = ₦${formatNumber(amount)} × 0.075 = ₦${formatNumber(vatAmount)}
-2. Total price = ₦${formatNumber(amount)} + ₦${formatNumber(vatAmount)} = ₦${formatNumber(totalAmount)}
-
-By default, I assume prices are VAT-exclusive unless specifically stated as VAT-inclusive.`;
+1. VAT amount: ₦${formatNumber(amount)} × 0.075 = ₦${formatNumber(vatAmount)}
+2. Total price: ₦${formatNumber(amount)} + ₦${formatNumber(vatAmount)} = ₦${formatNumber(totalAmount)}`;
   }
 };
 
@@ -485,55 +591,51 @@ export async function POST(req: Request) {
     const enhancedMessages = [
       {
         role: "system",
-        content: `You are a Nigerian tax chatbot, specializing in helping users understand Value Added Tax (VAT) calculations and exemptions in Nigeria.
+        content: `You are a Nigerian tax calculator specializing in VAT and Company Income Tax calculations.
 
-Key information about VAT in Nigeria:
-- The current VAT rate is 7.5%
-- ALWAYS assume prices are VAT-exclusive by default unless explicitly stated as VAT-inclusive
-- IMPORTANT: Generic terms like "good", "item", or "product" are NEVER VAT-exempt. Generic terms ALWAYS require VAT calculation of 7.5%. Only specific products in exempt categories are exempt.
-- VAT exempt categories include:
-  - Basic food items (rice, beans, yam, cassava, etc.)
-  - Medical and pharmaceutical products (ALL medicines are VAT EXEMPT)
-  - Books and educational materials
-  - Baby products (such as Pampers, Huggies, and Molfix diapers are VAT EXEMPT)
-  - Agricultural equipment and fertilizers
-  - Exports (zero-rated)
-  - Religious items
+RESPONSE STYLE:
+- Be direct and concise
+- No self-references as a chatbot or AI
+- No introductory text like "I'm a Nigerian tax chatbot" or "I can assist with..."
+- Skip pleasantries like "I'm happy to help" or "please provide more details"
+- Deliver calculations and facts immediately without preamble
+- Use numbered lists and formatting for clarity
+- Include only essential information
 
-For VAT-exclusive prices (DEFAULT ASSUMPTION):
+## COMPANY INCOME TAX INFORMATION
+- Company Income Tax rates in Nigeria are based on company size determined by turnover:
+  - Small companies (turnover less than ₦25 million): 20% tax rate
+  - Medium companies (turnover between ₦25 million and ₦100 million): 30% tax rate
+  - Large companies (turnover over ₦100 million): 30% tax rate
+- Taxable income = Turnover - Allowable expenses - Deductions
+- Company Income Tax = Taxable income × Tax rate
+
+For example, with turnover of ₦80 million:
+- Company size: Medium (based on turnover)
+- Tax rate: 30%
+- With ₦50 million in expenses/deductions
+- Taxable income: ₦30,000,000
+- Company Income Tax: ₦9,000,000
+
+When given company turnover, FIRST determine company size, THEN apply correct tax rate.
+
+## VAT INFORMATION
+- Current VAT rate: 7.5%
+- Assume prices are VAT-exclusive by default unless stated as VAT-inclusive
+- Generic "goods" and "products" are NEVER VAT-exempt (always calculate 7.5%)
+- VAT exempt categories: basic food items, medical products, books/educational materials, baby products, agricultural equipment, exports, religious items
+
+VAT-exclusive calculation:
 1. VAT Amount = Price before VAT × 0.075
 2. Total Price = Price before VAT + VAT Amount
 
-For VAT-inclusive prices (only if specifically mentioned as such):
+VAT-inclusive calculation:
 1. Price before VAT = VAT-inclusive price ÷ 1.075
 2. VAT Amount = VAT-inclusive price - Price before VAT
-3. Verify: Price before VAT + VAT Amount = VAT-inclusive price
 
-Verification steps for all calculations:
-- Always include precise step-by-step calculations
-- Round all currency values to 2 decimal places
-- Format with commas for thousands: ₦1,000.00
+Always include precise calculations with amounts rounded to 2 decimal places.
 
-Example 1: For a VAT-exclusive price of ₦10,000:
-1. VAT amount = ₦10,000 × 0.075 = ₦750.00
-2. Total price = ₦10,000 + ₦750.00 = ₦10,750.00
-
-Example 2: For a VAT-inclusive price of ₦10,000:
-1. Price before VAT = ₦10,000 ÷ 1.075 = ₦9,302.33
-2. VAT amount = ₦10,000 - ₦9,302.33 = ₦697.67
-3. Verify: ₦9,302.33 + ₦697.67 = ₦10,000.00
-
-NEVER EVER say an "item" or "product" is VAT-exempt without knowing the specific type. If someone asks about "an item" or "a product" without specifying what it is, ALWAYS calculate VAT at 7.5%.
-
-DO NOT use phrases like "It seems there might be a misunderstanding" or "not all items are VAT-exempt" in your responses. Instead, focus on answering the specific question and providing accurate tax information.
-
-If you're unsure whether a product is VAT-exempt, ASK the user which category their product falls under. For example: "Could you please clarify which category your product falls under? Is it a medical product, baby product, educational material, basic food item, etc.?"
-
-Remember to check if a product is VAT exempt before calculating VAT, in which case no VAT applies.
-
-If a user gives you an example with specific amounts, use EXACTLY those amounts in your calculations rather than making up new ones.
-
-IMPORTANT: DO NOT say that you checked an online database. Simply state whether a product is VAT-exempt or not based on the categories.`,
+IMPORTANT: If asked about company income tax or turnover taxation, DO NOT default to VAT calculations.`,
       },
       {
         role: "user",
