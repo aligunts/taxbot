@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { calculatePersonalIncomeTax } from "./taxbotLogic";
+import { calculatePersonalIncomeTax } from "@/utils/taxbotLogic";
 
 const TaxbotChat: React.FC = () => {
   const [salary, setSalary] = useState<number | string>(""); // State to capture salary input
@@ -10,6 +10,8 @@ const TaxbotChat: React.FC = () => {
     taxableIncome: number;
     totalTax: number;
     monthlyTax: number;
+    totalReliefs: number;
+    effectiveTaxRate: number;
   } | null>(null); // State to store tax response
 
   const handleSalaryInput = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -73,6 +75,11 @@ const TaxbotChat: React.FC = () => {
             <p>
               5. <strong>Monthly Tax Deduction</strong>: ₦{taxResponse.monthlyTax.toLocaleString()}
             </p>
+            {taxResponse.effectiveTaxRate > 0 && (
+              <p>
+                6. <strong>Effective Tax Rate</strong>: {taxResponse.effectiveTaxRate}%
+              </p>
+            )}
             <p>💬 Please confirm if you have any other income or deductions.</p>
           </div>
         )}
