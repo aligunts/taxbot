@@ -45,7 +45,7 @@ const enhanceUserMessage = async (message: string): Promise<string> => {
           turnover < 25000000 ? "small" : turnover < 100000000 ? "medium" : "large";
 
         // Determine tax rate based on company size
-        const taxRate = companySize === "small" ? 0.2 : 0.3;
+        const taxRate = companySize === "small" ? 0 : companySize === "medium" ? 0.2 : 0.3;
 
         // Assume profit is 40% of turnover for calculation purposes
         const estimatedProfit = turnover * 0.4;
@@ -65,14 +65,20 @@ const enhanceUserMessage = async (message: string): Promise<string> => {
 
         return `${message}
 
-## Company Income Tax Calculation (₦${displayValue} ${unitLabel} Turnover)
+🇳🇬 **Company Income Tax for ₦${displayValue} ${unitLabel} Turnover**
 
-1. Company Size: ${companySize.charAt(0).toUpperCase() + companySize.slice(1)}
-2. Tax Rate: ${(taxRate * 100).toFixed(1)}%
-3. Estimated Taxable Profit: ₦${formatNumber(estimatedProfit)}
-4. Tax Payable: ₦${formatNumber(taxPayable)}
+**Company Classification**:
+- Size: ${companySize.charAt(0).toUpperCase() + companySize.slice(1)} (turnover-based)
+- Applicable Tax Rate: ${(taxRate * 100).toFixed(0)}%
 
-Note: Small (<₦25M): 20% tax; Medium/Large: 30% tax`;
+**📊 Calculation Steps**:
+1. Annual Turnover: ₦${formatNumber(turnover)}
+2. Estimated Taxable Profit: ₦${formatNumber(turnover)} × 0.4 = ₦${formatNumber(estimatedProfit)}
+3. CIT Amount: ₦${formatNumber(estimatedProfit)} × ${taxRate} = ₦${formatNumber(taxPayable)}
+
+✅ **Final Tax Payable**: ₦${formatNumber(taxPayable)}
+
+🔍 **Note**: Tax brackets are Small (<₦25M): 0%, Medium (₦25M-₦100M): 20%, Large (>₦100M): 30%`;
       }
     }
   }
@@ -191,11 +197,16 @@ Note: Small (<₦25M): 20% tax; Medium/Large: 30% tax`;
 
         return (
           message +
-          `\n\n## VAT Calculation (VAT-inclusive ₦${formatNumber(amount)})
+          `
 
-1. Price before VAT: ₦${formatNumber(priceBeforeVAT)}
-2. VAT (7.5%): ₦${formatNumber(vatAmount)}
-3. Total: ₦${formatNumber(checkTotal)}`
+🇳🇬 **VAT Calculation for ${productName} (VAT-inclusive Amount)**
+
+**📊 Breakdown**:
+1. VAT-inclusive Amount: ₦${formatNumber(amount)}
+2. Price before VAT: ₦${formatNumber(priceBeforeVAT)}
+3. VAT Amount (7.5%): ₦${formatNumber(vatAmount)}
+
+✅ **Verification**: ₦${formatNumber(priceBeforeVAT)} + ₦${formatNumber(vatAmount)} = ₦${formatNumber(checkTotal)}`
         );
       }
 
@@ -211,9 +222,13 @@ Note: Small (<₦25M): 20% tax; Medium/Large: 30% tax`;
       if (uncertain) {
         return (
           message +
-          `\n\nVAT status of "${productName}" unclear.
+          `
 
-Please specify category:
+🔍 **VAT Status Undetermined**
+
+VAT status of "${productName}" unclear.
+
+**Please specify category**:
 - Medical/pharmaceutical product
 - Baby product
 - Educational material
@@ -227,10 +242,15 @@ Please specify category:
         // Format numbers with commas for thousands
         return (
           message +
-          `\n\n"${productName}" is VAT-exempt (${category}).
+          `
 
+🇳🇬 **VAT Calculation for ${productName}**
+
+**VAT Status**: ✅ Exempt (${category})
+
+**Calculation**:
 1. Price: ₦${formatNumber(amount)}
-2. VAT: ₦0.00
+2. VAT (0%): ₦0.00
 3. Total: ₦${formatNumber(amount)}`
         );
       }
@@ -245,11 +265,16 @@ Please specify category:
 
         return (
           message +
-          `\n\n## VAT Calculation (VAT-inclusive ₦${formatNumber(amount)})
+          `
 
-1. Price before VAT: ₦${formatNumber(priceBeforeVAT)}
-2. VAT (7.5%): ₦${formatNumber(vatAmount)}
-3. Total: ₦${formatNumber(checkTotal)}`
+🇳🇬 **VAT Calculation for ${productName} (VAT-inclusive)**
+
+**📊 Breakdown**:
+1. VAT-inclusive Price: ₦${formatNumber(amount)}
+2. Price before VAT: ₦${formatNumber(priceBeforeVAT)}
+3. VAT Amount (7.5%): ₦${formatNumber(vatAmount)}
+
+✅ **Verification**: ₦${formatNumber(priceBeforeVAT)} + ₦${formatNumber(vatAmount)} = ₦${formatNumber(checkTotal)}`
         );
       } else {
         // Default to VAT-exclusive calculations
@@ -258,10 +283,16 @@ Please specify category:
 
         return (
           message +
-          `\n\n## VAT Calculation (VAT-exclusive ₦${formatNumber(amount)})
+          `
 
-1. VAT (7.5%): ₦${formatNumber(vatAmount)}
-2. Total: ₦${formatNumber(totalAmount)}`
+🇳🇬 **VAT Calculation for ${productName} (VAT-exclusive)**
+
+**📊 Breakdown**:
+1. Price without VAT: ₦${formatNumber(amount)}
+2. VAT (7.5%): ₦${formatNumber(vatAmount)}
+3. Total Price: ₦${formatNumber(totalAmount)}
+
+🔍 **Note**: Standard VAT rate of 7.5% applies as this item is not VAT-exempt.`
         );
       }
     }
@@ -295,15 +326,14 @@ Please specify category:
         // Verify calculations
         const checkTotal = Math.round((priceBeforeVAT + vatAmount) * 100) / 100;
 
-        return `When asking for the "price before VAT", I need to calculate what the price was before VAT was added. For a total amount of ₦${formatNumber(amount)} (VAT-inclusive), the calculations are:
+        return `🇳🇬 **VAT Calculation (Price Before VAT)**
 
-1. Price before VAT = ₦${formatNumber(amount)} ÷ 1.075 = ₦${formatNumber(priceBeforeVAT)}
-2. VAT amount = ₦${formatNumber(amount)} - ₦${formatNumber(priceBeforeVAT)} = ₦${formatNumber(vatAmount)}
+**📊 Breakdown**:
+1. VAT-inclusive Amount: ₦${formatNumber(amount)}
+2. Price before VAT: ₦${formatNumber(amount)} ÷ 1.075 = ₦${formatNumber(priceBeforeVAT)}
+3. VAT Amount: ₦${formatNumber(vatAmount)}
 
-Verification:
-- Price before VAT + VAT amount = ₦${formatNumber(priceBeforeVAT)} + ₦${formatNumber(vatAmount)} = ₦${formatNumber(checkTotal)}
-
-These calculations assume the amount you provided (₦${formatNumber(amount)}) is VAT-inclusive, which is the total amount after VAT was added.`;
+✅ **Verification**: ₦${formatNumber(priceBeforeVAT)} + ₦${formatNumber(vatAmount)} = ₦${formatNumber(checkTotal)}`;
       }
 
       // Check if the amount is explicitly mentioned as VAT-inclusive
@@ -321,11 +351,16 @@ These calculations assume the amount you provided (₦${formatNumber(amount)}) i
 
         return (
           message +
-          `\n\n## VAT Calculation (VAT-inclusive ₦${formatNumber(amount)})
+          `
 
-1. Price before VAT: ₦${formatNumber(priceBeforeVAT)}
-2. VAT (7.5%): ₦${formatNumber(vatAmount)}
-3. Total: ₦${formatNumber(checkTotal)}`
+🇳🇬 **VAT Calculation (VAT-inclusive)**
+
+**📊 Breakdown**:
+1. VAT-inclusive Price: ₦${formatNumber(amount)}
+2. Price before VAT: ₦${formatNumber(priceBeforeVAT)}
+3. VAT Amount (7.5%): ₦${formatNumber(vatAmount)}
+
+✅ **Verification**: ₦${formatNumber(priceBeforeVAT)} + ₦${formatNumber(vatAmount)} = ₦${formatNumber(checkTotal)}`
         );
       } else {
         // Default to VAT-exclusive calculations
@@ -334,10 +369,16 @@ These calculations assume the amount you provided (₦${formatNumber(amount)}) i
 
         return (
           message +
-          `\n\n## VAT Calculation (VAT-exclusive ₦${formatNumber(amount)})
+          `
 
-1. VAT (7.5%): ₦${formatNumber(vatAmount)}
-2. Total: ₦${formatNumber(totalAmount)}`
+🇳🇬 **VAT Calculation (VAT-exclusive)**
+
+**📊 Breakdown**:
+1. Price without VAT: ₦${formatNumber(amount)}
+2. VAT (7.5%): ₦${formatNumber(vatAmount)}
+3. Total Price: ₦${formatNumber(totalAmount)}
+
+🔍 **Note**: Standard VAT rate of 7.5% applies.`
         );
       }
     }
@@ -387,7 +428,7 @@ const getFallbackResponse = async (message: string): Promise<string> => {
     const companySize = turnover < 25000000 ? "small" : turnover < 100000000 ? "medium" : "large";
 
     // Determine tax rate based on company size
-    const taxRate = companySize === "small" ? 0.2 : 0.3;
+    const taxRate = companySize === "small" ? 0 : companySize === "medium" ? 0.2 : 0.3;
 
     // Assume profit is 40% of turnover for calculation purposes
     const estimatedProfit = turnover * 0.4;
@@ -398,20 +439,21 @@ const getFallbackResponse = async (message: string): Promise<string> => {
       return num.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ",");
     };
 
-    return `## Company Income Tax Calculation for ₦${formatNumber(turnover / 1000000)} Million Turnover
+    return `🇳🇬 **Company Income Tax for ₦${formatNumber(turnover / 1000000)} Million Turnover**
 
-### Inputs
-- Annual Turnover: ₦${formatNumber(turnover)}
-- Company Size: ${companySize.charAt(0).toUpperCase() + companySize.slice(1)} (turnover-based)
-- Tax Rate: ${(taxRate * 100).toFixed(1)}%
+**Company Classification**:
+- Company Size: ${companySize.charAt(0).toUpperCase() + companySize.slice(1)}
+- Applicable Tax Rate: ${(taxRate * 100).toFixed(0)}%
 
-### Calculation
-1. Estimated Taxable Income: ₦${formatNumber(turnover)} × 0.4 = ₦${formatNumber(estimatedProfit)}
-2. Tax Amount: ₦${formatNumber(estimatedProfit)} × ${taxRate} = ₦${formatNumber(taxPayable)}
+**📊 Calculation Steps**:
+1. Annual Turnover: ₦${formatNumber(turnover)}
+2. Estimated Taxable Profit: ₦${formatNumber(turnover)} × 0.4 = ₦${formatNumber(estimatedProfit)}
+3. CIT Amount: ₦${formatNumber(estimatedProfit)} × ${taxRate} = ₦${formatNumber(taxPayable)}
 
-Company Income Tax Payable: ₦${formatNumber(taxPayable)}
+✅ **Final Tax Payable**: ₦${formatNumber(taxPayable)}
 
-Note: Small companies (<₦25M) pay 20% tax; medium/large companies pay 30%`;
+🔍 **Need a more precise calculation?** 
+Share your actual profit figure instead of using the estimated 40% of turnover.`;
   }
 
   // Extract the amount mentioned (default to ₦10,000 if none found)
@@ -507,9 +549,11 @@ Note: Small companies (<₦25M) pay 20% tax; medium/large companies pay 30%`;
 
     // If we're uncertain about the product, ask for clarification
     if (uncertain) {
-      return `Cannot determine VAT status of "${productName}".
+      return `🔍 **VAT Status Undetermined**
 
-Please clarify category:
+Cannot determine VAT status of "${productName}".
+
+**Please clarify category**:
 - Medical/pharmaceutical product
 - Baby product
 - Educational material
@@ -519,10 +563,13 @@ Please clarify category:
     }
 
     if (isExempt) {
-      return `"${productName}" is VAT-exempt (${category}).
+      return `🇳🇬 **VAT Calculation for ${productName}**
 
-1. Price: ₦${formatNumber(amount)}
-2. VAT amount: ₦0.00
+**VAT Status**: ✅ Exempt (${category})
+
+**Calculation**:
+1. Base Price: ₦${formatNumber(amount)}
+2. VAT (0%): ₦0.00
 3. Total: ₦${formatNumber(amount)}`;
     }
   }
@@ -531,7 +578,7 @@ Please clarify category:
   const isVatInclusive =
     /vat[\s-]*inclusive|including vat|includes vat|with vat|price after vat/i.test(message);
 
-  const productInfo = productName ? `for "${productName}" (which is not VAT-exempt)` : "";
+  const productInfo = productName ? ` for "${productName}"` : "";
 
   if (isVatInclusive) {
     // Calculate with proper precision for VAT-inclusive amount
@@ -540,23 +587,28 @@ Please clarify category:
 
     // Verify calculations
     const checkTotal = Math.round((priceBeforeVAT + vatAmount) * 100) / 100;
-    const checkVAT = Math.round(priceBeforeVAT * 0.075 * 100) / 100;
 
-    return `## VAT Calculation (VAT-inclusive amount ₦${formatNumber(amount)})
+    return `🇳🇬 **VAT Calculation (VAT-inclusive)**${productInfo}
 
-1. Price before VAT: ₦${formatNumber(amount)} ÷ 1.075 = ₦${formatNumber(priceBeforeVAT)}
-2. VAT amount: ₦${formatNumber(amount)} - ₦${formatNumber(priceBeforeVAT)} = ₦${formatNumber(vatAmount)}
+**📊 Breakdown**:
+1. VAT-inclusive Amount: ₦${formatNumber(amount)}
+2. Price before VAT: ₦${formatNumber(amount)} ÷ 1.075 = ₦${formatNumber(priceBeforeVAT)}
+3. VAT Amount (7.5%): ₦${formatNumber(vatAmount)}
 
-Verification: ₦${formatNumber(priceBeforeVAT)} + ₦${formatNumber(vatAmount)} = ₦${formatNumber(checkTotal)}`;
+✅ **Verification**: ₦${formatNumber(priceBeforeVAT)} + ₦${formatNumber(vatAmount)} = ₦${formatNumber(checkTotal)}`;
   } else {
     // Default to VAT-exclusive calculations
     const vatAmount = Math.round(amount * 0.075 * 100) / 100;
     const totalAmount = Math.round((amount + vatAmount) * 100) / 100;
 
-    return `## VAT Calculation (VAT-exclusive amount ₦${formatNumber(amount)})
+    return `🇳🇬 **VAT Calculation (VAT-exclusive)**${productInfo}
 
-1. VAT amount: ₦${formatNumber(amount)} × 0.075 = ₦${formatNumber(vatAmount)}
-2. Total price: ₦${formatNumber(amount)} + ₦${formatNumber(vatAmount)} = ₦${formatNumber(totalAmount)}`;
+**📊 Breakdown**:
+1. Base Price: ₦${formatNumber(amount)}
+2. VAT (7.5%): ₦${formatNumber(amount)} × 0.075 = ₦${formatNumber(vatAmount)}
+3. Total Amount: ₦${formatNumber(totalAmount)}
+
+🔍 **Note**: Standard VAT rate of 7.5% applies${productName ? ` as "${productName}" is not VAT-exempt` : ""}.`;
   }
 };
 
@@ -591,51 +643,51 @@ export async function POST(req: Request) {
     const enhancedMessages = [
       {
         role: "system",
-        content: `You are a Nigerian tax calculator specializing in VAT and Company Income Tax calculations.
+        content: `You are Taxbot — a Nigerian tax assistant specialized in VAT, Company Income Tax, and Personal Income Tax.
 
-RESPONSE STYLE:
-- Be direct and concise
-- No self-references as a chatbot or AI
-- No introductory text like "I'm a Nigerian tax chatbot" or "I can assist with..."
-- Skip pleasantries like "I'm happy to help" or "please provide more details"
-- Deliver calculations and facts immediately without preamble
-- Use numbered lists and formatting for clarity
-- Include only essential information
+Your responses must be:
+- Direct and professional
+- Structured with markdown formatting
+- Concise, using lists, tables, and clear breakdowns
+- Free of greetings, apologies, or self-references
+- Written in plain, accessible language
 
-## COMPANY INCOME TAX INFORMATION
-- Company Income Tax rates in Nigeria are based on company size determined by turnover:
-  - Small companies (turnover less than ₦25 million): 20% tax rate
-  - Medium companies (turnover between ₦25 million and ₦100 million): 30% tax rate
-  - Large companies (turnover over ₦100 million): 30% tax rate
-- Taxable income = Turnover - Allowable expenses - Deductions
-- Company Income Tax = Taxable income × Tax rate
+Use the following structure for tax-related queries:
 
-For example, with turnover of ₦80 million:
-- Company size: Medium (based on turnover)
-- Tax rate: 30%
-- With ₦50 million in expenses/deductions
-- Taxable income: ₦30,000,000
-- Company Income Tax: ₦9,000,000
-
-When given company turnover, FIRST determine company size, THEN apply correct tax rate.
+1. **Context Heading** (e.g., "🇳🇬 Personal Income Tax for Teachers")
+2. **Reliefs or Exemptions**:
+   - Bullet point summary of applicable deductions (e.g., CRA, Pension)
+3. **Calculation Steps or Tax Brackets**:
+   - Use tables for progressive rates
+   - Show formulas for VAT and CIT clearly
+4. **Follow-Up Prompt**:
+   - Ask for relevant info (salary, turnover, product type) if needed for precise calculation
 
 ## VAT INFORMATION
 - Current VAT rate: 7.5%
 - Assume prices are VAT-exclusive by default unless stated as VAT-inclusive
-- Generic "goods" and "products" are NEVER VAT-exempt (always calculate 7.5%)
 - VAT exempt categories: basic food items, medical products, books/educational materials, baby products, agricultural equipment, exports, religious items
 
-VAT-exclusive calculation:
-1. VAT Amount = Price before VAT × 0.075
-2. Total Price = Price before VAT + VAT Amount
+## COMPANY INCOME TAX INFORMATION
+- Company Income Tax rates in Nigeria are based on company size determined by turnover:
+  - Small companies (turnover less than ₦25 million): 0% tax rate
+  - Medium companies (turnover between ₦25 million and ₦100 million): 20% tax rate
+  - Large companies (turnover over ₦100 million): 30% tax rate
 
-VAT-inclusive calculation:
-1. Price before VAT = VAT-inclusive price ÷ 1.075
-2. VAT Amount = VAT-inclusive price - Price before VAT
+## PERSONAL INCOME TAX INFORMATION
+PIT uses progressive taxation with these brackets:
 
-Always include precise calculations with amounts rounded to 2 decimal places.
+| Taxable Income Bracket    | Rate |
+|---------------------------|------|
+| First ₦300,000           | 7%   |
+| Next ₦300,000            | 11%  |
+| Next ₦500,000            | 15%  |
+| Next ₦500,000            | 19%  |
+| Next ₦1,600,000          | 21%  |
+| Above ₦3,200,000         | 24%  |
 
-IMPORTANT: If asked about company income tax or turnover taxation, DO NOT default to VAT calculations.`,
+Format currency as ₦1,000,000 with thousands separators.
+Include emojis (📌, ✅, 🧮, 🔍) for readability.`,
       },
       {
         role: "user",
