@@ -7,15 +7,25 @@ import { NextResponse } from "next/server";
  */
 export async function GET() {
   const missingKeys = [];
+  const availableKeys = [];
 
-  // Check if the Mistral API key is set
-  if (!process.env.MISTRAL_API_KEY) {
-    missingKeys.push("MISTRAL_API_KEY");
+  // Check if the Mistral API keys are set
+  if (!process.env.MISTRAL_API_KEY && !process.env.MISTRAL_API_KEY_2) {
+    missingKeys.push("MISTRAL_API_KEY and MISTRAL_API_KEY_2");
+  } else {
+    if (process.env.MISTRAL_API_KEY) {
+      availableKeys.push("MISTRAL_API_KEY");
+    }
+    if (process.env.MISTRAL_API_KEY_2) {
+      availableKeys.push("MISTRAL_API_KEY_2");
+    }
   }
 
   // Check if the Google API key is set (if your application uses it)
   if (!process.env.GOOGLE_API_KEY) {
     missingKeys.push("GOOGLE_API_KEY");
+  } else {
+    availableKeys.push("GOOGLE_API_KEY");
   }
 
   // If any keys are missing, return an error
@@ -25,6 +35,7 @@ export async function GET() {
         success: false,
         message: `Missing environment variables: ${missingKeys.join(", ")}`,
         missingKeys,
+        availableKeys,
       },
       { status: 500 }
     );
@@ -35,6 +46,7 @@ export async function GET() {
     {
       success: true,
       message: "All required environment variables are set",
+      availableKeys,
     },
     { status: 200 }
   );

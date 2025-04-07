@@ -612,12 +612,41 @@ Cannot determine VAT status of "${productName}".
   }
 };
 
-// Define the API call function with a model parameter to allow for fallback attempts
-async function callMistralAPI(
-  apiKey: string,
-  messages: any[],
-  model: string = "mistral-large-latest"
-) {
+// Define a key rotation function to handle multiple API keys
+function getAvailableApiKey(): string | null {
+  // Define all available API keys
+  const apiKeys = [process.env.MISTRAL_API_KEY, process.env.MISTRAL_API_KEY_2];
+
+  // Filter out undefined or empty keys
+  const validKeys = apiKeys.filter((key) => key && key.trim().length > 0);
+
+  if (validKeys.length === 0) {
+    return null;
+  }
+
+  // Use a simple rotation strategy - get the current timestamp in seconds
+  // and use modulo to select a key based on the current time
+  const currentTimeInSeconds = Math.floor(Date.now() / 1000);
+  const keyIndex = currentTimeInSeconds % validKeys.length;
+
+  // Get the selected key and log which key is being used (partial key for security)
+  const selectedKey = validKeys[keyIndex];
+  console.log(
+    `Using API key ${keyIndex + 1}/${validKeys.length}: ${selectedKey?.substring(0, 4)}...`
+  );
+
+  return selectedKey;
+}
+
+// Update the API call function to use key rotation
+async function callMistralAPI(messages: any[], model: string = "mistral-small-latest") {
+  // Get an available API key using the rotation mechanism
+  const apiKey = getAvailableApiKey();
+
+  if (!apiKey) {
+    throw new Error("No valid API keys available");
+  }
+
   console.log(`Attempting API call with model: ${model}`);
 
   const response = await fetch("https://api.mistral.ai/v1/chat/completions", {
@@ -724,12 +753,12 @@ Include emojis (📌, ✅, 🧮, 🔍) for readability.`,
       },
     ];
 
-    // Get the API key from environment variables
-    const apiKey = process.env.MISTRAL_API_KEY;
+    // Check if any API keys are available
+    const apiKey = getAvailableApiKey();
 
     // Check if API key is available
     if (!apiKey) {
-      console.error("Missing Mistral API key in environment variables");
+      console.error("No valid Mistral API keys available");
       return NextResponse.json(
         {
           error: "API configuration error: Missing Mistral API key",
@@ -743,19 +772,13 @@ Include emojis (📌, ✅, 🧮, 🔍) for readability.`,
       // Log that we're about to make the API call (helps with debugging)
       console.log("Making API call to Mistral AI with valid API key");
 
-      // Try with the main model first
-      let response = await callMistralAPI(apiKey, enhancedMessages);
+      // Try with the main model first (switched to small model as default for better reliability)
+      let response = await callMistralAPI(enhancedMessages);
 
       // If the main model fails, try with a fallback model
       if (!response.ok && response.status >= 500) {
-        console.log("Primary model request failed. Trying fallback model mistral-small-latest");
-        response = await callMistralAPI(apiKey, enhancedMessages, "mistral-small-latest");
-
-        // If the fallback model also fails, try with an even smaller model
-        if (!response.ok && response.status >= 500) {
-          console.log("Fallback model request failed. Trying backup model mistral-tiny");
-          response = await callMistralAPI(apiKey, enhancedMessages, "mistral-tiny");
-        }
+        console.log("Primary model request failed. Trying fallback model mistral-tiny");
+        response = await callMistralAPI(enhancedMessages, "mistral-tiny");
       }
 
       // Check if the response is ok
