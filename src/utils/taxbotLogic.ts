@@ -1,25 +1,39 @@
 export function calculateCRA(grossIncome: number): number {
-  // Calculate CRA as 21% of gross income
-  const cra = grossIncome * 0.21;
+  // Calculate 1% and 20% of gross income
+  const onePercentOfIncome = grossIncome * 0.01;
+  const twentyPercentOfIncome = grossIncome * 0.2;
+  const totalCRA = onePercentOfIncome + twentyPercentOfIncome;
+
+  // Apply the minimum of ₦200,000
+  const finalCRA = Math.max(200_000, totalCRA);
 
   // Log calculation for debugging
-  console.log(`CRA Calculation for ${grossIncome}:`, {
-    cra,
-    formula: "grossIncome * 0.21",
+  console.log(
+    "Step 1: Calculate CRA = max(₦200,000, (1% of gross income) + (20% of gross income))"
+  );
+  console.log(`CRA Calculation for ${grossIncome.toLocaleString()}:`, {
+    onePercentOfIncome: onePercentOfIncome.toLocaleString(),
+    twentyPercentOfIncome: twentyPercentOfIncome.toLocaleString(),
+    totalCRA: totalCRA.toLocaleString(),
+    finalCRA: finalCRA.toLocaleString(),
+    formula: "max(200000, (0.01 * grossIncome) + (0.20 * grossIncome))",
   });
 
-  return cra;
+  return finalCRA;
 }
 
 export function calculatePension(grossIncome: number, rate = 0.08): number {
   // Calculate pension contribution (8% of gross income, capped at ₦500,000)
-  const pensionContribution = Math.min(rate * grossIncome, 500_000);
+  const uncappedPension = rate * grossIncome;
+  const pensionContribution = Math.min(uncappedPension, 500_000);
+  const isCapped = uncappedPension > 500_000;
 
   // Log calculation for debugging
-  console.log(`Pension Calculation for ${grossIncome}:`, {
-    pensionRate: rate,
-    uncappedPension: rate * grossIncome,
-    cappedPension: pensionContribution,
+  console.log(`Pension Calculation for ₦${grossIncome.toLocaleString()}:`, {
+    pensionRate: `${(rate * 100).toFixed(1)}%`,
+    uncappedPension: `₦${uncappedPension.toLocaleString()}`,
+    cappedPension: `₦${pensionContribution.toLocaleString()}`,
+    isCapped: isCapped,
     formula: "min(rate * grossIncome, 500000)",
   });
 
@@ -30,28 +44,32 @@ export function calculateTaxableIncome(
   grossIncome: number,
   pensionContribution: number = 0
 ): number {
+  console.log("Step 2: Calculate Taxable Income = Gross Income - CRA - Pension");
+
   // Calculate CRA using the dynamic method
   const CRA = calculateCRA(grossIncome);
 
   // Log values for debugging
-  console.log(`Calculating Taxable Income:`, {
-    grossIncome,
-    CRA,
-    pensionContribution,
+  console.log(`Calculating Taxable Income for ₦${grossIncome.toLocaleString()}:`, {
+    grossIncome: `₦${grossIncome.toLocaleString()}`,
+    CRA: `₦${CRA.toLocaleString()}`,
+    pensionContribution: `₦${pensionContribution.toLocaleString()}`,
   });
 
   // Recompute taxable income using the formula: grossIncome - CRA - pension
   const taxableIncome = grossIncome - CRA - pensionContribution;
-  console.log(`Taxable Income: ${taxableIncome}`);
+  console.log(`Taxable Income: ₦${taxableIncome.toLocaleString()}`);
   return taxableIncome;
 }
 
 export function calculateTax(grossIncome: number): number {
-  // Assuming pension contribution is 8% of gross income
-  const pensionContribution = grossIncome * 0.08;
+  // Calculate pension contribution (8% of gross income, capped at ₦500,000)
+  const pensionContribution = calculatePension(grossIncome);
 
-  // Calculate taxable income
+  // Calculate taxable income using our standardized function
   const taxableIncome = calculateTaxableIncome(grossIncome, pensionContribution);
+
+  console.log("Step 3: Calculate tax using progressive brackets");
 
   // Tax brackets (amounts are in naira and percentage rates)
   const brackets = [
@@ -65,16 +83,31 @@ export function calculateTax(grossIncome: number): number {
 
   let remainingIncome = taxableIncome;
   let totalTax = 0;
+  let taxBreakdown = [];
 
   // Apply tax brackets
   for (let i = 0; i < brackets.length; i++) {
     const bracket = brackets[i];
     const taxableAmount = Math.min(remainingIncome, bracket.limit);
-    totalTax += taxableAmount * bracket.rate;
+    const bracketTax = taxableAmount * bracket.rate;
+
+    if (taxableAmount > 0) {
+      taxBreakdown.push({
+        bracket: i + 1,
+        rate: bracket.rate * 100,
+        amount: taxableAmount,
+        tax: bracketTax,
+      });
+    }
+
+    totalTax += bracketTax;
     remainingIncome -= taxableAmount;
 
     if (remainingIncome <= 0) break;
   }
+
+  console.log("Tax breakdown by bracket:", taxBreakdown);
+  console.log(`Total calculated tax: ₦${totalTax.toLocaleString()}`);
 
   return totalTax;
 }
@@ -88,6 +121,9 @@ export function calculatePersonalIncomeTax({
   pensionRate?: number;
   minTaxableIncome?: number;
 }) {
+  console.log("===== STARTING TAX CALCULATION =====");
+  console.log(`Gross Income: ₦${grossIncome.toLocaleString()}`);
+
   // Validate inputs
   if (grossIncome < 0 || typeof grossIncome !== "number") {
     throw new Error("Invalid gross income");
@@ -105,25 +141,22 @@ export function calculatePersonalIncomeTax({
   // Calculate CRA (Consolidated Relief Allowance)
   const craTotal = roundToNaira(calculateCRA(grossIncome));
 
-  // Log values for debugging
-  console.log(`Calculating Personal Income Tax:`, {
-    grossIncome,
-    pension,
-    craTotal,
-  });
-
   // Calculate total reliefs
   const totalReliefs = pension + craTotal;
+  console.log(`Total Reliefs (CRA + Pension): ₦${totalReliefs.toLocaleString()}`);
 
   // Calculate taxable income
   let taxableIncome = roundToNaira(grossIncome - totalReliefs);
-  console.log(`Taxable Income after Reliefs: ${taxableIncome}`);
+  console.log(`Final Taxable Income: ₦${taxableIncome.toLocaleString()}`);
 
   // Apply minimum taxable income threshold
   taxableIncome = Math.max(0, taxableIncome);
 
   // If taxable income is below threshold, no tax is due
   if (taxableIncome < minTaxableIncome) {
+    console.log(
+      `Income below minimum taxable threshold of ₦${minTaxableIncome.toLocaleString()}, no tax due.`
+    );
     return {
       grossIncome,
       pension,
@@ -139,10 +172,16 @@ export function calculatePersonalIncomeTax({
   }
 
   // Calculate total tax using the bracket-based approach
-  const totalTax = calculateTax(taxableIncome);
+  const totalTax = roundToNaira(calculateTax(taxableIncome));
+  const monthlyTax = roundToNaira(totalTax / 12);
 
   // Calculate effective tax rate (as percentage)
   const effectiveTaxRate = grossIncome > 0 ? (totalTax / grossIncome) * 100 : 0;
+
+  console.log(`Annual Tax: ₦${totalTax.toLocaleString()}`);
+  console.log(`Monthly Tax: ₦${monthlyTax.toLocaleString()}`);
+  console.log(`Effective Tax Rate: ${effectiveTaxRate.toFixed(2)}%`);
+  console.log("===== TAX CALCULATION COMPLETE =====");
 
   // Return detailed tax breakdown
   return {
@@ -151,7 +190,7 @@ export function calculatePersonalIncomeTax({
     cra: craTotal,
     taxableIncome,
     totalTax,
-    monthlyTax: roundToNaira(totalTax / 12),
+    monthlyTax,
     totalReliefs,
     effectiveTaxRate: parseFloat(effectiveTaxRate.toFixed(2)),
     pensionCapped: pension < pensionRate * grossIncome,

@@ -40,7 +40,9 @@ const TaxbotChat: React.FC = () => {
         "%c TAX CALCULATION DEBUG",
         "background: #2196f3; color: white; font-size: 16px; padding: 5px;"
       );
-      console.log("Step 1: Calculate CRA = max(200000, 20% of gross income)");
+      console.log(
+        "Step 1: Calculate CRA = max(₦200,000, (1% of gross income) + (20% of gross income))"
+      );
       console.log(`   max(200000, ${0.2 * salaryNumber}) = ${cra}`);
       console.log("Step 2: Calculate Pension = min(8% of gross income, 500000)");
       console.log(`   min(${0.08 * salaryNumber}, 500000) = ${pension}`);
