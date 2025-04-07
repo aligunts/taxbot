@@ -642,175 +642,302 @@ function getAvailableApiKey(): string | null {
   return selectedKey;
 }
 
-// Modify the try block in the POST handler to use sequential API keys if needed
-try {
-  // Log that we're about to make the API call
-  console.log("Making API call to Mistral AI");
+// API call function with model parameter to allow for fallback attempts
+async function callMistralAPI(messages: any[], model: string = "mistral-small-latest") {
+  // Get an available API key using the rotation mechanism
+  const apiKey = getAvailableApiKey();
 
-  // First try with the rotating API key strategy
-  let response = await callMistralAPI(enhancedMessages);
+  if (!apiKey) {
+    throw new Error("No valid API keys available");
+  }
 
-  // If the first model fails with a potentially recoverable error, try the fallback model
-  if (!response.ok && (response.status >= 500 || response.status === 429)) {
-    console.log("Primary model request failed. Trying fallback model mistral-tiny");
-    response = await callMistralAPI(enhancedMessages, "mistral-tiny");
+  console.log(`Attempting API call with model: ${model}`);
 
-    // If both models fail with the rotated key, try each key explicitly in sequence
-    if (!response.ok && (response.status >= 500 || response.status === 429)) {
-      const allKeys = getAllAvailableApiKeys();
-      console.log(
-        `Primary and fallback models failed. Trying each API key sequentially (${allKeys.length} keys available)`
+  try {
+    const response = await fetch("https://api.mistral.ai/v1/chat/completions", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${apiKey}`,
+      },
+      body: JSON.stringify({
+        model: model,
+        messages: messages,
+        temperature: 0.3,
+        max_tokens: 1024,
+      }),
+    });
+
+    // If we get a rate limit error or unauthorized, log the specific key that failed
+    if (response.status === 429 || response.status === 401) {
+      const keyPrefix = apiKey.substring(0, 4);
+      console.error(
+        `API key ${keyPrefix}... returned status ${response.status}. This key might be rate-limited or invalid.`
+      );
+    }
+
+    return response;
+  } catch (error) {
+    // Log the error with the key prefix for debugging
+    const keyPrefix = apiKey.substring(0, 4);
+    console.error(`API call with key ${keyPrefix}... failed with error:`, error);
+    throw error;
+  }
+}
+
+// Function to handle API requests to /api/chat
+export async function POST(req: Request) {
+  try {
+    // Get user message from request body
+    const body = await req.json();
+    const userMessage = body.message || "";
+
+    // Avoid empty messages
+    if (!userMessage.trim()) {
+      return NextResponse.json({ error: "Please provide a message" }, { status: 400 });
+    }
+
+    // Enhanced the user message with potential calculations
+    let enhancedUserMessage;
+    try {
+      // Add a timeout to the enhanceUserMessage function to prevent hanging
+      const enhancePromise = enhanceUserMessage(userMessage);
+      const timeoutPromise = new Promise((_, reject) =>
+        setTimeout(() => reject(new Error("Timed out checking VAT status")), 5000)
       );
 
-      // Try each key with the small model
-      for (let i = 0; i < allKeys.length; i++) {
-        const currentKey = allKeys[i];
-        const keyPrefix = currentKey.substring(0, 4);
+      enhancedUserMessage = await Promise.race([enhancePromise, timeoutPromise]);
+    } catch (error) {
+      console.error("Error enhancing user message:", error);
+      enhancedUserMessage = userMessage;
+    }
+
+    // Structure messages for the API
+    const enhancedMessages = [
+      {
+        role: "system",
+        content: `You are Taxbot — a Nigerian tax assistant specialized in VAT, Company Income Tax, and Personal Income Tax.
+
+Your responses must be:
+- Direct and professional
+- Structured with markdown formatting
+- Concise, using lists, tables, and clear breakdowns
+- Free of greetings, apologies, or self-references
+- Written in plain, accessible language
+
+Use the following structure for tax-related queries:
+
+1. **Context Heading** (e.g., "🇳🇬 Personal Income Tax for Teachers")
+2. **Reliefs or Exemptions**:
+   - Bullet point summary of applicable deductions (e.g., CRA, Pension)
+3. **Calculation Steps or Tax Brackets**:
+   - Use tables for progressive rates
+   - Show formulas for VAT and CIT clearly
+4. **Follow-Up Prompt**:
+   - Ask for relevant info (salary, turnover, product type) if needed for precise calculation
+
+## PERSONAL INCOME TAX RELIEFS
+- Consolidated Relief Allowance (CRA): The greater of ₦200,000 or 21% of gross income (where 21% represents 1% + 20%)
+- Pension Contribution: 8% of gross income (capped at ₦500,000)
+
+## VAT INFORMATION
+- Current VAT rate: 7.5%
+- Assume prices are VAT-exclusive by default unless stated as VAT-inclusive
+- VAT exempt categories: basic food items, medical products, books/educational materials, baby products, agricultural equipment, exports, religious items
+
+## COMPANY INCOME TAX INFORMATION
+- Company Income Tax rates in Nigeria are based on company size determined by turnover:
+  - Small companies (turnover less than ₦25 million): 0% tax rate
+  - Medium companies (turnover between ₦25 million and ₦100 million): 20% tax rate
+  - Large companies (turnover over ₦100 million): 30% tax rate
+
+## PERSONAL INCOME TAX INFORMATION
+PIT uses progressive taxation with these brackets:
+
+| Taxable Income Bracket    | Rate |
+|---------------------------|------|
+| First ₦300,000           | 7%   |
+| Next ₦300,000            | 11%  |
+| Next ₦500,000            | 15%  |
+| Next ₦500,000            | 19%  |
+| Next ₦1,600,000          | 21%  |
+| Above ₦3,200,000         | 24%  |
+
+Format currency as ₦1,000,000 with thousands separators.
+Include emojis (📌, ✅, 🧮, 🔍) for readability.`,
+      },
+      {
+        role: "user",
+        content: enhancedUserMessage,
+      },
+    ];
+
+    // Check if any API keys are available
+    const apiKey = getAvailableApiKey();
+
+    // Check if API key is available
+    if (!apiKey) {
+      console.error("No valid Mistral API keys available");
+      return NextResponse.json(
+        {
+          error: "API configuration error: Missing Mistral API key",
+          content: "I'm having trouble connecting to the AI service. Please contact support.",
+        },
+        { status: 500 }
+      );
+    }
+
+    try {
+      // Log that we're about to make the API call
+      console.log("Making API call to Mistral AI");
+
+      // Try with the main model first (switched to small model as default for reliability)
+      let response = await callMistralAPI(enhancedMessages, "mistral-small-latest");
+
+      // If the main model fails, try with a fallback model
+      if (!response.ok && (response.status >= 500 || response.status === 429)) {
+        console.log("Primary model request failed. Trying fallback model mistral-tiny");
+        response = await callMistralAPI(enhancedMessages, "mistral-tiny");
+      }
+
+      // If both models fail, try with all API keys
+      if (!response.ok && (response.status >= 500 || response.status === 429)) {
+        // Get all valid API keys
+        const apiKeys = [
+          process.env.MISTRAL_API_KEY,
+          process.env.MISTRAL_API_KEY_2,
+          process.env.MISTRAL_API_KEY_3,
+        ];
+        const allKeys = apiKeys.filter((key) => key && key.trim().length > 0);
 
         console.log(
-          `Attempting with key ${i + 1}/${allKeys.length}: ${keyPrefix}... and model mistral-small-latest`
+          `All models failed. Trying each API key sequentially (${allKeys.length} keys available)`
         );
 
-        try {
-          response = await fetch("https://api.mistral.ai/v1/chat/completions", {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: `Bearer ${currentKey}`,
-            },
-            body: JSON.stringify({
-              model: "mistral-small-latest",
-              messages: enhancedMessages,
-              temperature: 0.3,
-              max_tokens: 1024,
-            }),
-          });
+        // Try all keys with both models
+        let success = false;
 
-          // If this key works, break out of the loop
-          if (response.ok) {
-            console.log(`Success with key ${keyPrefix}... and model mistral-small-latest`);
-            break;
-          }
+        for (const model of ["mistral-small-latest", "mistral-tiny"]) {
+          if (success) break;
 
-          console.log(`Key ${keyPrefix}... failed with status ${response.status}`);
+          for (let i = 0; i < allKeys.length; i++) {
+            const currentKey = allKeys[i];
+            const keyPrefix = currentKey?.substring(0, 4);
 
-          // If we've tried all keys with the small model and none worked, try the tiny model
-          if (i === allKeys.length - 1) {
-            console.log("All keys failed with small model. Trying tiny model with each key.");
+            console.log(
+              `Attempting with key ${i + 1}/${allKeys.length}: ${keyPrefix}... and model ${model}`
+            );
 
-            // Try each key with the tiny model
-            for (let j = 0; j < allKeys.length; j++) {
-              const lastKey = allKeys[j];
-              const lastKeyPrefix = lastKey.substring(0, 4);
-
-              console.log(
-                `Last attempt with key ${j + 1}/${allKeys.length}: ${lastKeyPrefix}... and model mistral-tiny`
-              );
-
+            try {
               response = await fetch("https://api.mistral.ai/v1/chat/completions", {
                 method: "POST",
                 headers: {
                   "Content-Type": "application/json",
-                  Authorization: `Bearer ${lastKey}`,
+                  Authorization: `Bearer ${currentKey}`,
                 },
                 body: JSON.stringify({
-                  model: "mistral-tiny",
+                  model: model,
                   messages: enhancedMessages,
                   temperature: 0.3,
                   max_tokens: 1024,
                 }),
               });
 
-              // If this key works with tiny model, break out
+              // If this key works, break out of the loop
               if (response.ok) {
-                console.log(`Success with key ${lastKeyPrefix}... and model mistral-tiny`);
+                console.log(`Success with key ${keyPrefix}... and model ${model}`);
+                success = true;
                 break;
               }
 
-              console.log(`Key ${lastKeyPrefix}... failed with tiny model as well`);
+              console.log(`Key ${keyPrefix}... failed with model ${model}: ${response.status}`);
+            } catch (keyError) {
+              console.error(`Error with key ${keyPrefix}:`, keyError);
+              // Continue to the next key
             }
           }
-        } catch (keyError) {
-          console.error(`Error with key ${keyPrefix}:`, keyError);
-          // Continue to the next key
         }
       }
-    }
-  }
 
-  // Check if the response is ok after all attempts
-  if (!response.ok) {
-    // Get error details from response
-    const errorData = await response.json().catch(() => ({}));
-    console.error("Mistral API error:", {
-      status: response.status,
-      statusText: response.statusText,
-      error: errorData,
-    });
+      // Check if the response is ok after all attempts
+      if (!response.ok) {
+        // Get error details from response
+        const errorData = await response.json().catch(() => ({}));
+        console.error("Mistral API error:", {
+          status: response.status,
+          statusText: response.statusText,
+          error: errorData,
+        });
 
-    return NextResponse.json(
-      {
-        error: `AI service error: ${response.status} ${response.statusText}`,
-        content: "Sorry, I'm having trouble connecting to the AI service. Please try again later.",
-      },
-      { status: response.status }
-    );
-  }
+        return NextResponse.json(
+          {
+            error: `AI service error: ${response.status} ${response.statusText}`,
+            content:
+              "Sorry, I'm having trouble connecting to the AI service. Please try again later.",
+          },
+          { status: response.status }
+        );
+      }
 
-  // Parse the API response
-  const data = await response.json();
+      // Parse the API response
+      const data = await response.json();
 
-  if (
-    !data.choices ||
-    !data.choices[0] ||
-    !data.choices[0].message ||
-    !data.choices[0].message.content
-  ) {
-    console.error("Unexpected API response format:", data);
-    // Return a fallback response
-    try {
-      // Add timeout protection to fallback response
-      const fallbackPromise = getFallbackResponse(userMessage);
-      const timeoutPromise = new Promise<string>((_, reject) =>
-        setTimeout(() => reject(new Error("Timed out generating fallback response")), 5000)
-      );
+      if (
+        !data.choices ||
+        !data.choices[0] ||
+        !data.choices[0].message ||
+        !data.choices[0].message.content
+      ) {
+        console.error("Unexpected API response format:", data);
+        // Return a fallback response
+        try {
+          // Add timeout protection to fallback response
+          const fallbackPromise = getFallbackResponse(userMessage);
+          const timeoutPromise = new Promise<string>((_, reject) =>
+            setTimeout(() => reject(new Error("Timed out generating fallback response")), 5000)
+          );
 
-      const fallbackContent = await Promise.race([fallbackPromise, timeoutPromise]);
-      return NextResponse.json({ content: fallbackContent }, { status: 200 });
-    } catch (error) {
-      console.error("Error generating fallback response:", error);
+          const fallbackContent = await Promise.race([fallbackPromise, timeoutPromise]);
+          return NextResponse.json({ content: fallbackContent }, { status: 200 });
+        } catch (error) {
+          console.error("Error generating fallback response:", error);
+          return NextResponse.json(
+            {
+              content: "I'm experiencing some technical issues. Please try again later.",
+            },
+            { status: 200 }
+          );
+        }
+      }
+
       return NextResponse.json(
         {
-          content: "I'm experiencing some technical issues. Please try again later.",
+          content:
+            data.choices[0].message.content ||
+            "I couldn't process your request properly. Please try again.",
         },
-        { status: 200 }
+        {
+          status: 200,
+          headers: {
+            "Access-Control-Allow-Origin": "*",
+            "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
+            "Access-Control-Allow-Headers": "Content-Type, Authorization",
+            "Cache-Control": "no-store, max-age=0",
+          },
+        }
+      );
+    } catch (error) {
+      console.error("Unexpected error calling Mistral API:", error);
+      return NextResponse.json(
+        {
+          error: "Failed to connect to AI service",
+          content: "I'm having trouble with the connection. Please try again later.",
+        },
+        { status: 500 }
       );
     }
+  } catch (error) {
+    console.error("Error processing request:", error);
+    return NextResponse.json({ error: "Error processing request" }, { status: 500 });
   }
-
-  return NextResponse.json(
-    {
-      content:
-        data.choices[0].message.content ||
-        "I couldn't process your request properly. Please try again.",
-    },
-    {
-      status: 200,
-      headers: {
-        "Access-Control-Allow-Origin": "*",
-        "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
-        "Access-Control-Allow-Headers": "Content-Type, Authorization",
-        "Cache-Control": "no-store, max-age=0",
-      },
-    }
-  );
-} catch (error) {
-  console.error("Unexpected error calling Mistral API:", error);
-  return NextResponse.json(
-    {
-      error: "Failed to connect to AI service",
-      content: "I'm having trouble with the connection. Please try again later.",
-    },
-    { status: 500 }
-  );
 }
