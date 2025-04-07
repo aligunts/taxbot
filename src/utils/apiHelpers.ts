@@ -14,17 +14,32 @@ export async function sendChatMessage(message: string) {
   }
 
   try {
-    // Make the API request
-    const response = await fetch("/api/chat", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
+    // Make the API request with a timeout
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 30000); // 30-second timeout
+
+    const response = await fetchWithRetry(
+      "/api/chat",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ message }),
+        signal: controller.signal,
+        cache: "no-store", // Disable caching
       },
-      body: JSON.stringify({ message }),
-    });
+      3, // 3 retries
+      300 // 300ms initial backoff
+    );
+
+    clearTimeout(timeoutId);
 
     // Parse the JSON response
-    const data = await response.json();
+    const data = await response.json().catch((e) => {
+      console.error("Failed to parse JSON response:", e);
+      return { error: "Invalid response format" };
+    });
 
     // Check if the response was successful
     if (!response.ok) {
@@ -33,6 +48,7 @@ export async function sendChatMessage(message: string) {
         status: response.status,
         statusText: response.statusText,
         error: data.error || "Unknown error",
+        data,
       });
 
       throw new Error(data.error || `API error: ${response.status} ${response.statusText}`);
@@ -41,6 +57,12 @@ export async function sendChatMessage(message: string) {
     // Return the response data
     return data;
   } catch (error) {
+    // Check for timeout errors
+    if (error.name === "AbortError") {
+      console.error("Request timed out");
+      throw new Error("Request timed out. The server took too long to respond.");
+    }
+
     // Log all errors
     console.error("Error in sendChatMessage:", error);
 
@@ -55,25 +77,81 @@ export async function sendChatMessage(message: string) {
  */
 export async function checkApiAvailability() {
   try {
+    // Add timeout for the request
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 10000); // 10-second timeout
+
     const response = await fetch("/api/env-check", {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
       },
+      signal: controller.signal,
+      cache: "no-store", // Disable caching
     });
 
-    const data = await response.json();
+    clearTimeout(timeoutId);
+
+    const data = await response
+      .json()
+      .catch(() => ({ success: false, message: "Invalid response format" }));
+
+    // Add detailed logging
+    console.log("API availability check result:", {
+      status: response.status,
+      ok: response.ok,
+      data,
+    });
+
     return {
-      available: response.ok,
+      available: response.ok && data.success,
       message: data.message || "API is available",
       missingKeys: data.missingKeys || [],
     };
   } catch (error) {
+    // Check for timeout errors
+    if (error.name === "AbortError") {
+      console.error("API availability check timed out");
+      return {
+        available: false,
+        message: "API availability check timed out. The server took too long to respond.",
+        missingKeys: ["CONNECTION_TIMEOUT"],
+      };
+    }
+
     console.error("API availability check failed:", error);
     return {
       available: false,
-      message: "Could not connect to API server",
-      missingKeys: ["UNKNOWN"],
+      message: "Could not connect to API server: " + (error.message || "Unknown error"),
+      missingKeys: ["CONNECTION_ERROR"],
     };
+  }
+}
+
+/**
+ * Retries a fetch request with exponential backoff
+ * @param url The URL to fetch
+ * @param options Fetch options
+ * @param retries Number of retries
+ * @param backoff Initial backoff in ms
+ * @returns A promise that resolves to the fetch response
+ */
+async function fetchWithRetry(
+  url: string,
+  options: RequestInit,
+  retries = 3,
+  backoff = 300
+): Promise<Response> {
+  try {
+    return await fetch(url, options);
+  } catch (error) {
+    if (retries <= 1) throw error;
+
+    // Wait for the backoff period
+    await new Promise((resolve) => setTimeout(resolve, backoff));
+
+    // Retry with exponential backoff
+    console.log(`Retrying fetch to ${url}, ${retries - 1} retries left`);
+    return fetchWithRetry(url, options, retries - 1, backoff * 2);
   }
 }

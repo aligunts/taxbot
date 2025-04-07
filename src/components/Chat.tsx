@@ -5,10 +5,12 @@ import toast from "react-hot-toast";
 import { Message } from "@/types";
 import { motion } from "framer-motion";
 import { sendChatMessage, checkApiAvailability } from "@/utils/apiHelpers";
+import getFallbackResponse from "@/utils/fallbackResponses";
 
 // Import chat components individually to avoid case sensitivity issues
 import MessageList from "./chat/MessageList";
 import ChatInput from "./chat/ChatInput";
+import ConnectionStatus from "./ConnectionStatus";
 
 export default function Chat() {
   const messagesEndRef = useRef<HTMLDivElement>(null);
@@ -112,20 +114,40 @@ export default function Chat() {
         // Set error state
         setHasError(true);
 
-        // Add error message
+        // Create a user-friendly error message
+        let errorMessage = "I'm having trouble connecting to the server.";
+
+        // Add more specific details based on the error
+        if (error.message && error.message.includes("timeout")) {
+          errorMessage = "The request timed out. The server took too long to respond.";
+        } else if (error.message && error.message.includes("NetworkError")) {
+          errorMessage = "Network error. Please check your internet connection.";
+        } else if (error.message && error.message.includes("API key")) {
+          errorMessage = "Server configuration issue: Missing API key. Please contact support.";
+        } else {
+          errorMessage =
+            "I'm having trouble processing your request. This might be a temporary issue.";
+        }
+
+        // Try to generate a fallback response
+        const fallbackContent = getFallbackResponse(messageText);
+
+        // Add error message and fallback response to chat
         setMessages((prevMessages) => [
           ...prevMessages,
           {
             role: "assistant",
-            content:
-              "I'm having trouble connecting to the server. This might be due to missing API keys in the environment. Please check your Vercel environment variables.",
+            content: `${errorMessage}\n\n${fallbackContent}`,
           },
         ]);
 
-        // Show error toast
-        toast.error("Connection error. Please check API keys in Vercel settings.", {
-          duration: 4000,
-        });
+        // Show error toast with troubleshooting steps
+        toast.error(
+          "Connection issue. Please try refreshing the page or checking your internet connection.",
+          {
+            duration: 5000,
+          }
+        );
       } finally {
         setIsLoading(false);
         setInput("");
@@ -184,6 +206,14 @@ export default function Chat() {
         transition={{ duration: 0.5 }}
       >
         <h2 className="text-base font-medium tracking-wide">Tax Assistant</h2>
+        <div className="hidden sm:block">
+          <ConnectionStatus
+            status={
+              apiStatus.checked ? (apiStatus.available ? "connected" : "disconnected") : "checking"
+            }
+            message={apiStatus.message}
+          />
+        </div>
       </motion.div>
 
       <div className="flex-1 overflow-y-auto px-0.5 sm:px-6 py-1.5 sm:py-4 bg-gray-50">

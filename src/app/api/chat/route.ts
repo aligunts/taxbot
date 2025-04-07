@@ -695,32 +695,25 @@ Include emojis (📌, ✅, 🧮, 🔍) for readability.`,
       },
     ];
 
-    // Call chat completion API
+    // Get the API key from environment variables
     const apiKey = process.env.MISTRAL_API_KEY;
 
+    // Check if API key is available
     if (!apiKey) {
-      console.log("Mistral API key not found, using fallback response");
-      try {
-        // Add timeout protection to fallback response
-        const fallbackPromise = getFallbackResponse(userMessage);
-        const timeoutPromise = new Promise<string>((_, reject) =>
-          setTimeout(() => reject(new Error("Timed out generating fallback response")), 5000)
-        );
-
-        const fallbackContent = await Promise.race([fallbackPromise, timeoutPromise]);
-        return NextResponse.json({ content: fallbackContent }, { status: 200 });
-      } catch (error) {
-        console.error("Error generating fallback response:", error);
-        return NextResponse.json(
-          {
-            content: "I'm experiencing some technical issues. Please try again later.",
-          },
-          { status: 200 }
-        );
-      }
+      console.error("Missing Mistral API key in environment variables");
+      return NextResponse.json(
+        {
+          error: "API configuration error: Missing Mistral API key",
+          content: "I'm having trouble connecting to the AI service. Please contact support.",
+        },
+        { status: 500 }
+      );
     }
 
     try {
+      // Log that we're about to make the API call (helps with debugging)
+      console.log("Making API call to Mistral AI with valid API key");
+
       const response = await fetch("https://api.mistral.ai/v1/chat/completions", {
         method: "POST",
         headers: {
@@ -735,6 +728,27 @@ Include emojis (📌, ✅, 🧮, 🔍) for readability.`,
         }),
       });
 
+      // Check if the response is ok
+      if (!response.ok) {
+        // Get error details from response
+        const errorData = await response.json().catch(() => ({}));
+        console.error("Mistral API error:", {
+          status: response.status,
+          statusText: response.statusText,
+          error: errorData,
+        });
+
+        return NextResponse.json(
+          {
+            error: `AI service error: ${response.status} ${response.statusText}`,
+            content:
+              "Sorry, I'm having trouble connecting to the AI service. Please try again later.",
+          },
+          { status: response.status }
+        );
+      }
+
+      // Parse the API response
       const data = await response.json();
 
       if (
@@ -774,25 +788,14 @@ Include emojis (📌, ✅, 🧮, 🔍) for readability.`,
         { status: 200 }
       );
     } catch (error) {
-      console.error("Error calling Mistral API:", error);
-      try {
-        // Add timeout protection to fallback response
-        const fallbackPromise = getFallbackResponse(userMessage);
-        const timeoutPromise = new Promise<string>((_, reject) =>
-          setTimeout(() => reject(new Error("Timed out generating fallback response")), 5000)
-        );
-
-        const fallbackContent = await Promise.race([fallbackPromise, timeoutPromise]);
-        return NextResponse.json({ content: fallbackContent }, { status: 200 });
-      } catch (fallbackError) {
-        console.error("Error generating fallback response:", fallbackError);
-        return NextResponse.json(
-          {
-            content: "I'm experiencing some technical issues. Please try again later.",
-          },
-          { status: 200 }
-        );
-      }
+      console.error("Unexpected error calling Mistral API:", error);
+      return NextResponse.json(
+        {
+          error: "Failed to connect to AI service",
+          content: "I'm having trouble with the connection. Please try again later.",
+        },
+        { status: 500 }
+      );
     }
   } catch (error) {
     console.error("Error processing request:", error);
