@@ -60,7 +60,6 @@ export async function GET() {
   return NextResponse.json(
     {
       success: true,
-      message: "All required environment variables are set",
       availableKeys,
       mistralKeysAvailable: mistralKeysCount,
     },

@@ -10,7 +10,6 @@ import getFallbackResponse from "@/utils/fallbackResponses";
 // Import chat components individually to avoid case sensitivity issues
 import MessageList from "./chat/MessageList";
 import ChatInput from "./chat/ChatInput";
-import ConnectionStatus from "./ConnectionStatus";
 
 export default function Chat() {
   const messagesEndRef = useRef<HTMLDivElement>(null);
@@ -18,49 +17,20 @@ export default function Chat() {
   const [input, setInput] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [hasError, setHasError] = useState(false);
-  const [apiStatus, setApiStatus] = useState<{
-    checked: boolean;
-    available: boolean;
-    message: string;
-    missingKeys?: string[];
-  }>({
-    checked: false,
-    available: true,
-    message: "",
-  });
 
-  // Check API availability on mount
+  // Initial API check on component mount
   useEffect(() => {
-    const checkApi = async () => {
-      try {
-        const status = await checkApiAvailability();
-        setApiStatus({
-          checked: true,
-          available: status.available,
-          message: status.message,
-          missingKeys: status.missingKeys,
-        });
-
-        if (!status.available) {
-          setMessages([
-            {
-              role: "assistant",
-              content: `API configuration issue: ${status.message}. Please check your environment variables.`,
-            },
-          ]);
-        }
-      } catch (error) {
-        console.error("Failed to check API availability:", error);
-        setApiStatus({
-          checked: true,
-          available: false,
-          message: "Could not connect to API service",
-        });
-      }
-    };
-
+    // Check if API is available on initial load
     checkApi();
   }, []);
+
+  const checkApi = async () => {
+    try {
+      await checkApiAvailability();
+    } catch (error) {
+      console.error("API check error:", error);
+    }
+  };
 
   // Scroll to bottom when messages change
   useEffect(() => {
@@ -93,93 +63,73 @@ export default function Chat() {
   /**
    * Handle sending a message to the API
    */
-  const handleApiMessage = useCallback(
-    async (messageText: string) => {
-      setIsLoading(true);
+  const handleApiMessage = useCallback(async (messageText: string) => {
+    setIsLoading(true);
 
-      // Show error if API is not available
-      if (!apiStatus.available && apiStatus.checked) {
-        setMessages((prevMessages) => [
-          ...prevMessages,
-          { role: "user", content: messageText },
-          {
-            role: "assistant",
-            content: `API configuration issue: ${apiStatus.message}. Missing environment variables: ${
-              apiStatus.missingKeys?.join(", ") || "unknown"
-            }. Please check your Vercel environment variables.`,
-          },
-        ]);
-        setIsLoading(false);
-        setInput("");
-        return;
+    try {
+      // Add user message immediately for better UX
+      setMessages((prevMessages) => [...prevMessages, { role: "user", content: messageText }]);
+
+      // Send message to API with retry mechanism
+      const responseData = await retryWithBackoff(
+        () => sendChatMessage(messageText),
+        2, // Number of retries
+        1000 // Initial delay in ms
+      );
+
+      // Add the API response to messages
+      setMessages((prevMessages) => [
+        ...prevMessages,
+        { role: "assistant", content: responseData.content },
+      ]);
+
+      // Reset error state on successful response
+      setHasError(false);
+    } catch (error) {
+      console.error("Error sending message:", error);
+
+      // Set error state
+      setHasError(true);
+
+      // Create a user-friendly error message
+      let errorMessage = "I'm having trouble connecting to the server.";
+
+      // Add more specific details based on the error
+      if (error.message && error.message.includes("timeout")) {
+        errorMessage = "The request timed out. The server took too long to respond.";
+      } else if (error.message && error.message.includes("NetworkError")) {
+        errorMessage = "Network error. Please check your internet connection.";
+      } else if (error.message && error.message.includes("API key")) {
+        errorMessage = "Server configuration issue: Missing API key. Please contact support.";
+      } else {
+        errorMessage =
+          "I'm having trouble processing your request. This might be a temporary issue.";
       }
 
-      try {
-        // Add user message immediately for better UX
-        setMessages((prevMessages) => [...prevMessages, { role: "user", content: messageText }]);
+      // Try to generate a fallback response
+      const fallbackContent = getFallbackResponse(messageText);
 
-        // Send message to API with retry mechanism
-        const responseData = await retryWithBackoff(
-          () => sendChatMessage(messageText),
-          2, // Number of retries
-          1000 // Initial delay in ms
-        );
+      // Add error message and fallback response to chat
+      setMessages((prevMessages) => [
+        ...prevMessages,
+        {
+          role: "assistant",
+          content: `${errorMessage}\n\n${fallbackContent}`,
+        },
+      ]);
 
-        // Add the API response to messages
-        setMessages((prevMessages) => [
-          ...prevMessages,
-          { role: "assistant", content: responseData.content },
-        ]);
-
-        // Reset error state on successful response
-        setHasError(false);
-      } catch (error) {
-        console.error("Error sending message:", error);
-
-        // Set error state
-        setHasError(true);
-
-        // Create a user-friendly error message
-        let errorMessage = "I'm having trouble connecting to the server.";
-
-        // Add more specific details based on the error
-        if (error.message && error.message.includes("timeout")) {
-          errorMessage = "The request timed out. The server took too long to respond.";
-        } else if (error.message && error.message.includes("NetworkError")) {
-          errorMessage = "Network error. Please check your internet connection.";
-        } else if (error.message && error.message.includes("API key")) {
-          errorMessage = "Server configuration issue: Missing API key. Please contact support.";
-        } else {
-          errorMessage =
-            "I'm having trouble processing your request. This might be a temporary issue.";
+      // Show error toast with troubleshooting steps
+      toast.error(
+        "Connection issue. Please try refreshing the page or checking your internet connection.",
+        {
+          duration: 5000,
         }
-
-        // Try to generate a fallback response
-        const fallbackContent = getFallbackResponse(messageText);
-
-        // Add error message and fallback response to chat
-        setMessages((prevMessages) => [
-          ...prevMessages,
-          {
-            role: "assistant",
-            content: `${errorMessage}\n\n${fallbackContent}`,
-          },
-        ]);
-
-        // Show error toast with troubleshooting steps
-        toast.error(
-          "Connection issue. Please try refreshing the page or checking your internet connection.",
-          {
-            duration: 5000,
-          }
-        );
-      } finally {
-        setIsLoading(false);
-        setInput("");
-      }
-    },
-    [apiStatus]
-  );
+      );
+    } finally {
+      setIsLoading(false);
+      setInput("");
+    }
+  }, []);
 
   /**
    * Handle sending a message
@@ -193,14 +143,88 @@ export default function Chat() {
   );
 
   /**
-   * Handle form submit
+   * Handle form submission
    */
   const handleFormSubmit = useCallback(
     (e: React.FormEvent<HTMLFormElement>) => {
       e.preventDefault();
-      handleSendMessage(input);
+      if (!input.trim()) return;
+
+      setIsLoading(true);
+      const messageText = input;
+
+      try {
+        // Add user message to chat
+        setMessages((prevMessages) => [...prevMessages, { role: "user", content: messageText }]);
+
+        // Send message to API with retry mechanism
+        retryWithBackoff(
+          () => sendChatMessage(messageText),
+          2, // Number of retries
+          1000 // Initial delay in ms
+        )
+          .then((responseData) => {
+            // Add the API response to messages
+            setMessages((prevMessages) => [
+              ...prevMessages,
+              { role: "assistant", content: responseData.content },
+            ]);
+
+            // Reset error state on successful response
+            setHasError(false);
+          })
+          .catch((error) => {
+            console.error("Error sending message:", error);
+
+            // Set error state
+            setHasError(true);
+
+            // Create a user-friendly error message
+            let errorMessage = "I'm having trouble connecting to the server.";
+
+            // Add more specific details based on the error
+            if (error.message && error.message.includes("timeout")) {
+              errorMessage = "The request timed out. The server took too long to respond.";
+            } else if (error.message && error.message.includes("NetworkError")) {
+              errorMessage = "Network error. Please check your internet connection.";
+            } else if (error.message && error.message.includes("API key")) {
+              errorMessage = "Server configuration issue: Missing API key. Please contact support.";
+            } else {
+              errorMessage =
+                "I'm having trouble processing your request. This might be a temporary issue.";
+            }
+
+            // Try to generate a fallback response
+            const fallbackContent = getFallbackResponse(messageText);
+
+            // Add error message and fallback response to chat
+            setMessages((prevMessages) => [
+              ...prevMessages,
+              {
+                role: "assistant",
+                content: `${errorMessage}\n\n${fallbackContent}`,
+              },
+            ]);
+
+            // Show error toast with troubleshooting steps
+            toast.error(
+              "Connection issue. Please try refreshing the page or checking your internet connection.",
+              {
+                duration: 5000,
+              }
+            );
+          })
+          .finally(() => {
+            setIsLoading(false);
+            setInput("");
+          });
+      } catch (error) {
+        console.error("Error in form submission:", error);
+        setIsLoading(false);
+        setInput("");
+      }
     },
-    [input, handleSendMessage]
+    [input]
   );
 
   /**
@@ -231,14 +255,6 @@ export default function Chat() {
         transition={{ duration: 0.5 }}
       >
         <h2 className="text-base font-medium tracking-wide">Tax Assistant</h2>
-        <div className="hidden sm:block">
-          <ConnectionStatus
-            status={
-              apiStatus.checked ? (apiStatus.available ? "connected" : "disconnected") : "checking"
-            }
-            message={apiStatus.message}
-          />
-        </div>
       </motion.div>
 
       <div className="flex-1 overflow-y-auto px-0.5 sm:px-6 py-1.5 sm:py-4 bg-gray-50">
