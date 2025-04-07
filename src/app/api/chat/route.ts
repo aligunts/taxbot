@@ -612,6 +612,31 @@ Cannot determine VAT status of "${productName}".
   }
 };
 
+// Define the API call function with a model parameter to allow for fallback attempts
+async function callMistralAPI(
+  apiKey: string,
+  messages: any[],
+  model: string = "mistral-large-latest"
+) {
+  console.log(`Attempting API call with model: ${model}`);
+
+  const response = await fetch("https://api.mistral.ai/v1/chat/completions", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${apiKey}`,
+    },
+    body: JSON.stringify({
+      model: model,
+      messages: messages,
+      temperature: 0.3,
+      max_tokens: 1024,
+    }),
+  });
+
+  return response;
+}
+
 // Function to handle API requests to /api/chat
 export async function POST(req: Request) {
   try {
@@ -662,6 +687,10 @@ Use the following structure for tax-related queries:
    - Show formulas for VAT and CIT clearly
 4. **Follow-Up Prompt**:
    - Ask for relevant info (salary, turnover, product type) if needed for precise calculation
+
+## PERSONAL INCOME TAX RELIEFS
+- Consolidated Relief Allowance (CRA): The greater of ₦200,000 or 21% of gross income (where 21% represents 1% + 20%)
+- Pension Contribution: 8% of gross income (capped at ₦500,000)
 
 ## VAT INFORMATION
 - Current VAT rate: 7.5%
@@ -714,19 +743,20 @@ Include emojis (📌, ✅, 🧮, 🔍) for readability.`,
       // Log that we're about to make the API call (helps with debugging)
       console.log("Making API call to Mistral AI with valid API key");
 
-      const response = await fetch("https://api.mistral.ai/v1/chat/completions", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${apiKey}`,
-        },
-        body: JSON.stringify({
-          model: "mistral-large-latest",
-          messages: enhancedMessages,
-          temperature: 0.3,
-          max_tokens: 1024,
-        }),
-      });
+      // Try with the main model first
+      let response = await callMistralAPI(apiKey, enhancedMessages);
+
+      // If the main model fails, try with a fallback model
+      if (!response.ok && response.status >= 500) {
+        console.log("Primary model request failed. Trying fallback model mistral-small-latest");
+        response = await callMistralAPI(apiKey, enhancedMessages, "mistral-small-latest");
+
+        // If the fallback model also fails, try with an even smaller model
+        if (!response.ok && response.status >= 500) {
+          console.log("Fallback model request failed. Trying backup model mistral-tiny");
+          response = await callMistralAPI(apiKey, enhancedMessages, "mistral-tiny");
+        }
+      }
 
       // Check if the response is ok
       if (!response.ok) {
@@ -785,7 +815,15 @@ Include emojis (📌, ✅, 🧮, 🔍) for readability.`,
             data.choices[0].message.content ||
             "I couldn't process your request properly. Please try again.",
         },
-        { status: 200 }
+        {
+          status: 200,
+          headers: {
+            "Access-Control-Allow-Origin": "*",
+            "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
+            "Access-Control-Allow-Headers": "Content-Type, Authorization",
+            "Cache-Control": "no-store, max-age=0",
+          },
+        }
       );
     } catch (error) {
       console.error("Unexpected error calling Mistral API:", error);

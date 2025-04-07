@@ -69,6 +69,27 @@ export default function Chat() {
     }
   }, [messages]);
 
+  // Add this function just before handleApiMessage
+  const retryWithBackoff = async (
+    fn: () => Promise<any>,
+    retries = 2,
+    delay = 1000,
+    backoffFactor = 2
+  ): Promise<any> => {
+    try {
+      return await fn();
+    } catch (error) {
+      if (retries <= 0) {
+        throw error;
+      }
+
+      console.log(`Retrying operation. Retries left: ${retries}. Waiting ${delay}ms...`);
+      await new Promise((resolve) => setTimeout(resolve, delay));
+
+      return retryWithBackoff(fn, retries - 1, delay * backoffFactor, backoffFactor);
+    }
+  };
+
   /**
    * Handle sending a message to the API
    */
@@ -97,13 +118,17 @@ export default function Chat() {
         // Add user message immediately for better UX
         setMessages((prevMessages) => [...prevMessages, { role: "user", content: messageText }]);
 
-        // Send message to API
-        const data = await sendChatMessage(messageText);
+        // Send message to API with retry mechanism
+        const responseData = await retryWithBackoff(
+          () => sendChatMessage(messageText),
+          2, // Number of retries
+          1000 // Initial delay in ms
+        );
 
         // Add the API response to messages
         setMessages((prevMessages) => [
           ...prevMessages,
-          { role: "assistant", content: data.content },
+          { role: "assistant", content: responseData.content },
         ]);
 
         // Reset error state on successful response

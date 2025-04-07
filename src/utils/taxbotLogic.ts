@@ -1,25 +1,15 @@
 export function calculateCRA(grossIncome: number): number {
-  // Calculate 1% and 20% of gross income
-  const onePercentOfIncome = grossIncome * 0.01;
-  const twentyPercentOfIncome = grossIncome * 0.2;
-  const totalCRA = onePercentOfIncome + twentyPercentOfIncome;
-
-  // Apply the minimum of ₦200,000
-  const finalCRA = Math.max(200_000, totalCRA);
+  // CRA is the greater of ₦200,000 or 21% of gross income (1% + 20%)
+  const cra = Math.max(200_000, grossIncome * 0.21);
 
   // Log calculation for debugging
-  console.log(
-    "Step 1: Calculate CRA = max(₦200,000, (1% of gross income) + (20% of gross income))"
-  );
   console.log(`CRA Calculation for ${grossIncome.toLocaleString()}:`, {
-    onePercentOfIncome: onePercentOfIncome.toLocaleString(),
-    twentyPercentOfIncome: twentyPercentOfIncome.toLocaleString(),
-    totalCRA: totalCRA.toLocaleString(),
-    finalCRA: finalCRA.toLocaleString(),
-    formula: "max(200000, (0.01 * grossIncome) + (0.20 * grossIncome))",
+    formula: "max(₦200,000, 21% of gross income)",
+    calculation: `max(200000, ${grossIncome} * 0.21)`,
+    result: cra.toLocaleString(),
   });
 
-  return finalCRA;
+  return cra;
 }
 
 export function calculatePension(grossIncome: number, rate = 0.08): number {

@@ -63,8 +63,20 @@ export async function sendChatMessage(message: string) {
       throw new Error("Request timed out. The server took too long to respond.");
     }
 
-    // Log all errors
-    console.error("Error in sendChatMessage:", error);
+    // Log all errors with detailed information
+    console.error("Error in sendChatMessage:", {
+      error,
+      message: error.message,
+      stack: error.stack,
+      type: error.constructor.name,
+      status: error.status || "unknown",
+    });
+
+    // Log the request that caused the error
+    console.log("Request that caused error:", {
+      endpoint: "/api/chat",
+      body: { message },
+    });
 
     // Re-throw the error to be handled by the caller
     throw error;
